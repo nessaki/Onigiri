@@ -1,0 +1,298 @@
+/*
+    - ANIMATION -
+
+    This is a animation sequence player.  It's triggered on attach.  Obviously it's for avatars.  You can find an
+    Animesh version of this same thing with your package.
+*/
+
+// Display extensive messages
+integer debug = %DEBUG;
+
+// Kill, stop previous animation after starting a new one
+integer kill = %KILL;
+
+// If only the owner can touch to start/stop the animesh animation
+integer owner_only = %OWNER_ONLY;
+
+// yes/no - Repeat the list of animations endlessly.
+integer anim_loop = %ANIM_LOOP;
+
+//  These two switches enable or disable the ability for the corresponding event to trigger the animation sequence.
+integer on_touch = %ON_TOUCH;
+integer on_listen = %ON_LISTEN;
+
+// This is normally best to have as a negative channel when using object to object communications.
+// 0 listens on the main channel in local, not the best idea.
+integer channel = %CHANNEL;
+integer handle;
+// These two variables, start/stop, are issued to the listner to start or stop the animation sequence,
+// they can be anything you like but are named after the variable, and the variable named after what
+// it does, for clarity.
+string stop = "%STOP";
+string start = "%START";
+
+// Add your animations to this list or enable "populate" (yes)
+list anim_list = [
+    %ANIM_LIST
+    ];
+
+// The amount of time each animation plays for.
+list time_list = [
+    %TIME_LIST
+    ];
+
+// The remaining items do not need to be edited but you're welcome to do so.
+integer running = FALSE; // If we're engaged already
+string anim_name = ""; // Current animation retrieved and playing, also used later when refreshing.
+integer anim_current = 0; // This is the index of the currently playing animation in anim_list .
+integer anim_total = 0;
+// Get animation list from object inventory? TRUE/FALSE
+integer populate = FALSE;
+
+key owner;
+// If we have permission to play animations
+integer perm_anim = FALSE;
+// If the object is attached
+integer is_attached = FALSE;
+// An initializer is provided here for changed owner and permission request.
+init(string trigger)
+{
+    if(on_listen == TRUE)
+    {
+        llListenRemove(handle);
+        handle = llListen(channel, "", "", "");
+    }
+    if (trigger == "changed_owner")
+    {
+        msg("changed_owner: animation permmision requested");
+        // reset some things for the new owner
+        perm_anim = FALSE;
+        is_attached = FALSE;
+        // New owner
+        owner = llGetOwner();
+    }
+    if (trigger == "run_time_permissions")
+    {
+        // This means the permissions where granted
+        perm_anim = TRUE;
+        msg("animation permission was granted");
+    }
+    if (trigger == "attach")
+    {
+        // This is 0 for not attached or it's an integer for the attach point
+        is_attached = llGetAttached();
+        if (is_attached)
+        {
+            msg("HUD attached, requesting permissions and assuming granted.");
+            llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
+            perm_anim = TRUE;
+       }
+    }
+    if (trigger == "state_entry")
+    {
+        msg("state_entry");
+    }
+    if (trigger == "on_rez")
+    {
+        if(llGetAttached() == 0)
+        {
+            is_attached = FALSE;
+            stop_all();
+        }
+        msg("on_rez");
+    }
+    if (trigger == "changed_inventory")
+    {
+        msg("changed_inventory");
+    }
+}
+refresh()
+{
+    // The index of the currently playing animation, we bump this each timer trigger
+    anim_current = 0;
+    if(populate == TRUE)
+    {
+        anim_list = []; // clear it
+        integer anim_count = llGetInventoryNumber(INVENTORY_ANIMATION);
+        msg("Total inventory animations: " + (string)anim_count);
+        integer count = 0;
+        while(count < anim_count)
+        {
+            anim_name = llGetInventoryName(INVENTORY_ANIMATION, count);
+            msg("Loaded animation on index [" + (string)count + "] as " + anim_name);
+            anim_list += anim_name;
+            ++count;
+        }
+    }
+    anim_name = llList2String(anim_list, anim_current);
+    float anim_time = llList2Float(time_list, anim_current);
+    anim_total = llGetListLength(anim_list);
+    llStartAnimation(anim_name);
+    msg("Started " + anim_name);
+    llSetTimerEvent(anim_time);
+    running = TRUE;
+}
+stop_all()
+{
+    llSetTimerEvent(0);
+    if(perm_anim == FALSE)
+    {
+        msg("No permission to stop animations just yet");
+        return;
+    }
+    list playing = llGetAnimationList(llGetOwner());
+    integer anim_count = llGetListLength(playing);
+    msg("total animations playing before stop: " + (string)playing);
+    if(anim_count == 0)
+    {
+        msg("No animations playing");
+        return;
+    }
+    integer index = 0;
+    while(index + 1 < anim_count)
+    {
+        anim_name = llList2String(playing, index);
+        msg("stopping animation " + anim_name);
+        llStopAnimation(anim_name);
+        ++index;
+    }
+    running = FALSE;
+    perm_anim = FALSE;
+    if(llGetAttached() == 0)
+    {
+        is_attached = FALSE;
+    }
+    llSetTimerEvent(0);
+    running = FALSE;
+    msg("Stopped all!");
+}
+msg(string msg)
+{
+    if(debug == 1) llOwnerSay(msg);
+}
+
+
+default
+{
+    on_rez(integer start_param)
+    {
+        init("on_rez");
+    }    
+    state_entry()
+    {
+        init("state_entry");
+    }
+    attach(key id)
+    {
+        init("attach");
+    }
+    run_time_permissions(integer perm)
+    {
+        if (perm & PERMISSION_TRIGGER_ANIMATION)
+        {
+            init("run_time_permissions");
+        }
+        else
+        {
+            msg("Permissions failed!");
+        }
+    }
+    changed(integer mask)
+    {
+        if(mask & CHANGED_OWNER)
+        {
+            msg("owner changed");
+            init("changed_owner");
+        }
+        // when an item changes in the inventory we'd like to stop animations and reload the list
+        if (mask & CHANGED_INVENTORY)
+        {
+            perm_anim = FALSE;
+            stop_all();
+            running = FALSE;
+            init("changed_inventory");
+            //refresh();
+        }
+   }
+   touch_start(integer total_number)
+   {
+        if (on_touch == FALSE) return;
+        if (owner_only == TRUE)
+        {
+            key toucher = llDetectedKey(0);
+            if(toucher != llGetOwner())
+            {
+                string name = llKey2Name(toucher);
+                string obj_name = llGetObjectName();
+                llOwnerSay(obj_name + " touched by " + name);
+                return;
+            }
+        }
+        if(running == TRUE)
+        {
+            llStopAnimation(anim_name);
+            llOwnerSay("Stopped " + anim_name);
+            llSetTimerEvent(0);
+            running = FALSE;
+        }
+        else
+        {
+            msg("reset timer and stop_all() and check attached state");
+            llSetTimerEvent(0);
+            stop_all();
+            if(llGetAttached() == 0)
+            {
+                msg("Item not attached, attach the HUD then try again");
+            }
+            else refresh();
+        }
+    }
+    // Channel will be the channel actually used, you don't need to care about this unless you add
+    // an additional listner, you use this to determine which channel has content on it.  In this
+    // particular case you'll get an integer that on "Channel" that is the same as "channel", note
+    // the case sensitive variables.
+    listen(integer Channel, string Name, key ID, string Content)
+    {
+        msg("Name / ID / Content: " + Name + " / " + (string)ID + " / " + Content);
+        if (Content == start) { stop_all(); refresh(); }
+        else if (Content == stop) { stop_all(); }
+    }
+    timer()
+    {
+        // If the last pass was the end of the string, do we stop now?
+        if(anim_current + 1 == anim_total)
+        {
+            msg("End of sequence");
+            if(anim_loop == FALSE)
+            {
+                msg("End of animation splice, loop disabled, stopped at " + anim_name);
+                llSetTimerEvent(0);
+                stop_all();
+                running = FALSE;
+                return;
+            }
+            else
+            {
+                msg("Timer: Recycling...");
+                anim_current = 0;
+            }
+        }
+        else
+        {
+            ++anim_current;
+        }
+        string anim = llList2String(anim_list, anim_current);
+        float anim_time = llList2Float(time_list, anim_current);
+        msg("Timer loaded animation " + anim);
+        llStartAnimation(anim);
+        llSetTimerEvent(anim_time);
+	if(kill == TRUE)
+	{
+	        llStopAnimation(anim_name);
+	}
+        anim_name = anim;
+    }
+
+}
+
+

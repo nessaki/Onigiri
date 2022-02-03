@@ -1,0 +1,36 @@
+If you unzipped this file yourself these instructions are for you.  If Bento Buddy is already installed into Blender and functioning just ignore this notice.
+
+- Installation -
+Here is a video showing how to install your addon into Blender.
+https://youtu.be/BdYouLPaxGA
+
+- join the Discord Server -
+This is the best option for support but we do keep our eyes open in-world when we can.
+We're most likely much quicker to respond on Discord.
+http://onelifeform.com/discord
+
+- Join the group -
+You may want to join the support group "Bento Buddy".  For ease of access I've included an object that will give you a link to the group.
+Rez or wear the object "Bento Buddy - group Join (touch / rez)".
+
+- TEXT INSTRUCTIONS -
+
+Go to the website indicated https://www.onelifeform.com/bentobuddy
+
+Login to the website.  Your full Second Life name is your user name to login with.  It was shown to you when you registered in-world.  If you don't have a legacy user name then your last name is "Resident", which doesn't normally show up for you in SL.  After you login you'll get a download screen where you can download your product.
+
+If you opted to use Linden Labs` name change feature (not display names) the process might confuse you and you will need to use the name provided for you after registration of your product, the information will be sent to your local window.  The name you are registering comes from SL and cannot be changed for Bento Buddy access, even if you change your in-world name.
+
+To change your password rez or wear the item "Bento Buddy - password change and account Info" and type /4 password_here
+
+Don't use the word "password_here", make your own password.
+
+To extend your download privileges you can purchase an update, which will allow you to keep your tool up to date.
+https://marketplace.secondlife.com/p/Bento-Buddy-Update/18276030
+
+Have fun \o
+
+- BinBash Resident
+
+
+
