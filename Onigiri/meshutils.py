@@ -1500,7 +1500,7 @@ def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=F
         
         
         
-        newObj['bentobuddy_mesh_rig'] = 1
+        newObj['onigiri_mesh_rig'] = 1
 
         
         bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)

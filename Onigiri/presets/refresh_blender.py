@@ -13,7 +13,7 @@ import os
 def run_main():
 
     temp_path = tempfile.gettempdir()
-    temp_blend = temp_path + "/bentobuddy_blend.blend"
+    temp_blend = temp_path + "/onigiri_blend.blend"
 
     
     for o in bpy.data.objects:
@@ -24,7 +24,7 @@ def run_main():
     
     
     
-    args_path = temp_path + "/bentobuddy_args.py"
+    args_path = temp_path + "/onigiri_args.py"
     arguments = {}
     try:
         namespace = {}

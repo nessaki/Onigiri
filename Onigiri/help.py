@@ -25,7 +25,7 @@ def get_unique_name():
 
 
 
-class BentoBuddyHelpProperties(bpy.types.PropertyGroup):
+class OnigiriHelpProperties(bpy.types.PropertyGroup):
     def update_help_some_property(self, context):
         bbh = bpy.context.window_manager.bb_help
         

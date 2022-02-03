@@ -222,7 +222,7 @@ bb_notes["constraint_copy_transforms"] =    "Constrain to all transforms of the 
 bb_flags.update({"target_non_deformable": 0})
 bb_groups["advanced"].append("target_non_deformable")
 bb_labels["target_non_deformable"] = "Target non deformable bones"
-bb_notes["target_non_deformable"] =    "Usually you don't want to waste a bone mapping on a target bone that is not flagged as deformable.  "    "An example of this would be shape bones, that alter the mesh depending on where the rotation is.  "    "Second Life doesn't support this.  Control bones and controllers for IK also are non deformable and you "    "don't want to waste bones on those either.  However, I'm giving you the option here in case you need it.  "    "Enabling this will tell Bento Buddy to put a bone anywhere where this is a bone, regardless if it's deformable."
+bb_notes["target_non_deformable"] =    "Usually you don't want to waste a bone mapping on a target bone that is not flagged as deformable.  "    "An example of this would be shape bones, that alter the mesh depending on where the rotation is.  "    "Second Life doesn't support this.  Control bones and controllers for IK also are non deformable and you "    "don't want to waste bones on those either.  However, I'm giving you the option here in case you need it.  "    "Enabling this will tell Onigiri to put a bone anywhere where this is a bone, regardless if it's deformable."
 
 
 
@@ -599,7 +599,7 @@ bb_flags.update({"sanity_check": 1})
 bb_flags.update({"vbones_first": 0})
 bb_groups["advanced"].append("vbones_first")
 bb_labels["vbones_first"] = "Use volume / collision bones first"
-bb_notes["vbones_first"] =    "The internal data have a specific structure, it's not random which bones are used first to map to your characters.  "    "However, for the sake of testing I chose to create this feature in order to test the functionality of using the "    "volume bones for animation, like any other bone.  I discovered that it works but I kept the flag here for you to play with.  "    "Note that you can already control which bones are used first by using a text file and importing that map into Bento Buddy."
+bb_notes["vbones_first"] =    "The internal data have a specific structure, it's not random which bones are used first to map to your characters.  "    "However, for the sake of testing I chose to create this feature in order to test the functionality of using the "    "volume bones for animation, like any other bone.  I discovered that it works but I kept the flag here for you to play with.  "    "Note that you can already control which bones are used first by using a text file and importing that map into Onigiri."
 
 
 bb_flags.update({"match_roll": 1})
@@ -655,7 +655,7 @@ bb_notes["remove_empties"] = "This is a debug feature, you probably never need t
 
 
 
-bb_data.update({"bb_arm": "BentoBuddy"})
+bb_data.update({"bb_arm": "Onigiri"})
 
 
 

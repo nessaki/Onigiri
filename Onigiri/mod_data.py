@@ -1508,7 +1508,7 @@ layers_ik = [17,18,19]
 
 
 
-bento_buddy_group_name = 'Bento Buddy Proxy'    
+bento_buddy_group_name = 'Onigiri Proxy'    
 pose_bones_group_name = 'BB Base Bones'  
 mbones_group_name = 'New mBone Group'           
 unused_bones_group_name = 'Bone Bucket'         

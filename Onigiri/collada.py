@@ -173,7 +173,7 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
     if export_full_rig:
         print("export_full_rig Will NOT work in Second Life, it will be most useful when using other applications.")
 
-    if armObj.get('bentobuddy_converted') != None:
+    if armObj.get('onigiri_converted') != None:
         print("collada::write_collada reports: converted mesh detected, adjusting export properties")
         export_path_to_pelvis = True
         export_full_rig = False
@@ -320,8 +320,8 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
     
     
     sl_rig = None
-    if armObj.get('bentobuddy') != None:
-        sl_rig = "bentobuddy"
+    if armObj.get('onigiri') != None:
+        sl_rig = "onigiri"
         print("Found SL compatible rig, maybe:", sl_rig)
     if armObj.get('avastar') != None:
         sl_rig = "avastar"

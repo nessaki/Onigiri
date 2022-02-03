@@ -3,18 +3,11 @@ import math
 import mathutils
 from .presets import skeleton as skel
 
-
-
-
-
-
 if True:
     collada = {}
     collada['URI'] ='http://www.collada.org/2005/11/COLLADASchema'
     collada['namespace'] = '{http://www.collada.org/2005/11/COLLADASchema}'
 
-    
-    
     version = (0, 0, 0)
 
     bone_roll = {
@@ -33,24 +26,9 @@ if True:
     Z180 = mathutils.Matrix.Rotation(math.radians(180.0), 4, 'Z')
     Z180I = Z180.inverted()
 
-
-
-
-
-
-
-
-
     align_bones = {}
     align_bones['first'] = None
     align_bones['last'] = None
-
-
-
-
-
-
-
 
 if True:
     
@@ -60,11 +38,6 @@ if True:
 
     goofy_bones = ('PelvisInv', 'COG', 'Origin', 'Tinker')
 
-    
-    
-    
-    
-    
     spine_chain = {
         "mSpine1": "mTorso",
         "mSpine2": "mPelvis",
@@ -75,40 +48,18 @@ if True:
         "mChest" : "mSpine3",
         }
 
-
-
-
 if True:
 
-    
-    
-    
-    
     bb_mixer = {}
     bb_mixer['source'] = ""
-    
     
     bb_mixer['bone_location_set'] = ""
     bb_mixer['bone_rotation_set'] = ""
     bb_mixer['bone_scale_set'] = ""
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
     bb_mixer['constraints'] = {}
     for bone in skel.avatar_skeleton:
         bone_type = skel.avatar_skeleton[bone]['type']
-        
-        
-        
-        
-
         
         if 1 == 1:
             bb_mixer['constraints'][bone] = {}
@@ -118,41 +69,13 @@ if True:
             
             bb_mixer['constraints'][bone]['child_of'] = None
 
-
-
-
-
-    
-    
-    
-    
-    
     bb_paint = {}
     bb_paint['use_frontface'] = False
     bb_paint['use_frontface_falloff'] = False
     bb_paint['falloff_shape'] = 'PROJECTED'
     bb_paint['object'] = None 
 
-    
-    
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
     bb_alib = {}
-    
-    
     
     bb_alib['actions'] = {}
 
@@ -161,20 +84,3 @@ if True:
     bb_alib['frame_start'] = 1
 
     bb_alib['count'] = 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

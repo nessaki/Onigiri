@@ -431,7 +431,7 @@ def animesh_mode(context):
 
 
 
-class BentoBuddyAnimeshCollectionProps(bpy.types.PropertyGroup):
+class OnigiriAnimeshCollectionProps(bpy.types.PropertyGroup):
 
     
     name : bpy.props.StringProperty(name="container name", default="empty")
@@ -448,7 +448,7 @@ class BentoBuddyAnimeshCollectionProps(bpy.types.PropertyGroup):
 
 
 
-class BentoBuddyAnimeshProps(bpy.types.PropertyGroup):
+class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
     def update_animesh_menu_enabled(self, context):
         
@@ -638,7 +638,7 @@ class BentoBuddyAnimeshProps(bpy.types.PropertyGroup):
 
             
             source_bone_count = len(obj[ani.animesh_source_name].data.bones)
-            if obj[ani.animesh_source_name].get('bentobuddy_control_rig') == True:
+            if obj[ani.animesh_source_name].get('onigiri_control_rig') == True:
                 
                 print("has control rig", ani.animesh_source_name)
                 source_bone_count = int(source_bone_count / 2)
@@ -768,7 +768,7 @@ class BentoBuddyAnimeshProps(bpy.types.PropertyGroup):
         )
     animesh_lock_source : bpy.props.BoolProperty(
         name = "anim add source",
-        description =            "Select your bone source rig, this might, for instance, be a Bento Buddy rig designed for Second Life or Opensim.",
+        description =            "Select your bone source rig, this might, for instance, be a Onigiri rig designed for Second Life or Opensim.",
         default = False,
         update = update_animesh_lock_source
         )
@@ -910,9 +910,9 @@ class BentoBuddyAnimeshProps(bpy.types.PropertyGroup):
 
 
 
-class BentoBuddyAnimeshGetCurrent(bpy.types.Operator):
+class OnigiriAnimeshGetCurrent(bpy.types.Operator):
     """Load the currently mapped rig setup into the Template Workshop"""
-    bl_idname = "bentobuddy.animesh_get_current"
+    bl_idname = "onigiri.animesh_get_current"
     bl_label = "Get map from Mapper"
 
     @classmethod
@@ -960,8 +960,8 @@ class BentoBuddyAnimeshGetCurrent(bpy.types.Operator):
         arm_props = {}
         for arm in arms:
             arm_props.setdefault(arm, {})
-            if obj[arm].get('bentobuddy_control_rig') != None:
-                arm_props[arm]['bentobuddy_control_rig'] = obj[source]['bentobuddy_control_rig']
+            if obj[arm].get('onigiri_control_rig') != None:
+                arm_props[arm]['onigiri_control_rig'] = obj[source]['onigiri_control_rig']
             if obj[arm].get('bone_map') != None:
                 arm_props[arm]['bone_map'] = obj[source]['bone_map'].to_dict()
             if obj[arm].get('bone_data') != None:
@@ -985,7 +985,7 @@ class BentoBuddyAnimeshGetCurrent(bpy.types.Operator):
         targets = bmp['targets'].to_dict()
 
         
-        bpy.ops.bentobuddy.mapper_reset()
+        bpy.ops.onigiri.mapper_reset()
 
         
         if len(bpy.context.selected_objects) > 0:
@@ -1001,7 +1001,7 @@ class BentoBuddyAnimeshGetCurrent(bpy.types.Operator):
         
 
         
-        bpy.ops.bentobuddy.animesh_reset()
+        bpy.ops.onigiri.animesh_reset()
 
         
         
@@ -1020,7 +1020,7 @@ class BentoBuddyAnimeshGetCurrent(bpy.types.Operator):
         for tarm in targets:
             obj[tarm].select_set(True)
             bpy.context.view_layer.objects.active = obj[tarm]
-            bpy.ops.bentobuddy.animesh_set_target(target=tarm)
+            bpy.ops.onigiri.animesh_set_target(target=tarm)
             
             
             
@@ -1038,9 +1038,9 @@ class BentoBuddyAnimeshGetCurrent(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshLoad(bpy.types.Operator, ImportHelper):
+class OnigiriAnimeshLoad(bpy.types.Operator, ImportHelper):
     """Load a previously saved character template map into the set to continue work on it or to apply it to your rigs to test"""
-    bl_idname = "bentobuddy.animesh_load"
+    bl_idname = "onigiri.animesh_load"
     bl_label = "Load template"
 
     filename_ext = ".ctm"
@@ -1064,7 +1064,7 @@ class BentoBuddyAnimeshLoad(bpy.types.Operator, ImportHelper):
             return {'FINISHED'}
 
         
-        bpy.ops.bentobuddy.animesh_reset()
+        bpy.ops.onigiri.animesh_reset()
 
         ani['template'] = template_map
         arms = {}
@@ -1106,9 +1106,9 @@ class BentoBuddyAnimeshLoad(bpy.types.Operator, ImportHelper):
 
 
 
-class BentoBuddyAnimeshRemoveTarget(bpy.types.Operator):
+class OnigiriAnimeshRemoveTarget(bpy.types.Operator):
     """Remove this target from your list.  All targets must be processed before the workshop is enabled."""
-    bl_idname = "bentobuddy.animesh_remove_target"
+    bl_idname = "onigiri.animesh_remove_target"
     bl_label = "Remove target map"
 
     target : bpy.props.StringProperty(default="")
@@ -1194,11 +1194,11 @@ class BentoBuddyAnimeshRemoveTarget(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshSetTarget(bpy.types.Operator):
+class OnigiriAnimeshSetTarget(bpy.types.Operator):
     """Choose a target armature that is associated with the name displayed on this button.  When
 you have processed them all the workshop will be enabled."""
 
-    bl_idname = "bentobuddy.animesh_set_target"
+    bl_idname = "onigiri.animesh_set_target"
     bl_label = "Set target"
 
     target : bpy.props.StringProperty(default="")
@@ -1225,7 +1225,7 @@ you have processed them all the workshop will be enabled."""
         
 
         if ani.animesh_action == "remove":
-            print("BentoBuddyAnimeshSetTarget reports: removing target from list -", self.target)
+            print("OnigiriAnimeshSetTarget reports: removing target from list -", self.target)
             ani.animesh_action = ""
             del ani['targets'][self.target]
             return {'FINISHED'}
@@ -1376,9 +1376,9 @@ you have processed them all the workshop will be enabled."""
 
 
 
-class BentoBuddyAnimeshSave(bpy.types.Operator, ExportHelper):
+class OnigiriAnimeshSave(bpy.types.Operator, ExportHelper):
     """Save your character template map to a file"""
-    bl_idname = "bentobuddy.animesh_save"
+    bl_idname = "onigiri.animesh_save"
     bl_label = "Save template map"
 
     filename_ext = ".ctm"
@@ -1412,7 +1412,7 @@ class BentoBuddyAnimeshSave(bpy.types.Operator, ExportHelper):
         bone_map = obj[ani.animesh_source_name]['bone_map'].to_dict()
 
         
-        template_map = "# Character Template Map auto-generated by Bento Buddy\n";
+        template_map = "# Character Template Map auto-generated by Onigiri\n";
         template_map += "template_map = {\n"
         for sbone in bone_map:
             (tarm, tbone), = bone_map[sbone].items()
@@ -1438,9 +1438,9 @@ class BentoBuddyAnimeshSave(bpy.types.Operator, ExportHelper):
 
 
 
-class BentoBuddyAnimeshApply(bpy.types.Operator):
+class OnigiriAnimeshApply(bpy.types.Operator):
     """Apply retargeting map to selected rig"""
-    bl_idname = "bentobuddy.animesh_apply"
+    bl_idname = "onigiri.animesh_apply"
     bl_label = "apply animesh map"
 
     @classmethod
@@ -1512,10 +1512,10 @@ class BentoBuddyAnimeshApply(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshAddTarget(bpy.types.Operator):
+class OnigiriAnimeshAddTarget(bpy.types.Operator):
     """This only works in suspend mode.  Suspend your mapping, choose a rig and click (Add Rig) to include it into your set."""
 
-    bl_idname = "bentobuddy.animesh_add_target"
+    bl_idname = "onigiri.animesh_add_target"
     bl_label = "add a rig to set"
 
     @classmethod
@@ -1560,11 +1560,11 @@ class BentoBuddyAnimeshAddTarget(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshStore(bpy.types.Operator):
+class OnigiriAnimeshStore(bpy.types.Operator):
     """Store all of the bones' current position/rotation into the (Restore) buffer.  If you do this while (Apply) is still in effect,
     you will freeze those bones where they are, you may not want that."""
 
-    bl_idname = "bentobuddy.animesh_store"
+    bl_idname = "onigiri.animesh_store"
     bl_label = "store character map"
 
     @classmethod
@@ -1640,9 +1640,9 @@ class BentoBuddyAnimeshStore(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshRestore(bpy.types.Operator):
+class OnigiriAnimeshRestore(bpy.types.Operator):
     """Restore the bones to their original locations, this will not delete your work."""
-    bl_idname = "bentobuddy.animesh_restore"
+    bl_idname = "onigiri.animesh_restore"
     bl_label = "restore rig"
 
     @classmethod
@@ -1691,7 +1691,7 @@ class BentoBuddyAnimeshRestore(bpy.types.Operator):
         
         return_value = mapper.restore_rig(armature=ani.animesh_source_name_backup, type="edit", data="all", roll=True)
         if return_value == False:
-            print("BentoBuddyAnimeshRestore reports: restore_rig returned False")
+            print("OnigiriAnimeshRestore reports: restore_rig returned False")
 
         arms = ani['targets'].keys()
         arms.append(ani.animesh_source_name)
@@ -1707,10 +1707,10 @@ class BentoBuddyAnimeshRestore(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshReset(bpy.types.Operator):
+class OnigiriAnimeshReset(bpy.types.Operator):
     """This resets the template workshop as if you didn't do anything."""
 
-    bl_idname = "bentobuddy.animesh_reset"
+    bl_idname = "onigiri.animesh_reset"
     bl_label = "Reset template workshop"
 
     def execute(self, context):
@@ -1743,10 +1743,10 @@ class BentoBuddyAnimeshReset(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshRemoveSelectedBones(bpy.types.Operator):
+class OnigiriAnimeshRemoveSelectedBones(bpy.types.Operator):
     """This will remove all of the currently selected bones from the mapper or the sole active pose bone depending what stage you're in."""
 
-    bl_idname = "bentobuddy.animesh_remove_selected_bones"
+    bl_idname = "onigiri.animesh_remove_selected_bones"
     bl_label = "remove animesh remove bones"
 
     @classmethod
@@ -1798,7 +1798,7 @@ class BentoBuddyAnimeshRemoveSelectedBones(bpy.types.Operator):
             
             
             if ani.animesh_source_bone in obj[ani.animesh_source_name]['bone_map']:
-                bpy.ops.bentobuddy.animesh_remove_bone(bone=ani.animesh_source_bone)
+                bpy.ops.onigiri.animesh_remove_bone(bone=ani.animesh_source_bone)
                 ani.animesh_source_bone = ""
                 return {'FINISHED'}
 
@@ -1840,7 +1840,7 @@ class BentoBuddyAnimeshRemoveSelectedBones(bpy.types.Operator):
             for b in bone_list:
                 
                 
-                bpy.ops.bentobuddy.animesh_remove_bone(bone=b)
+                bpy.ops.onigiri.animesh_remove_bone(bone=b)
 
             return {'FINISHED'}
 
@@ -1850,9 +1850,9 @@ class BentoBuddyAnimeshRemoveSelectedBones(bpy.types.Operator):
 
 
 
-class BentoBuddyAnimeshRemoveBone(bpy.types.Operator):
+class OnigiriAnimeshRemoveBone(bpy.types.Operator):
     """Remove this specific bone map from your set, this will NOT delete all of your work, only the associated bone map."""
-    bl_idname = "bentobuddy.animesh_remove_bone"
+    bl_idname = "onigiri.animesh_remove_bone"
     bl_label = "remove animesh remove bone"
 
     bone : bpy.props.StringProperty(default="")
@@ -1894,7 +1894,7 @@ class BentoBuddyAnimeshRemoveBone(bpy.types.Operator):
         bpy.ops.object.mode_set(mode='EDIT')
         error = restore_bone(armature=ani.animesh_source_name, bone=self.bone, type="edit", roll=True)
         if error == False:
-            print("BentoBuddyRemoveBone reports: restore_bone returned False")
+            print("OnigiriRemoveBone reports: restore_bone returned False")
         bpy.ops.object.mode_set(mode='POSE')
 
         

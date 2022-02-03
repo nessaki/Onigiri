@@ -54,7 +54,7 @@ def sl_bvh_export(
     if vbones == None:
         vbones = mbones
 
-    bb = bpy.context.scene.bentobuddy
+    bb = bpy.context.scene.onigiri
     bba = bpy.context.scene.bb_anim_props
     obj = bpy.data.objects
 
@@ -164,7 +164,7 @@ def sl_bvh_export(
 
     
     
-    bvh_temp_name = tempfile.gettempdir() + "/bentobuddy_" + get_unique_name_short() + ".bv_"
+    bvh_temp_name = tempfile.gettempdir() + "/onigiri_" + get_unique_name_short() + ".bv_"
 
     armObj.select_set(False)
     armObj = obj[vbones]

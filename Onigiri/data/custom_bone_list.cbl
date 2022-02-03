@@ -17,7 +17,7 @@
 # in some index order from when your target skeleton was created.
 #
 # You'll notice this comment, you should notice how it starts.
-# Everything after the # is considered a comment and is ignored by Bento Buddy.
+# Everything after the # is considered a comment and is ignored by Onigiri.
 # The following are containers for the items that you wish to rearrange.
 # The items in the containers are enclosed with single quotes ('), although you
 # can use double quotes ("), and the quoted name ends with a comma.
@@ -27,7 +27,7 @@
 # to quickly prototype your end result.  Note that this problem is mostly associated
 # with a combination of bones and not the bones themselves.  For instance, you may find
 # that mHead doesn't like to be used in your rig because its parent is still in the
-# bone bucket, not being used.  Bento Buddy allows you to quickly prototype, without
+# bone bucket, not being used.  Onigiri allows you to quickly prototype, without
 # having to redo your animations each time.  The bones below are a suggestion because
 # of my experience with problem rigs I know that these usually clear it up if added to
 # problem_bones.  You can also put volume bones here (vBones) if they are giving you grief.

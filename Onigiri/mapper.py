@@ -61,13 +61,13 @@ def mapper_handler(context):
         bpy.app.handlers.depsgraph_update_post.remove(mapper_handler)
         bmp.mapper_enabled = False
         print("mapper_handler reports: terminating mapper, source became empty while working:", bmp.mapper_source_name_backup)
-        bpy.ops.bentobuddy.mapper_reset()
+        bpy.ops.onigiri.mapper_reset()
         return
     if bmp.mapper_source_name not in obj:
         bpy.app.handlers.depsgraph_update_post.remove(mapper_handler)
         bmp.mapper_enabled = False
         print("mapper_handler reports: terminating mapper, source removed:", bmp.mapper_source_name_backup)
-        bpy.ops.bentobuddy.mapper_reset()
+        bpy.ops.onigiri.mapper_reset()
         return
     
     if bmp.mapper_lock_source == False:
@@ -77,7 +77,7 @@ def mapper_handler(context):
             print("mapper::mapper_handler reports attempt to disable but doesn't exist")
         bmp.mapper_enabled = False
         print("mapper_handler reports: mapper disengaged by source")
-        bpy.ops.bentobuddy.mapper_reset()
+        bpy.ops.onigiri.mapper_reset()
         return
     
     
