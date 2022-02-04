@@ -24,8 +24,8 @@ def get_master(armature, report=False):
         OBJ = bpy.data.objects[armature]
 
     
-    masRig = OBJ.get('bb_puppet_master')
-    minions = OBJ.get('bb_puppet_minions')
+    masRig = OBJ.get('oni_puppet_master')
+    minions = OBJ.get('oni_puppet_minions')
     if masRig == None and minions == None:
         if report == True:
             print("puppet::get_master reports : not in the set")

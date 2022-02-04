@@ -5,11 +5,11 @@ from bpy_extras.io_utils import ImportHelper, ExportHelper
 
 from . import ico
 from . import utils
-from .mod_settings import bb_settings
+from .mod_settings import oni_settings
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-presets_path    =   bb_settings['paths']['presets']
-data_path       =   bb_settings['paths']['data']
+presets_path    =   oni_settings['paths']['presets']
+data_path       =   oni_settings['paths']['data']
 
 
 
@@ -39,13 +39,13 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_info_onigiri_load_generic_template(self, context):
         
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         
-        bb_settings['terminate'] = True
-        bbe.info_onigiri_load_generic_template = False
+        oni_settings['terminate'] = True
+        onie.info_onigiri_load_generic_template = False
         return
     info_onigiri_load_generic_template : bpy.props.BoolProperty(
         name = "Template Converter",
@@ -62,13 +62,13 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_info_onigiri_combine_generic_template(self, context):
         
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         
-        bb_settings['terminate'] = True
-        bbe.info_onigiri_combine_generic_template = False
+        oni_settings['terminate'] = True
+        onie.info_onigiri_combine_generic_template = False
         return
     info_onigiri_combine_generic_template : bpy.props.BoolProperty(
         name = "Combine Templates",
@@ -97,9 +97,9 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
     )
 
     def update_source_active(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.terminate == True:
-            bbe.terminate = False
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.terminate == True:
+            onie.terminate = False
             return
 
         print("entered update for source_active")
@@ -112,23 +112,23 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
     )
 
     def update_move_name(self,context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.terminate == True:
-            bbe.terminate = False
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.terminate == True:
+            onie.terminate = False
             return
         
-        if bbe.move_name == bbe.move_name_backup:
+        if onie.move_name == onie.move_name_backup:
             print("Property move_name updater running, no name change, returning")
-            bbe.message = "Same name, nothing changed"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "Same name, nothing changed"
+            del onie['name']
+            del onie['item']
             return
         
-        if bbe.move_name.strip() == "":
+        if onie.move_name.strip() == "":
             print("we're not allowing empty names today, come back tomorrow")
-            bbe.message = "Empty string"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "Empty string"
+            del onie['name']
+            del onie['item']
             return
 
         
@@ -139,12 +139,12 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
         
         
         tarms = dict()
-        for sbone in bbe['template_editing']:
-            (tarm, tbone), = bbe['template_editing'][sbone].items()
+        for sbone in onie['template_editing']:
+            (tarm, tbone), = onie['template_editing'][sbone].items()
             tarms[tarm] = tbone
 
         
-        if bbe.move_name in tarms:
+        if onie.move_name in tarms:
             
             
             
@@ -155,15 +155,15 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
             
             template_new = dict()
             target_bones = dict()
-            for sbone in bbe['template_editing']:
-                (tarm, tbone), = bbe['template_editing'][sbone].items()
-                if tarm == bbe.move_name_backup:
-                    template_new[sbone] = {bbe.move_name : tbone}
+            for sbone in onie['template_editing']:
+                (tarm, tbone), = onie['template_editing'][sbone].items()
+                if tarm == onie.move_name_backup:
+                    template_new[sbone] = {onie.move_name : tbone}
                     target_bones[tbone] = ""
             
-            for sbone in bbe['template_editing']:
-                (tarm, tbone), = bbe['template_editing'][sbone].items()
-                if tarm == bbe.move_name_backup:
+            for sbone in onie['template_editing']:
+                (tarm, tbone), = onie['template_editing'][sbone].items()
+                if tarm == onie.move_name_backup:
                     continue
                 if tbone in target_bones:
                     continue
@@ -175,89 +175,89 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
         
         else:
             template_new = dict()
-            for sbone in bbe['template_editing']:
-                (tarm, tbone), = bbe['template_editing'][sbone].items()
+            for sbone in onie['template_editing']:
+                (tarm, tbone), = onie['template_editing'][sbone].items()
                 
-                if tarm == bbe.move_name_backup:
-                    template_new[sbone] = {bbe.move_name : tbone}
-            for sbone in bbe['template_editing']:
-                (tarm, tbone), = bbe['template_editing'][sbone].items()
+                if tarm == onie.move_name_backup:
+                    template_new[sbone] = {onie.move_name : tbone}
+            for sbone in onie['template_editing']:
+                (tarm, tbone), = onie['template_editing'][sbone].items()
                 
-                if tarm == bbe.move_name_backup:
+                if tarm == onie.move_name_backup:
                     continue
                 template_new[sbone] = {tarm : tbone}
 
-        bbe.message = "rig name changed from " + bbe.move_name_backup + " to " + bbe.move_name
-        bbe['template_editing'] = template_new
+        onie.message = "rig name changed from " + onie.move_name_backup + " to " + onie.move_name
+        onie['template_editing'] = template_new
 
         
-        if bbe.get('template_editing_undo'):
-            del bbe['template_editing_undo']
+        if onie.get('template_editing_undo'):
+            del onie['template_editing_undo']
 
-        del bbe['name']
-        del bbe['item']
+        del onie['name']
+        del onie['item']
 
     def update_sbone_name(self,context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.terminate == True:
-            bbe.terminate = False
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.terminate == True:
+            onie.terminate = False
             return
         
-        if bbe.sbone_name == bbe.sbone_name_backup:
+        if onie.sbone_name == onie.sbone_name_backup:
             print("Property sbone_name updater running, no name change, returning")
-            bbe.message = "Same name, nothing changed"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "Same name, nothing changed"
+            del onie['name']
+            del onie['item']
             return
         
-        if bbe.sbone_name.strip() == "":
+        if onie.sbone_name.strip() == "":
             print("we're not allowing empty names today, come back tomorrow")
-            bbe.message = "Empty string"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "Empty string"
+            del onie['name']
+            del onie['item']
             return
         
-        if bbe.sbone_name in bbe['template_editing']:
+        if onie.sbone_name in onie['template_editing']:
             print("Name collision, change the name of the other one if you want to move this stream")
-            bbe.message = "[The name " + '"' + bbe.sbone_name + '"' + " would collide with another bone" + "]"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "[The name " + '"' + onie.sbone_name + '"' + " would collide with another bone" + "]"
+            del onie['name']
+            del onie['item']
             return
 
-        print("Property sbone_name updater running to change bone map from", bbe.sbone_name_backup, "to", bbe.sbone_name)
+        print("Property sbone_name updater running to change bone map from", onie.sbone_name_backup, "to", onie.sbone_name)
 
         
         last_edit = {}
         
-        bbe['template_editing_undo'] = dict()
-        bbe['template_editing_undo']['old'] = {}
-        bbe['template_editing_undo']['new'] = {}
-        bbe['template_editing_undo']['map'] = {}
-        bbe['template_editing_undo']['old'][bbe.sbone_name_backup] = bbe['template_editing'][bbe.sbone_name_backup]
+        onie['template_editing_undo'] = dict()
+        onie['template_editing_undo']['old'] = {}
+        onie['template_editing_undo']['new'] = {}
+        onie['template_editing_undo']['map'] = {}
+        onie['template_editing_undo']['old'][onie.sbone_name_backup] = onie['template_editing'][onie.sbone_name_backup]
         
-        bbe['template_editing_undo']['new'][bbe.sbone_name] = bbe['template_editing'][bbe.sbone_name_backup]
+        onie['template_editing_undo']['new'][onie.sbone_name] = onie['template_editing'][onie.sbone_name_backup]
         
         
         
-        bbe['template_editing_undo']['map'][bbe.sbone_name] = bbe.sbone_name_backup
+        onie['template_editing_undo']['map'][onie.sbone_name] = onie.sbone_name_backup
 
         
-        template = bbe['template_editing'].to_dict()
+        template = onie['template_editing'].to_dict()
         template_new = dict()
-        template_new[bbe.sbone_name] = template[bbe.sbone_name_backup]
+        template_new[onie.sbone_name] = template[onie.sbone_name_backup]
         for t in template:
-            if t == bbe.sbone_name_backup:
+            if t == onie.sbone_name_backup:
                 continue
             template_new[t] = template[t]
 
-        bbe.sbone_name_backup = bbe.sbone_name
-        bbe['template_editing'] = template_new
+        onie.sbone_name_backup = onie.sbone_name
+        onie['template_editing'] = template_new
 
         
-        del bbe['name']
-        del bbe['item']
+        del onie['name']
+        del onie['item']
 
-        bbe.message = "name changed"
+        onie.message = "name changed"
 
         return
 
@@ -268,13 +268,13 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
     
     
     def update_tbone_name(self,context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.terminate == True:
-            bbe.terminate = False
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.terminate == True:
+            onie.terminate = False
             return
 
         
-        sbone = bbe['name']
+        sbone = onie['name']
 
         
 
@@ -283,146 +283,146 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
         
         
         
-        (tarm, tbone), = bbe['template_editing'][sbone].items()
+        (tarm, tbone), = onie['template_editing'][sbone].items()
 
         
-        if bbe.tbone_name == bbe.tbone_name_backup:
+        if onie.tbone_name == onie.tbone_name_backup:
             print("Property tbone_name updater running, no name change, returning")
-            bbe.message = "Same name, nothing changed"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "Same name, nothing changed"
+            del onie['name']
+            del onie['item']
             return
         
-        if bbe.tbone_name.strip() == "":
+        if onie.tbone_name.strip() == "":
             print("we're not allowing empty names today, come back tomorrow")
-            bbe.message = "Empty string"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "Empty string"
+            del onie['name']
+            del onie['item']
             return
 
         
         
 
         tbone_items = set()
-        for k in bbe['template_editing']: 
-            (rig, tbone), = bbe['template_editing'][k].items()
+        for k in onie['template_editing']: 
+            (rig, tbone), = onie['template_editing'][k].items()
             if rig == tarm:
                 tbone_items.add(tbone)
 
         
-        if bbe.tbone_name in tbone_items:
+        if onie.tbone_name in tbone_items:
             print("Name collision, change the name of the other one if you want to move this stream")
-            bbe.message = "The name " + '"' + bbe.tbone_name + '"' + " would collide with another bone"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "The name " + '"' + onie.tbone_name + '"' + " would collide with another bone"
+            del onie['name']
+            del onie['item']
             return
 
-        print("Property tbone_name updater running to change target from", tarm, bbe.tbone_name_backup, "to", tarm, bbe.tbone_name)
+        print("Property tbone_name updater running to change target from", tarm, onie.tbone_name_backup, "to", tarm, onie.tbone_name)
 
         
         last_edit = {}
         
-        bbe['template_editing_undo'] = dict()
-        bbe['template_editing_undo']['old'] = {}
-        bbe['template_editing_undo']['new'] = {}
-        bbe['template_editing_undo']['map'] = {}
-        bbe['template_editing_undo']['old'][sbone] = bbe['template_editing'][sbone]
+        onie['template_editing_undo'] = dict()
+        onie['template_editing_undo']['old'] = {}
+        onie['template_editing_undo']['new'] = {}
+        onie['template_editing_undo']['map'] = {}
+        onie['template_editing_undo']['old'][sbone] = onie['template_editing'][sbone]
         
-        bbe['template_editing_undo']['new'][sbone] = {tarm : bbe.tbone_name}
+        onie['template_editing_undo']['new'][sbone] = {tarm : onie.tbone_name}
         
-        bbe['template_editing_undo']['map'][bbe.tbone_name] = bbe.tbone_name_backup
+        onie['template_editing_undo']['map'][onie.tbone_name] = onie.tbone_name_backup
 
         
-        template = bbe['template_editing'].to_dict()
+        template = onie['template_editing'].to_dict()
         template_new = dict()
-        template_new[sbone] = {tarm : bbe.tbone_name}
+        template_new[sbone] = {tarm : onie.tbone_name}
 
         for t in template:
             if t == sbone:
                 continue
             template_new[t] = template[t]
 
-        bbe.tbone_name_backup = bbe.tbone_name
-        bbe['template_editing'] = template_new
+        onie.tbone_name_backup = onie.tbone_name
+        onie['template_editing'] = template_new
 
-        del bbe['name']
-        del bbe['item']
+        del onie['name']
+        del onie['item']
 
-        bbe.message = "name changed"
+        onie.message = "name changed"
 
         return
 
     def update_tarm_name(self,context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.terminate == True:
-            bbe.terminate = False
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.terminate == True:
+            onie.terminate = False
             return
 
         
-        sbone = bbe['name']
+        sbone = onie['name']
 
         
 
         
-        (tarm, tbone), = bbe['template_editing'][sbone].items()
+        (tarm, tbone), = onie['template_editing'][sbone].items()
 
         
-        if bbe.tarm_name == bbe.tarm_name_backup:
+        if onie.tarm_name == onie.tarm_name_backup:
             print("Property tarm_name updater running, no name change, returning")
-            bbe.message = "Same name, nothing changed"
-            del bbe['name']
-            del bbe['item']
+            onie.message = "Same name, nothing changed"
+            del onie['name']
+            del onie['item']
             return
         
-        if bbe.tarm_name.strip() == "":
+        if onie.tarm_name.strip() == "":
             print("we're not allowing empty names today, come back tomorrow")
-            bbe.message = "Empty string"
+            onie.message = "Empty string"
 
-            del bbe['name']
-            del bbe['item']
+            del onie['name']
+            del onie['item']
             return
         
         
         tarm_items = {}
-        for k in bbe['template_editing']:
-            (arm, bone), = bbe['template_editing'][k].items()
-            if bbe.tarm_name == arm:
+        for k in onie['template_editing']:
+            (arm, bone), = onie['template_editing'][k].items()
+            if onie.tarm_name == arm:
                 
                 print("The target armature rename would have collided:", tarm)
-                bbe.message = bbe.tarm_name + " would have collided, use rig options to merge"
-                del bbe['name']
-                del bbe['item']
+                onie.message = onie.tarm_name + " would have collided, use rig options to merge"
+                del onie['name']
+                del onie['item']
                 return
 
         
         last_edit = {}
         
-        bbe['template_editing_undo'] = dict()
-        bbe['template_editing_undo']['old'] = {}
-        bbe['template_editing_undo']['new'] = {}
-        bbe['template_editing_undo']['map'] = {}
-        bbe['template_editing_undo']['old'][sbone] = bbe['template_editing'][sbone]
+        onie['template_editing_undo'] = dict()
+        onie['template_editing_undo']['old'] = {}
+        onie['template_editing_undo']['new'] = {}
+        onie['template_editing_undo']['map'] = {}
+        onie['template_editing_undo']['old'][sbone] = onie['template_editing'][sbone]
         
-        bbe['template_editing_undo']['new'][sbone] = {bbe.tarm_name : tbone}
+        onie['template_editing_undo']['new'][sbone] = {onie.tarm_name : tbone}
         
-        bbe['template_editing_undo']['map'][bbe.tarm_name] = bbe.tarm_name_backup
+        onie['template_editing_undo']['map'][onie.tarm_name] = onie.tarm_name_backup
 
         
-        template = bbe['template_editing'].to_dict()
+        template = onie['template_editing'].to_dict()
         template_new = dict()
-        template_new[sbone] = {bbe.tarm_name : tbone}
+        template_new[sbone] = {onie.tarm_name : tbone}
 
         for t in template:
             if t == sbone:
                 continue
             template_new[t] = template[t]
 
-        bbe.tarm_name_backup = bbe.tarm_name
-        bbe['template_editing'] = template_new
-        del bbe['name']
-        del bbe['item']
+        onie.tarm_name_backup = onie.tarm_name
+        onie['template_editing'] = template_new
+        del onie['name']
+        del onie['item']
 
-        bbe.message = "name changed"
+        onie.message = "name changed"
 
         return
 
@@ -482,7 +482,7 @@ This section contains an info button (!), hover over it for detailed information
 
     def execute(self, context):
         obj = bpy.data.objects
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         path = self.properties.filepath
 
         try:
@@ -504,10 +504,10 @@ This section contains an info button (!), hover over it for detailed information
 
         
         if template != None:
-            bbe['template_map_convert'] = {}
+            onie['template_map_convert'] = {}
 
             
-            bbe['template_map_convert'] = template
+            onie['template_map_convert'] = template
 
 
 
@@ -523,9 +523,9 @@ This section contains an info button (!), hover over it for detailed information
         
         
         if 'template_map' in template:
-            bbe['map_type_convert'] = "ctm"
+            onie['map_type_convert'] = "ctm"
         if 'rename' in template:
-            bbe['map_type_convert'] = "ccm"
+            onie['map_type_convert'] = "ccm"
 
         return {'FINISHED'}
 
@@ -558,24 +558,24 @@ class OnigiriSaveCCM(bpy.types.Operator, ExportHelper):
     
     @classmethod
     def poll(cls, context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.get('template_map_convert') == None:
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.get('template_map_convert') == None:
             return False
-        if bbe['template_map_convert'] == "":
+        if onie['template_map_convert'] == "":
             return False
-        if bbe.get('map_type_convert') == None:
+        if onie.get('map_type_convert') == None:
             return False
-        if bbe['map_type_convert'] == "ccm":
+        if onie['map_type_convert'] == "ccm":
             return False
         return True
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         path = self.properties.filepath
 
         
-        if bbe['map_type_convert'] == "ccm":
-            txt = "Conversion type is the same as the loaded map: " + bbe['map_type']
+        if onie['map_type_convert'] == "ccm":
+            txt = "Conversion type is the same as the loaded map: " + onie['map_type']
             print(txt)
             utils.popup(txt, "Error", "ERROR")
             return {'FINISHED'}
@@ -585,7 +585,7 @@ class OnigiriSaveCCM(bpy.types.Operator, ExportHelper):
         
 
         
-        template = bbe['template_map_convert']['template_map'].to_dict()
+        template = onie['template_map_convert']['template_map'].to_dict()
 
         
         container = dict()
@@ -608,8 +608,8 @@ class OnigiriSaveCCM(bpy.types.Operator, ExportHelper):
         output.close()
 
         
-        del bbe['template_map_convert']
-        del bbe['map_type_convert']
+        del onie['template_map_convert']
+        del onie['map_type_convert']
 
         return {'FINISHED'}
 
@@ -637,30 +637,30 @@ class OnigiriSaveCTM(bpy.types.Operator, ExportHelper):
     
     @classmethod
     def poll(cls, context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.get('template_map_convert') == None:
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.get('template_map_convert') == None:
             return False
-        if bbe['template_map_convert'] == "":
+        if onie['template_map_convert'] == "":
             return False
-        if bbe.get('map_type_convert') == None:
+        if onie.get('map_type_convert') == None:
             return False
-        if bbe['map_type_convert'] == "ctm":
+        if onie['map_type_convert'] == "ctm":
             return False
         return True
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         path = self.properties.filepath
 
         
-        if bbe['map_type_convert'] == "ctm":
-            txt = "Conversion type is the same as the loaded map: " + bbe['map_type']
+        if onie['map_type_convert'] == "ctm":
+            txt = "Conversion type is the same as the loaded map: " + onie['map_type']
             print(txt)
             utils.popup(txt, "Error", "ERROR")
             return {'FINISHED'}
 
         
-        template = bbe['template_map_convert'].to_dict()
+        template = onie['template_map_convert'].to_dict()
 
         
         
@@ -687,7 +687,7 @@ class OnigiriSaveCTM(bpy.types.Operator, ExportHelper):
         output.close()
 
         
-        del bbe['template_map_convert']
+        del onie['template_map_convert']
 
         return {'FINISHED'}
 
@@ -724,7 +724,7 @@ previously been mapped separately, see (!) button"""
 
     def execute(self, context):
         obj = bpy.data.objects
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         path = self.properties.filepath
 
         low_path = path.lower()
@@ -739,18 +739,18 @@ previously been mapped separately, see (!) button"""
 
         
         
-        if bbe.get('map_type_combine') != None:
-            if bbe['map_type_combine'] == my_type:
+        if onie.get('map_type_combine') != None:
+            if onie['map_type_combine'] == my_type:
                 pass
             else:
-                print("OnigiriCombineGenericTemplate reports: existing template is", bbe['map_type_combine'], "but user wants something else")
+                print("OnigiriCombineGenericTemplate reports: existing template is", onie['map_type_combine'], "but user wants something else")
                 txt = "You can only combine maps of the same type.  To start over use the reset button"
                 print(txt)
                 utils.popup(txt, "Error", "ERROR")
                 return {'FINISHED'}
         
         else:
-            bbe['map_type_combine'] = my_type
+            onie['map_type_combine'] = my_type
 
         path_head, path_tail = os.path.split(path)
 
@@ -774,10 +774,10 @@ previously been mapped separately, see (!) button"""
         
         if template != "":
             
-            if bbe.get('template_map_combine') == None:
-                bbe['template_map_combine'] = {}
+            if onie.get('template_map_combine') == None:
+                onie['template_map_combine'] = {}
                 
-                bbe['map_files_combine'] = [path_tail]
+                onie['map_files_combine'] = [path_tail]
             
             else:
 
@@ -787,24 +787,24 @@ previously been mapped separately, see (!) button"""
                 print("---------------------------------------------------------------")
 
 
-                if bbe.get('map_files_combine') == None:
-                    bbe['map_files_combine'] = list()
-                if path_tail in bbe['map_files_combine']:
+                if onie.get('map_files_combine') == None:
+                    onie['map_files_combine'] = list()
+                if path_tail in onie['map_files_combine']:
                     txt = "OnigiriCombineGenericTemplate reports: already recorded - " + path_tail
                     print(txt)
                     utils.popup(txt, "Error", "ERROR")
                     return {'FINISHED'}
 
-                map_files = bbe['map_files_combine']
+                map_files = onie['map_files_combine']
                 map_files.append(path_tail)
-                bbe['map_files_combine'] = map_files
+                onie['map_files_combine'] = map_files
 
             
             
             
             
             
-            template_map = bbe['template_map_combine'].to_dict()
+            template_map = onie['template_map_combine'].to_dict()
             for root_key in template:
                 if template_map.get(root_key) == None:
                     template_map[root_key] = dict()
@@ -817,10 +817,10 @@ previously been mapped separately, see (!) button"""
                 
                 
                 if root_key == "pose":
-                    if bbe.disable_map_pose == True:
+                    if onie.disable_map_pose == True:
                         continue
 
-            bbe['template_map_combine'] = template_map
+            onie['template_map_combine'] = template_map
 
         return {'FINISHED'}
 
@@ -846,7 +846,7 @@ class OnigiriSaveCombinedCCM(bpy.types.Operator, ExportHelper):
         )
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         path = self.properties.filepath
 
 
@@ -854,7 +854,7 @@ class OnigiriSaveCombinedCCM(bpy.types.Operator, ExportHelper):
 
         
         
-        template = bbe['template_map_combine'].to_dict()
+        template = onie['template_map_combine'].to_dict()
 
         formatted_maps = "# Auto generated by Onigiri - Character Converter from Combined CCM\n"
         for k in template:
@@ -867,8 +867,8 @@ class OnigiriSaveCombinedCCM(bpy.types.Operator, ExportHelper):
         output.close()
 
         
-        del bbe['template_map_combine']
-        del bbe['map_type_combine']
+        del onie['template_map_combine']
+        del onie['map_type_combine']
 
         return {'FINISHED'}
 
@@ -894,10 +894,10 @@ class OnigiriSaveCombinedCTM(bpy.types.Operator, ExportHelper):
         )
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         path = self.properties.filepath
 
-        template = bbe['template_map_combine'].to_dict()
+        template = onie['template_map_combine'].to_dict()
 
         formatted_maps = "# Character Template Map auto-generated by Onigiri from CTM\n"
 
@@ -911,8 +911,8 @@ class OnigiriSaveCombinedCTM(bpy.types.Operator, ExportHelper):
         output.close()
 
         
-        del bbe['template_map_combine']
-        del bbe['map_type_combine']
+        del onie['template_map_combine']
+        del onie['map_type_combine']
 
         return {'FINISHED'}
 
@@ -931,10 +931,10 @@ class OnigiriResetCombinedTemplates(bpy.types.Operator):
     bl_label = "Reset Composer"
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        del bbe['template_map_combine']
-        del bbe['map_type_combine']
-        del bbe['map_files_combine']
+        onie = bpy.context.window_manager.oni_edit_template
+        del onie['template_map_combine']
+        del onie['map_type_combine']
+        del onie['map_files_combine']
         return {'FINISHED'}
 
 
@@ -962,9 +962,9 @@ class OnigiriEditTemplateNewCTM(bpy.types.Operator):
 
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
 
-        if bbe.get('template_editing') != None:
+        if onie.get('template_editing') != None:
             print("Create new CTM runs but there's already a template in the mapper")
             utils.popup("You have an active ctm, reset it to start a new one", "Template Exists", "INFO")
             return {'FINISHED'}
@@ -974,7 +974,7 @@ class OnigiriEditTemplateNewCTM(bpy.types.Operator):
         sbone = utils.get_unique_name_short()
         tarm = utils.get_unique_name_short()
         tbone = utils.get_unique_name_short()
-        bbe['template_editing'] = {sbone: {tarm: tbone}}
+        onie['template_editing'] = {sbone: {tarm: tbone}}
 
         return {'FINISHED'}
 
@@ -1004,7 +1004,7 @@ SL bones don't have spaces but your target can.
         return {'RUNNING_MODAL'}
 
     def execute(self, context):
-        bb_edit_template = bpy.context.window_manager.bb_edit_template
+        oni_edit_template = bpy.context.window_manager.oni_edit_template
         bpy.ops.onigiri.edit_template_reset()
 
         template = {}
@@ -1039,7 +1039,7 @@ SL bones don't have spaces but your target can.
             if tbone in used_targets:
                 duplicates[tbone] = ""
                 continue
-            if bb_edit_template.load_txt_reversed == True:
+            if oni_edit_template.load_txt_reversed == True:
                 used_targets[sbone] = "" 
                 template_map[tbone] = {}
                 template_map[tbone]["Target"] = sbone
@@ -1053,7 +1053,7 @@ SL bones don't have spaces but your target can.
             print("There were duplicate targets in your map, they were removed:", duplicates)
             utils.popup("Duplicates were found and removed, see console.", "Info", "INFO")
 
-        bb_edit_template['template_editing'] = template_map
+        oni_edit_template['template_editing'] = template_map
 
         return {'FINISHED'}
 
@@ -1085,7 +1085,7 @@ class OnigiriEditTemplateLoadFromCTM(bpy.types.Operator, ImportHelper):
         return {'RUNNING_MODAL'}
 
     def execute(self, context):
-        bb_edit_template = bpy.context.window_manager.bb_edit_template
+        oni_edit_template = bpy.context.window_manager.oni_edit_template
         bpy.ops.onigiri.edit_template_reset()
 
         try:
@@ -1108,7 +1108,7 @@ class OnigiriEditTemplateLoadFromCTM(bpy.types.Operator, ImportHelper):
         
         
         
-        bb_edit_template[self.target] = template_map
+        oni_edit_template[self.target] = template_map
 
         return {'FINISHED'}
 
@@ -1134,11 +1134,11 @@ class OnigiriEditTemplateSaveFromCTM(bpy.types.Operator, ExportHelper):
         return {'RUNNING_MODAL'}
 
     def execute(self, context):
-        bb_edit_template = bpy.context.window_manager.bb_edit_template
+        oni_edit_template = bpy.context.window_manager.oni_edit_template
 
-        if bb_edit_template.get('template_editing'):
+        if oni_edit_template.get('template_editing'):
 
-            template_map = bb_edit_template['template_editing'].to_dict()
+            template_map = oni_edit_template['template_editing'].to_dict()
             formatted_text = utils.format_ctm(template_map)
 
             try:
@@ -1176,14 +1176,14 @@ does not actually do anything except build a data set for you"""
         return False
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         obj = bpy.data.objects
 
         armObj = bpy.context.selected_objects[0]
         sarm = armObj.name
         print("source picked", sarm)
-        bbe.terminate = True
-        bbe.source_active = True
+        onie.terminate = True
+        onie.source_active = True
         return {'FINISHED'}
 
 
@@ -1206,26 +1206,26 @@ class OnigiriEditTemplatePickTarget(bpy.types.Operator):
         
         
         
-        bbe = bpy.context.window_manager.bb_edit_template
-        return bbe.source_active
+        onie = bpy.context.window_manager.oni_edit_template
+        return onie.source_active
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         obj = bpy.data.objects
 
         armObj = bpy.context.selected_objects[0]
         tarm = armObj.name
         print("target picked", tarm)
-        bbe.terminate = True
+        onie.terminate = True
 
-        if bbe.get('template_editor_targets') == None:
-            bbe['template_editor_targets'] = dict()
+        if onie.get('template_editor_targets') == None:
+            onie['template_editor_targets'] = dict()
 
-        if tarm in bbe['template_editor_targets']:
+        if tarm in onie['template_editor_targets']:
             print("target exists already:", tarm)
             utils.popup("Target already chosen", "Info", "INFO")
         else:
-            bbe['template_editor_targets'][tarm] = {}
+            onie['template_editor_targets'][tarm] = {}
 
         return {'FINISHED'}
 
@@ -1250,15 +1250,15 @@ Any stored undo will be removed
     name : bpy.props.StringProperty(default="")
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         obj = bpy.data.objects
 
         
-        if self.name == bbe.get('name'):
+        if self.name == onie.get('name'):
             
             
-            del bbe['name']
-            del bbe['item']
+            del onie['name']
+            del onie['item']
             return {'FINISHED'}
 
         
@@ -1267,8 +1267,8 @@ Any stored undo will be removed
 
         
         
-        bbe['item'] = "move"
-        bbe['name'] = self.name
+        onie['item'] = "move"
+        onie['name'] = self.name
 
         
         
@@ -1276,9 +1276,9 @@ Any stored undo will be removed
 
         
         
-        bbe.terminate = True
-        bbe.move_name = self.name
-        bbe.move_name_backup = self.name
+        onie.terminate = True
+        onie.move_name = self.name
+        onie.move_name_backup = self.name
 
         return {'FINISHED'}
 
@@ -1318,41 +1318,41 @@ is not usually what you need but it's here for convenience.
     name : bpy.props.StringProperty(default="")
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         obj = bpy.data.objects
 
         
-        if self.name == bbe.get('name'):
+        if self.name == onie.get('name'):
             
             
-            del bbe['name']
-            del bbe['item']
+            del onie['name']
+            del onie['item']
             return {'FINISHED'}
 
         print("Removing target armature stream for:", self.name)
 
         
         template_new = {}
-        template = bbe['template_editing'].to_dict()
+        template = onie['template_editing'].to_dict()
         for sbone in template:
             (tarm, tbone), = template[sbone].items()
             if tarm == self.name:
                 continue
             template_new[sbone] = {tarm : tbone}
 
-        bbe['template_editing'] = template_new
-        bbe.terminate = True
-        bbe.move_name = ""
-        bbe.move_name_backup = ""
+        onie['template_editing'] = template_new
+        onie.terminate = True
+        onie.move_name = ""
+        onie.move_name_backup = ""
 
         
-        if bbe.get('name'):
-            del bbe['name']
-        if bbe.get('item'):
-            del bbe['item']
+        if onie.get('name'):
+            del onie['name']
+        if onie.get('item'):
+            del onie['item']
 
         
-        if len(bbe['template_editing']) == 0:
+        if len(onie['template_editing']) == 0:
             
             
             
@@ -1360,13 +1360,13 @@ is not usually what you need but it's here for convenience.
             bpy.ops.onigiri.edit_template_reset()
 
         
-        if bbe.get('template_editing_undo'):
-            undo_stream = bbe['template_editing_undo']['new'].to_dict()
+        if onie.get('template_editing_undo'):
+            undo_stream = onie['template_editing_undo']['new'].to_dict()
             (sbone, tarm_tbone), = undo_stream.items()
             (tarm, tbone), = tarm_tbone.items()
             if tarm == self.name:
                 print("removed undo for target armature:", self.name)
-                del bbe['template_editing_undo']
+                del onie['template_editing_undo']
 
         return {'FINISHED'}
 
@@ -1381,25 +1381,25 @@ class OnigiriEditTemplateReset(bpy.types.Operator):
     def execute(self, context):
         
         
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.get('template_editing') != None:
-            del bbe['template_editing']
-        if bbe.get('template_editing_undo') != None:
-            del bbe['template_editing_undo']
-        if bbe.get('item') != None:
-            del bbe['item']
-        if bbe.get('name') != None:
-            del bbe['name']
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.get('template_editing') != None:
+            del onie['template_editing']
+        if onie.get('template_editing_undo') != None:
+            del onie['template_editing_undo']
+        if onie.get('item') != None:
+            del onie['item']
+        if onie.get('name') != None:
+            del onie['name']
 
-        bbe.show_rigs = False
-        bbe.terminate = True
-        bbe.move_name = ""
-        bbe.move_name_backup = ""
-        bbe.terminate = True
-        bbe.source_active = False
+        onie.show_rigs = False
+        onie.terminate = True
+        onie.move_name = ""
+        onie.move_name_backup = ""
+        onie.terminate = True
+        onie.source_active = False
 
-        bbe.item_name = ""
-        bbe.item_name_backup = ""
+        onie.item_name = ""
+        onie.item_name_backup = ""
 
         return {'FINISHED'}
 
@@ -1419,22 +1419,22 @@ black, not in map mode"""
     bone : bpy.props.StringProperty(default="")
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         try:
-            del bbe['template_editing'][self.bone]
-            if len(bbe['template_editing']) == 0:
-                del bbe['template_editing']
+            del onie['template_editing'][self.bone]
+            if len(onie['template_editing']) == 0:
+                del onie['template_editing']
             print("Removed", self.bone)
         except:
             print("Couldn't remove bone, this is weird:", self.bone)
 
         
-        if bbe.get('template_editing_undo') != None:
-            undo_stream = bbe['template_editing_undo']['new'].to_dict()
+        if onie.get('template_editing_undo') != None:
+            undo_stream = onie['template_editing_undo']['new'].to_dict()
             (sbone, tarm_tbone), = undo_stream.items()
             if self.bone == sbone:
                 print("removed undo for bone:", self.bone)
-                del bbe['template_editing_undo']
+                del onie['template_editing_undo']
 
         return {'FINISHED'}
 
@@ -1449,7 +1449,7 @@ get an error about a collision just try again
     bl_label = "Click to manually add a bone to the mapper\n"
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
 
         
         sbone = utils.get_unique_name_short()
@@ -1459,14 +1459,14 @@ get an error about a collision just try again
         tarm = sbone
         tbone = sbone
 
-        if sbone in bbe['template_editing']:
+        if sbone in onie['template_editing']:
             print("uuid was present in the map as a source bone, maybe try again?")
             utils.popup("the uniquly created name for the source bone existed in the map, see console", "Collision", "ERROR")
             return {'FINISHED'}
 
         
         
-        template = bbe['template_editing'].to_dict()
+        template = onie['template_editing'].to_dict()
         template_new = dict()
         template_new[sbone] = {}
         template_new[sbone][tarm] = tbone
@@ -1478,7 +1478,7 @@ get an error about a collision just try again
             template_new[sbone] = {}
             template_new[sbone][tarm] = tbone
 
-        bbe['template_editing'] = template_new
+        onie['template_editing'] = template_new
 
         return {'FINISHED'}
 
@@ -1503,15 +1503,15 @@ Rig Tools options
     name : bpy.props.StringProperty(default="")
 
     def execute(self, context):
-        bb_edit_template = bpy.context.window_manager.bb_edit_template
+        oni_edit_template = bpy.context.window_manager.oni_edit_template
         obj = bpy.data.objects
 
         
-        if self.name == bb_edit_template.get('name'):
+        if self.name == oni_edit_template.get('name'):
             
             
-            del bb_edit_template['name']
-            del bb_edit_template['item']
+            del oni_edit_template['name']
+            del oni_edit_template['item']
             return {'FINISHED'}
 
         
@@ -1520,18 +1520,18 @@ Rig Tools options
 
         
         
-        bb_edit_template['item'] = "tarm"
-        bb_edit_template['name'] = self.name
+        oni_edit_template['item'] = "tarm"
+        oni_edit_template['name'] = self.name
 
         
         
         
 
         
-        (tarm, tbone), = bb_edit_template['template_editing'][self.name].items()
-        bb_edit_template.terminate = True
-        bb_edit_template.tarm_name = tarm
-        bb_edit_template.tarm_name_backup = tarm
+        (tarm, tbone), = oni_edit_template['template_editing'][self.name].items()
+        oni_edit_template.terminate = True
+        oni_edit_template.tarm_name = tarm
+        oni_edit_template.tarm_name_backup = tarm
 
         return {'FINISHED'}
 
@@ -1548,15 +1548,15 @@ target rig and target bone stay the same.  The only change you'll see is the sou
     name : bpy.props.StringProperty(default="")
 
     def execute(self, context):
-        bb_edit_template = bpy.context.window_manager.bb_edit_template
+        oni_edit_template = bpy.context.window_manager.oni_edit_template
         obj = bpy.data.objects
 
         
-        if self.name == bb_edit_template.get('name'):
+        if self.name == oni_edit_template.get('name'):
             
             
-            del bb_edit_template['name']
-            del bb_edit_template['item']
+            del oni_edit_template['name']
+            del oni_edit_template['item']
             return {'FINISHED'}
 
         
@@ -1565,8 +1565,8 @@ target rig and target bone stay the same.  The only change you'll see is the sou
 
         
         
-        bb_edit_template['item'] = "sbone"
-        bb_edit_template['name'] = self.name
+        oni_edit_template['item'] = "sbone"
+        oni_edit_template['name'] = self.name
 
         
         
@@ -1576,9 +1576,9 @@ target rig and target bone stay the same.  The only change you'll see is the sou
         
         
         
-        bb_edit_template.terminate = True
-        bb_edit_template.sbone_name = self.name
-        bb_edit_template.sbone_name_backup = self.name
+        oni_edit_template.terminate = True
+        oni_edit_template.sbone_name = self.name
+        oni_edit_template.sbone_name_backup = self.name
 
         return {'FINISHED'}
 
@@ -1595,15 +1595,15 @@ target rig.  The entire stream goes with it, source bone and target rig.
     name : bpy.props.StringProperty(default="")
 
     def execute(self, context):
-        bb_edit_template = bpy.context.window_manager.bb_edit_template
+        oni_edit_template = bpy.context.window_manager.oni_edit_template
         obj = bpy.data.objects
 
         
-        if self.name == bb_edit_template.get('name'):
+        if self.name == oni_edit_template.get('name'):
             
             
-            del bb_edit_template['name']
-            del bb_edit_template['item']
+            del oni_edit_template['name']
+            del oni_edit_template['item']
             return {'FINISHED'}
 
         
@@ -1612,18 +1612,18 @@ target rig.  The entire stream goes with it, source bone and target rig.
 
         
         
-        bb_edit_template['item'] = "tbone"
-        bb_edit_template['name'] = self.name
+        oni_edit_template['item'] = "tbone"
+        oni_edit_template['name'] = self.name
 
         
         
         
 
         
-        (tarm, tbone), = bb_edit_template['template_editing'][self.name].items()
-        bb_edit_template.terminate = True
-        bb_edit_template.tbone_name = tbone
-        bb_edit_template.tbone_name_backup = tbone
+        (tarm, tbone), = oni_edit_template['template_editing'][self.name].items()
+        oni_edit_template.terminate = True
+        oni_edit_template.tbone_name = tbone
+        oni_edit_template.tbone_name_backup = tbone
 
         return {'FINISHED'}
 
@@ -1643,22 +1643,22 @@ mistake take advantage of this right away!"""
 
     @classmethod
     def poll(cls, context):
-        bbe = bpy.context.window_manager.bb_edit_template
-        if bbe.get('template_editing_undo') == None:
+        onie = bpy.context.window_manager.oni_edit_template
+        if onie.get('template_editing_undo') == None:
             return False
         return True
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
 
-        old_stream = bbe['template_editing_undo']['old'].to_dict()
-        new_stream = bbe['template_editing_undo']['new'].to_dict()
+        old_stream = onie['template_editing_undo']['old'].to_dict()
+        new_stream = onie['template_editing_undo']['new'].to_dict()
 
         (old_bone, tarm_tbone), = old_stream.items()
         (new_bone, junk), = new_stream.items()
 
         
-        template = bbe['template_editing'].to_dict()
+        template = onie['template_editing'].to_dict()
         template_new = dict()
         template_new[old_bone] = tarm_tbone
         for t in template:
@@ -1666,16 +1666,16 @@ mistake take advantage of this right away!"""
                 continue
             template_new[t] = template[t]
 
-        bbe['template_editing'] = template_new
+        onie['template_editing'] = template_new
 
-        bbe.terminate = True
-        bbe.sbone_name = old_bone
-        bbe.sbone_name_backup = old_bone
+        onie.terminate = True
+        onie.sbone_name = old_bone
+        onie.sbone_name_backup = old_bone
 
-        (new, old), = bbe['template_editing_undo']['map'].items()
-        bbe.message = new + " restored to " + old
+        (new, old), = onie['template_editing_undo']['map'].items()
+        onie.message = new + " restored to " + old
 
-        del bbe['template_editing_undo']
+        del onie['template_editing_undo']
 
 
         return {'FINISHED'}
@@ -1689,7 +1689,7 @@ mistake take advantage of this right away!"""
 
 class OnigiriPanelTemplateEditor(bpy.types.Panel):
     """This is CTM Editor"""
-    bl_idname = "OBJECT_PT_bento_buddy_template_tools"
+    bl_idname = "OBJECT_PT_onigiri_template_tools"
     bl_label = "Template Creator / Editor"
     bl_space_type = "VIEW_3D"
     bl_category = "Onigiri"
@@ -1701,8 +1701,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         selected = bpy.context.selected_objects
         
         
-        bbe = bpy.context.window_manager.bb_edit_template
-        bb_edit_template = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
+        oni_edit_template = bpy.context.window_manager.oni_edit_template
 
         
         scale_factor = 21
@@ -1731,7 +1731,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             icon_value = ico.custom_icons["load"].icon_id
             )
         row.prop(
-            bbe,
+            onie,
             "info_onigiri_load_generic_template",
             toggle=True,
             text = "",
@@ -1760,9 +1760,9 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             )
         col = box.column(align = True)
         row = col.row(align=True)
-        if bbe.get('map_type_combine') == "ctm":
+        if onie.get('map_type_combine') == "ctm":
             label_text = "Load ctm"
-        elif bbe.get('map_type_combine') == "ccm":
+        elif onie.get('map_type_combine') == "ccm":
             label_text = "Load ccm"
         else:
             label_text = "Load ctm or ccm"
@@ -1773,20 +1773,20 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             )
         
         row.prop(
-            bbe,
+            onie,
             "disable_map_pose",
             text = "",
             toggle = True,
             icon_value = ico.custom_icons["disable_map_pose"].icon_id
             )
         row.prop(
-            bbe,
+            onie,
             "info_onigiri_combine_generic_template",
             toggle=True,
             text = "",
             icon_value = ico.custom_icons["alert"].icon_id
             )
-        if bbe.get('template_map_combine') != None and bbe.get('map_files_combine') != None:
+        if onie.get('template_map_combine') != None and onie.get('map_files_combine') != None:
 
             row = col.row(align=True)
             row.operator(
@@ -1794,16 +1794,16 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 text = "Reset Composer",
                 icon_value = ico.custom_icons["reset"].icon_id
                 )
-            if len(bbe['map_files_combine']) > 1:
+            if len(onie['map_files_combine']) > 1:
                 layout = self.layout
                 row = col.row(align=True)
-                if bbe['map_type_combine'] == "ccm":
+                if onie['map_type_combine'] == "ccm":
                     row.operator(
                         "onigiri.save_combined_ccm",
                         text = "Save Combined CCM",
                         icon_value = ico.custom_icons["save"].icon_id
                         )
-                elif bbe['map_type_combine'] == "ctm":
+                elif onie['map_type_combine'] == "ctm":
                     row.operator(
                         "onigiri.save_combined_ctm",
                         text = "Save Combined CTM",
@@ -1818,7 +1818,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.label(
                 text = "- maps loaded -",
                 )
-            for m in bbe['map_files_combine']:
+            for m in onie['map_files_combine']:
                 row = col.row(align=True)
                 row.label(
                     text = "[" + m + "]",
@@ -1886,7 +1886,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             )
 
         row.prop(
-            bb_edit_template,
+            oni_edit_template,
             "load_txt_reversed",
             toggle=True,
             text = "",
@@ -1902,7 +1902,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 )
 
 
-        if bb_edit_template.get('template_editing'):
+        if oni_edit_template.get('template_editing'):
             row = col.row(align=True)
             row.operator(
                 "onigiri.edit_template_save_ctm",
@@ -1910,11 +1910,11 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 icon_value = ico.custom_icons["save"].icon_id
                 )
 
-            if bb_edit_template.show_map == True:
+            if oni_edit_template.show_map == True:
                 edit_template_show_map_icon = "menu_opened"
             else:
                 edit_template_show_map_icon = "menu_closed"
-            if bb_edit_template.show_rigs == True:
+            if oni_edit_template.show_rigs == True:
                 edit_template_show_rigs_icon = "menu_opened"
             else:
                 edit_template_show_rigs_icon = "menu_closed"
@@ -1922,7 +1922,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             col = box.column(align = True)
             row = col.row(align=True)
             row.prop(
-                bb_edit_template,
+                oni_edit_template,
                 "show_map",
                 toggle=True,
                 text = "Expand Map",
@@ -1930,7 +1930,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 )
 
             row.prop(
-                bb_edit_template,
+                oni_edit_template,
                 "show_rigs",
                 toggle=True,
                 text = "Rig Options",
@@ -1938,7 +1938,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 )
 
 
-            if bb_edit_template.show_map == True or bb_edit_template.show_rigs == True:
+            if oni_edit_template.show_map == True or oni_edit_template.show_rigs == True:
 
                     
                     row = col.row(align=True)
@@ -1951,10 +1951,10 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row = col.row(align=True)
                     
                     row.label(
-                        text = "[" +bbe.message + "]",
+                        text = "[" +onie.message + "]",
                         )
                     
-                    if bbe.get('template_editing_undo') != None:
+                    if onie.get('template_editing_undo') != None:
                         edit_template_undo_icon = "reset_warning"
                         row_state = True
                     else:
@@ -1967,7 +1967,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         icon_value = ico.custom_icons[edit_template_undo_icon].icon_id
                         )
 
-            if bb_edit_template.show_rigs == True:
+            if oni_edit_template.show_rigs == True:
                 row = col.row(align=True)
 
 
@@ -1990,9 +1990,9 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                 if 1 == 0:
                     row = col.row(align=True)
-                    if bbe.source_active == True:
+                    if onie.source_active == True:
                         row.prop(
-                            bbe,
+                            onie,
                             "source_active",
                             toggle = True,
                             text = "Source Active",
@@ -2022,8 +2022,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                 
                 targets = dict()
-                for sbone in bbe.get('template_editing', []):
-                    (tarm, tbone), = bbe['template_editing'][sbone].items()
+                for sbone in onie.get('template_editing', []):
+                    (tarm, tbone), = onie['template_editing'][sbone].items()
                     targets[tarm] = "" 
                 for target in targets:
                     row = col.row(align=True)
@@ -2032,9 +2032,9 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         text = "",
                         icon_value = ico.custom_icons["edit_red"].icon_id
                         ).name = target
-                    if bb_edit_template.get('item') == "move" and bb_edit_template.get('name') == target:
+                    if oni_edit_template.get('item') == "move" and oni_edit_template.get('name') == target:
                         row.prop(
-                            bb_edit_template,
+                            oni_edit_template,
                             "move_name",
                             text = "",
                             )
@@ -2055,14 +2055,14 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         icon_value = ico.custom_icons["x_red"].icon_id
                         ).name = target
 
-            if bb_edit_template.show_map == True:
+            if oni_edit_template.show_map == True:
                 edit_template_change_source_bone_icon = "edit"
                 edit_template_change_target_bone_icon = "edit"
                 edit_template_change_rig_name_icon = "edit"
 
                 row = col.row(align=True)
 
-                if bb_edit_template.get('template_editing'):
+                if oni_edit_template.get('template_editing'):
                     row = col.row(align=True)
                     for i in range(icon_repeat):
                         row.label(
@@ -2110,10 +2110,10 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                 
                 
-                for sbone in bb_edit_template['template_editing']:
+                for sbone in oni_edit_template['template_editing']:
 
                     row = col.row(align=True)
-                    (tarm, tbone), = bb_edit_template['template_editing'][sbone].items()
+                    (tarm, tbone), = oni_edit_template['template_editing'][sbone].items()
 
                     
                     row.operator(
@@ -2128,9 +2128,9 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     
 
                     
-                    if bb_edit_template.get('item') == "sbone" and bb_edit_template.get('name') == sbone:
+                    if oni_edit_template.get('item') == "sbone" and oni_edit_template.get('name') == sbone:
                         row.prop(
-                            bb_edit_template,
+                            oni_edit_template,
                             "sbone_name",
                             text = "",
                             )
@@ -2145,9 +2145,9 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         ).name = sbone
 
                     
-                    if bb_edit_template.get('item') == "tarm" and bb_edit_template.get('name') == sbone:
+                    if oni_edit_template.get('item') == "tarm" and oni_edit_template.get('name') == sbone:
                         row.prop(
-                            bb_edit_template,
+                            oni_edit_template,
                             "tarm_name",
                             text = "",
                             )
@@ -2162,9 +2162,9 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         ).name = sbone
 
                     
-                    if bb_edit_template.get('item') == "tbone" and bb_edit_template.get('name') == sbone:
+                    if oni_edit_template.get('item') == "tbone" and oni_edit_template.get('name') == sbone:
                         row.prop(
-                            bb_edit_template,
+                            oni_edit_template,
                             "tbone_name",
                             text = "",
                             )
@@ -2201,7 +2201,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         
         
         
-        bb_onemap = bpy.context.window_manager.bb_onemap
+        oni_onemap = bpy.context.window_manager.oni_onemap
 
         layout = self.layout
         box = layout.box()
@@ -2223,7 +2223,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             )
         row = col.row(align=True)
         row.prop(
-            bb_onemap,
+            oni_onemap,
             "blank",
             text = "something",
             )
@@ -2289,7 +2289,7 @@ class OnigiriEditTemplateLoadFromCCM(bpy.types.Operator, ImportHelper):
 
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
         bpy.ops.onigiri.edit_template_reset()
 
         try:
@@ -2322,10 +2322,10 @@ class OnigiriEditTemplateLoadFromCCM(bpy.types.Operator, ImportHelper):
             pose = dict()
             print("No pose data, that's not a fatal error but the definition should exist at least")
 
-        bbe['template_ccm'] = dict()
-        bbe['template_ccm']['rename'] = rename
-        bbe['template_ccm']['reskin'] = reskin
-        bbe['template_ccm']['pose'] = pose
+        onie['template_ccm'] = dict()
+        onie['template_ccm']['rename'] = rename
+        onie['template_ccm']['reskin'] = reskin
+        onie['template_ccm']['pose'] = pose
 
         return {'FINISHED'}
 
@@ -2352,11 +2352,11 @@ class OnigiriEditTemplateSaveFromCCM(bpy.types.Operator, ExportHelper):
         return {'RUNNING_MODAL'}
 
     def execute(self, context):
-        bbe = bpy.context.window_manager.bb_edit_template
+        onie = bpy.context.window_manager.oni_edit_template
 
-        if bbe.get('template_ccm'):
+        if onie.get('template_ccm'):
 
-            template_map = bbe['template_ccm'].to_dict()
+            template_map = onie['template_ccm'].to_dict()
             formatted_text = utils.format_ccm(template_map)
 
             try:
@@ -2382,7 +2382,7 @@ class OnigiriTemplateOneMapProperties(bpy.types.PropertyGroup):
 
     
     def update_blank(self, context):
-        bpy.context.window_manager_bb_onemap.property_unset("blank")
+        bpy.context.window_manager_oni_onemap.property_unset("blank")
     blank : bpy.props.BoolProperty(default=False, update=update_blank)
 
     def update_onemap_reskin(self, context):
@@ -2416,7 +2416,7 @@ class OnigiriTemplateLoadOneMap(bpy.types.Operator, ImportHelper):
         return {'RUNNING_MODAL'}
 
     def execute(self, context):
-        bb_onemap = bpy.context.window_manager.bb_onemap
+        oni_onemap = bpy.context.window_manager.oni_onemap
 
         file_path = self.properties.filepath
         path, name = os.path.split(self.properties.filepath)
@@ -2455,7 +2455,7 @@ class OnigiriTemplateLoadOneMap(bpy.types.Operator, ImportHelper):
             print("Programmers dum, invalid extension:", ext)
             return {'FINISHED'}
 
-        bb_onemap.onemap_template_name = name
+        oni_onemap.onemap_template_name = name
 
         return {'FINISHED'}
 
@@ -2484,18 +2484,18 @@ class OnigiriTemplateSaveOneMap(bpy.types.Operator, ExportHelper):
 
     @classmethod
     def poll(cls, context):
-        bb_onemap = bpy.context.window_manager.bb_onemap
-        if bb_onemap.get('template_map') == None:
+        oni_onemap = bpy.context.window_manager.oni_onemap
+        if oni_onemap.get('template_map') == None:
             return False
         return True
 
     def execute(self, context):
-        bb_onemap = bpy.context.window_manager.bb_onemap
+        oni_onemap = bpy.context.window_manager.oni_onemap
         path = self.properties.filepath
 
-        template_map = bb_onemap['template_map'].to_dict()
-        rename = bb_onemap['rename'].to_dict()
-        reskin = bb_onemap['reskin'].to_dict()
+        template_map = oni_onemap['template_map'].to_dict()
+        rename = oni_onemap['rename'].to_dict()
+        reskin = oni_onemap['reskin'].to_dict()
         target = "Armature"
 
         container = dict()
@@ -2520,9 +2520,9 @@ class OnigiriTemplateSaveOneMap(bpy.types.Operator, ExportHelper):
         output.close()
 
         
-        del bb_onemap['template_map'] 
-        bb_onemap.pop('rename', "")
-        bb_onemap.pop('reskin', "")
+        del oni_onemap['template_map'] 
+        oni_onemap.pop('rename', "")
+        oni_onemap.pop('reskin', "")
 
         return {'FINISHED'}
 

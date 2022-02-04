@@ -25,18 +25,18 @@ from .mod_functions import *
 
 @persistent
 def expire_data(context):
-    bbe = bpy.context.window_manager.bb_expire
+    onie = bpy.context.window_manager.oni_expire
     
     
     
-    if bbe.get('suspend') == True:
+    if onie.get('suspend') == True:
         return
 
-    if bbe.get('triggers') == None:
+    if onie.get('triggers') == None:
         
         return
     
-    for trigger in bbe['triggers']:
+    for trigger in onie['triggers']:
         if trigger not in bpy.data.objects:
             print("expire_data reports: trigger object is missing", "[" + trigger + "],", "expiring links")
             expire_purge(trigger)
@@ -84,7 +84,7 @@ def expire_data(context):
 
 def expire_create(trigger="", partners=[], objects=[], tasks={}):
     print("expire_create reports: adding expire trigger for", trigger)
-    bbe = bpy.context.window_manager.bb_expire
+    onie = bpy.context.window_manager.oni_expire
     expires = {}
     expires[trigger] = {}
     expires[trigger]['objects'] = objects
@@ -93,15 +93,15 @@ def expire_create(trigger="", partners=[], objects=[], tasks={}):
 
     print("tasks are:", tasks)
 
-    if bbe.get('triggers') == None:
+    if onie.get('triggers') == None:
         print("expire_create reports: no triggers property, creating...")
-        bbe['triggers'] = {}
+        onie['triggers'] = {}
 
     
     
     
     
-    bbe['triggers'][trigger] = expires[trigger].copy()
+    onie['triggers'][trigger] = expires[trigger].copy()
 
     
     for partner in partners:
@@ -112,39 +112,39 @@ def expire_create(trigger="", partners=[], objects=[], tasks={}):
         
         expires[partner]['partners'].append(trigger)
         
-        bbe['triggers'][partner] = expires[partner].copy()
+        onie['triggers'][partner] = expires[partner].copy()
 
     return True
 
 
 
 def expire_remove(trigger=""):
-    bbe = bpy.context.window_manager.bb_expire
-    if bbe.get(triggers) == None:
-        print("expire_remove reports: bb_expire base item (triggers) is missing")
+    onie = bpy.context.window_manager.oni_expire
+    if onie.get(triggers) == None:
+        print("expire_remove reports: oni_expire base item (triggers) is missing")
         return False
-    if bbe['triggers'].get(trigger) == None:
+    if onie['triggers'].get(trigger) == None:
         print("expire_remove reports: Trigger doesn't exist -", trigger)
         return False
     
-    if bbe['triggers'][trigger].get(partners) != None:
-        partners = bbe['triggers'][trigger]['partners']
+    if onie['triggers'][trigger].get(partners) != None:
+        partners = onie['triggers'][trigger]['partners']
         if partners != "":
             for p in partners:
-                del bbe['triggers'][p]
-    del bbe['triggers'][trigger]
+                del onie['triggers'][p]
+    del onie['triggers'][trigger]
     return True
 
 
 
 def expire_purge(trigger=""):
     print("expire_purge reports: trigger executed -", trigger)
-    bbe = bpy.context.window_manager.bb_expire
+    onie = bpy.context.window_manager.oni_expire
     obj = bpy.data.objects
-    if bbe.get('triggers') == None:
-        print("expire_purge reports: bb_expire base item (triggers) is missing")
+    if onie.get('triggers') == None:
+        print("expire_purge reports: oni_expire base item (triggers) is missing")
         return False
-    if bbe['triggers'].get(trigger) == None:
+    if onie['triggers'].get(trigger) == None:
         print("expire_purge reports: Trigger doesn't exist -", trigger)
         return False
 
@@ -159,7 +159,7 @@ def expire_purge(trigger=""):
     
     
 
-    for o in bbe['triggers'][trigger]['objects']:
+    for o in onie['triggers'][trigger]['objects']:
         if o in bpy.data.objects:
             
             
@@ -172,17 +172,17 @@ def expire_purge(trigger=""):
     
     
     
-    bbe['suspend'] = True
+    onie['suspend'] = True
     bpy.ops.object.delete({"selected_objects": o_to_delete})
     
     
 
 
     
-    for p in bbe['triggers'][trigger]['partners']:
+    for p in onie['triggers'][trigger]['partners']:
         print("removing partner trigger:", p)
         try:
-            del bbe['triggers'][p]
+            del onie['triggers'][p]
         except:
             print("missing partner:", p)
 
@@ -190,7 +190,7 @@ def expire_purge(trigger=""):
     
     
     
-    tasks = bbe['triggers'][trigger]['tasks'].to_dict()
+    tasks = onie['triggers'][trigger]['tasks'].to_dict()
     print("eval_purge reports: tasks type is", type(tasks))
     if tasks != "":
         for task_list in tasks:
@@ -204,9 +204,9 @@ def expire_purge(trigger=""):
                     eval(job)
 
     
-    del bbe['triggers'][trigger]
+    del onie['triggers'][trigger]
 
-    bbe['suspend'] = False
+    onie['suspend'] = False
     return True
 
 

@@ -14,8 +14,8 @@ from . import mapper
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-presets_path    =   bb_settings['paths']['presets']
-data_path       =   bb_settings['paths']['data']
+presets_path    =   oni_settings['paths']['presets']
+data_path       =   oni_settings['paths']['data']
 
 
 
@@ -41,7 +41,7 @@ data_path       =   bb_settings['paths']['data']
 
 def animesh_init():
     obj = bpy.data.objects
-    ani = bpy.context.window_manager.bb_animesh
+    ani = bpy.context.window_manager.oni_animesh
 
     print("animesh_init runs")
 
@@ -173,9 +173,9 @@ def animesh_init():
             for arm in ani['targets']:
                 remove_bone_groups(arm)
             
-            create_bone_group(ani.animesh_source_name, bb_source_group, bb_source_theme)
+            create_bone_group(ani.animesh_source_name, oni_source_group, oni_source_theme)
             for arm in ani['targets']:
-                create_bone_group(arm, bb_target_group, bb_target_theme)
+                create_bone_group(arm, oni_target_group, oni_target_theme)
             obj[ani.animesh_source_name]['bone_map'] = dict()
             for arm in ani['targets']:
                 obj[arm]['bone_map'] = dict()
@@ -249,7 +249,7 @@ def animesh_init():
 
 def animesh_mode(context):
     obj = bpy.data.objects
-    ani = bpy.context.window_manager.bb_animesh
+    ani = bpy.context.window_manager.oni_animesh
 
 
 
@@ -294,7 +294,7 @@ def animesh_mode(context):
 
     
     if ani.animesh_rig == "source":
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print("source rig activated")
         ani.animesh_message = "Select a target bone"
 
@@ -338,7 +338,7 @@ def animesh_mode(context):
 
         
 
-        boneObj.bone_group = bpy.data.objects[ani.animesh_source_name].pose.bone_groups[bb_source_group]
+        boneObj.bone_group = bpy.data.objects[ani.animesh_source_name].pose.bone_groups[oni_source_group]
 
         
         
@@ -400,7 +400,7 @@ def animesh_mode(context):
         obj[target_rig]['bone_map'][ani.animesh_target_bone][ani.animesh_source_name] = ani.animesh_source_bone
 
         
-        boneObj.bone_group = bpy.data.objects[target_rig].pose.bone_groups[bb_target_group]
+        boneObj.bone_group = bpy.data.objects[target_rig].pose.bone_groups[oni_target_group]
 
         
         for b in obj[ani.animesh_source_name].data.bones:
@@ -455,7 +455,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
         
         
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
         if ani.animesh_menu_enabled == True:
             print("animesh menu enabled")
@@ -465,13 +465,13 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
     def update_animesh_mapper_enabled(self, context):
         
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
         
         
         
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
         if ani.animesh_mapper_enabled == True:
             print("update_animesh_mapper_enabled reports: animesh mapper enabled")
@@ -486,26 +486,26 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_lock_source(self, context):
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
         if ani.animesh_lock_source == True:
             if len(bpy.context.selected_objects) == 0:
                 ani.animesh_message = "[Select at least 1 armature]"
-                bb_settings['terminate'] = True
+                oni_settings['terminate'] = True
                 ani.animesh_lock_source = False
                 return
             if len(bpy.context.selected_objects) > 1:
                 ani.animesh_message = "[Select only 1 armature for this]"
-                bb_settings['terminate'] = True
+                oni_settings['terminate'] = True
                 ani.animesh_lock_source = False
                 return
             armObj = bpy.context.selected_objects[0]
             if armObj.type != 'ARMATURE':
                 ani.animesh_message = "[Must be an armature]"
-                bb_settings['terminate'] = True
+                oni_settings['terminate'] = True
                 ani.animesh_lock_source = False
                 return
             
@@ -513,7 +513,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
             if 'targets' in ani.keys() and armObj.name in ani['targets']:
                 print("source rig in target")
                 ani.animesh_message = "ERROR: Source is in targets"
-                bb_settings['terminate'] = True
+                oni_settings['terminate'] = True
                 ani.animesh_lock_source = False
                 return
             ani.animesh_source_name = armObj.name
@@ -522,31 +522,31 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         
         ani.animesh_message = "[Select your rigs]"
         
-        bb_settings['terminate'] = True
+        oni_settings['terminate'] = True
         ani.animesh_lock_target = False
         
         
         ani.animesh_source_name = ""
         
         
-        bb_settings['terminate'] = True
+        oni_settings['terminate'] = True
         ani.animesh_target_name = ""
         return
 
     def update_animesh_lock_target(self, context):
         
         
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
         if ani.animesh_lock_target == True:
             
             ani['targets'] = dict()
             if len(bpy.context.selected_objects) == 0:
                 ani.animesh_message = "[Select at least 1 armature]"
-                bb_settings['terminate'] = True
+                oni_settings['terminate'] = True
                 ani.animesh_lock_target = False
                 return
             
@@ -555,7 +555,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
             if ani.animesh_source_name != "" and obj[ani.animesh_source_name] in bpy.context.selected_objects:
                 print("can't have source as target")
                 ani.animesh_message = "ERROR: Target in source"
-                bb_settings['terminate'] = True
+                oni_settings['terminate'] = True
                 ani.animesh_lock_target = False
                 return
             
@@ -566,7 +566,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
             
             if len(ani['targets']) == 0:
                 ani.animesh_message = "[Select armatures]"
-                bb_settings['terminate'] = True
+                oni_settings['terminate'] = True
                 ani.animesh_lock_target = False
                 return
             
@@ -582,13 +582,13 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         
         ani.animesh_message = "[Select your rigs]"
         
-        bb_settings['terminate'] = True
+        oni_settings['terminate'] = True
         ani.animesh_lock_source = False
 
         
         ani.animesh_target_name = "" 
         
-        bb_settings['terminate'] = True
+        oni_settings['terminate'] = True
         ani.animesh_source_name = ""
         
         
@@ -598,10 +598,10 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_check(self, context):
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
         
         
@@ -655,14 +655,14 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_suspend(self, context):
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
         if ani.animesh_mapper_enabled == False:
             
-            bb_settings['terminate'] = True
+            oni_settings['terminate'] = True
             ani.animesh_suspend = False
             return
         
@@ -704,15 +704,15 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_reset(self, context):
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
         
         if ani.animesh_suspend == True:
             ani.animesh_message = "ERROR: come out of suspend"
-            bb_settings['terminate'] = True
+            oni_settings['terminate'] = True
             ani.animesh_reset = False
             return
         
@@ -739,7 +739,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
         activate(ani.animesh_source_name)
 
-        bb_settings['terminate'] = True
+        oni_settings['terminate'] = True
         ani.animesh_reset = False
         
         
@@ -753,7 +753,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
     
     animesh_menu_enabled : bpy.props.BoolProperty(
-        name = "bbr enable animesh mapper",
+        name = "onir enable animesh mapper",
         description =            "Enable the character map creator which allows you to point and click bones to be placed for mapping your custom "            "wearable characters or for Animesh.  You can map a number of target characters at one time or just one if you like.",
         default = False,
         update = update_animesh_menu_enabled
@@ -761,7 +761,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
     
     
     animesh_mapper_enabled : bpy.props.BoolProperty(
-        name = "bbr enable animesh mapper",
+        name = "onir enable animesh mapper",
         description =            "-- internal",
         default = False,
         update = update_animesh_mapper_enabled
@@ -839,7 +839,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         )
 
     animesh_suspend : bpy.props.BoolProperty(
-        name = "bbr animesh suspend",
+        name = "onir animesh suspend",
         description =            "This is useful if you need to adjust the position of bones or move rigs in order to get a better view of your work.  "            "This button, or getting out of pose mode, when enabled, will allow you to move your rigs without losing your data.  "            "When you've finished click this button so that it's disabled (out) and you will be returned to your mapping stage.",
         default = False,
         update = update_animesh_suspend
@@ -850,7 +850,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
     
     
     animesh_reset : bpy.props.BoolProperty(
-        name = "bbr animesh reset",
+        name = "onir animesh reset",
         description =            "This will reset the mapper as if you never did anything, save your work first.  You might want to do this after you've "            "finished mapping and you've saved your work and now you want to test things out.  Another option is to just save your "            "map file, open a new Blender without closing this one, and test it over there loading the map to see if things worked. ",
         default = False,
         update = update_animesh_reset
@@ -918,8 +918,8 @@ class OnigiriAnimeshGetCurrent(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
-        bmp = bpy.context.window_manager.bb_mapper
+        ani = bpy.context.window_manager.oni_animesh
+        bmp = bpy.context.window_manager.oni_mapper
         
         if bmp.mapper_enabled == True:
             return True
@@ -927,8 +927,8 @@ class OnigiriAnimeshGetCurrent(bpy.types.Operator):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
-        bmp = bpy.context.window_manager.bb_mapper
+        ani = bpy.context.window_manager.oni_animesh
+        bmp = bpy.context.window_manager.oni_mapper
 
         source = bmp.mapper_source_name
 
@@ -1045,13 +1045,13 @@ class OnigiriAnimeshLoad(bpy.types.Operator, ImportHelper):
 
     filename_ext = ".ctm"
     filter_glob : bpy.props.StringProperty(
-        default='*.ctm;*.bbm',
+        default='*.ctm;*.onim',
         options={'HIDDEN'}
         )
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         filename = self.properties.filepath
         template_map = {}
@@ -1115,7 +1115,7 @@ class OnigiriAnimeshRemoveTarget(bpy.types.Operator):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         
@@ -1150,9 +1150,9 @@ class OnigiriAnimeshRemoveTarget(bpy.types.Operator):
             for tarm in ani['targets']:
                 remove_bone_groups(tarm)
 
-            create_bone_group(source, bb_source_group, bb_source_theme)
+            create_bone_group(source, oni_source_group, oni_source_theme)
             for tarm in ani['targets']:
-                create_bone_group(tarm, bb_target_group, bb_target_theme)
+                create_bone_group(tarm, oni_target_group, oni_target_theme)
             
             
             
@@ -1163,8 +1163,8 @@ class OnigiriAnimeshRemoveTarget(bpy.types.Operator):
                     bad_bones.setdefault(tarm, [])
                     bad_bones[tarm].append(tbone)
                     continue
-                add_bone_to_group(armature=source, bone=sbone, group=bb_source_group)
-                add_bone_to_group(armature=tarm, bone=tbone, group=bb_target_group)
+                add_bone_to_group(armature=source, bone=sbone, group=oni_source_group)
+                add_bone_to_group(armature=tarm, bone=tbone, group=oni_target_group)
             if len(bad_bones) > 0:
                 txt = "There were some missing bones in your targets, they were skipped, check console for details."
                 print("Missing bones in targets:", bad_bones)
@@ -1205,7 +1205,7 @@ you have processed them all the workshop will be enabled."""
 
     @classmethod
     def poll(cls, context):
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         if len(bpy.context.selected_objects) == 0:
             return False
         if ani.animesh_source_name == "":
@@ -1219,7 +1219,7 @@ you have processed them all the workshop will be enabled."""
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         
@@ -1336,9 +1336,9 @@ you have processed them all the workshop will be enabled."""
             for tarm in ani['targets']:
                 remove_bone_groups(tarm)
 
-            create_bone_group(source, bb_source_group, bb_source_theme)
+            create_bone_group(source, oni_source_group, oni_source_theme)
             for tarm in ani['targets']:
-                create_bone_group(tarm, bb_target_group, bb_target_theme)
+                create_bone_group(tarm, oni_target_group, oni_target_theme)
 
             
             
@@ -1351,8 +1351,8 @@ you have processed them all the workshop will be enabled."""
 
                 (tarm, tbone), = bone_map[sbone].items()
                 if tbone in obj[tarm].data.bones:
-                    add_bone_to_group(armature=source, bone=sbone, group=bb_source_group)
-                    add_bone_to_group(armature=tarm, bone=tbone, group=bb_target_group)
+                    add_bone_to_group(armature=source, bone=sbone, group=oni_source_group)
+                    add_bone_to_group(armature=tarm, bone=tbone, group=oni_target_group)
             if sbone_error == True:
                 popup("There were source bones missing, this is probably not good, check console", "Error", "ERROR")
 
@@ -1390,7 +1390,7 @@ class OnigiriAnimeshSave(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         if ani.animesh_mapper_enabled == False:
@@ -1403,7 +1403,7 @@ class OnigiriAnimeshSave(bpy.types.Operator, ExportHelper):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         bpy.app.handlers.depsgraph_update_post.remove(animesh_mode)
@@ -1446,7 +1446,7 @@ class OnigiriAnimeshApply(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         if ani.animesh_suspend == True:
@@ -1469,7 +1469,7 @@ class OnigiriAnimeshApply(bpy.types.Operator):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         
@@ -1521,7 +1521,7 @@ class OnigiriAnimeshAddTarget(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
         if ani.animesh_suspend != True:
             return False
         if ani.get('targets') == None:
@@ -1543,7 +1543,7 @@ class OnigiriAnimeshAddTarget(bpy.types.Operator):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         o = bpy.context.selected_objects[0]
@@ -1551,7 +1551,7 @@ class OnigiriAnimeshAddTarget(bpy.types.Operator):
         o['bone_map'] = dict()
         o['name'] = o.name
         remove_bone_groups(o.name)
-        create_bone_group(o.name, bb_target_group, bb_target_theme)
+        create_bone_group(o.name, oni_target_group, oni_target_theme)
         mapper.store_armature_data(o.name)
         ani.animesh_targets += 1
         ani.animesh_message = "[SUSPENDED] " + o.name + " added"
@@ -1570,7 +1570,7 @@ class OnigiriAnimeshStore(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         if ani.animesh_suspend == True:
@@ -1590,7 +1590,7 @@ class OnigiriAnimeshStore(bpy.types.Operator):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         
@@ -1648,7 +1648,7 @@ class OnigiriAnimeshRestore(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         if ani.animesh_suspend == True:
@@ -1679,7 +1679,7 @@ class OnigiriAnimeshRestore(bpy.types.Operator):
         
 
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         
@@ -1717,7 +1717,7 @@ class OnigiriAnimeshReset(bpy.types.Operator):
         print("got reset signal")
 
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         
@@ -1732,7 +1732,7 @@ class OnigiriAnimeshReset(bpy.types.Operator):
         
         ani.animesh_lock_source = False
 
-        bb_settings['terminate'] = True
+        oni_settings['terminate'] = True
         ani.animesh_suspend = False
 
         return {'FINISHED'}
@@ -1752,7 +1752,7 @@ class OnigiriAnimeshRemoveSelectedBones(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         if ani.animesh_suspend == True:
@@ -1779,7 +1779,7 @@ class OnigiriAnimeshRemoveSelectedBones(bpy.types.Operator):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         
@@ -1860,7 +1860,7 @@ class OnigiriAnimeshRemoveBone(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         if ani.animesh_suspend == True:
@@ -1876,7 +1876,7 @@ class OnigiriAnimeshRemoveBone(bpy.types.Operator):
 
     def execute(self, context):
         obj = bpy.data.objects
-        ani = bpy.context.window_manager.bb_animesh
+        ani = bpy.context.window_manager.oni_animesh
 
         
         

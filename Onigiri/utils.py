@@ -33,14 +33,14 @@ if 1 == 1:
 
 
 
-def get_bento_buddy_version():
+def get_onigiri_version():
     for mod_name in bpy.context.preferences.addons.keys():
         mod = sys.modules[mod_name]
         name = mod.bl_info.get('name')
         if name == "Onigiri":
             version = mod.bl_info.get('version', (-1, -1, -1))
             return version
-    print("utils::get_bento_buddy_version reports: Something went wrong when trying to get the Onigiri version")
+    print("utils::get_onigiri_version reports: Something went wrong when trying to get the Onigiri version")
     return False
 
 
@@ -305,11 +305,11 @@ def add_constraint(
         bc['Child Of'].target =  bpy.data.objects[target]
         bc['Child Of'].subtarget = tbone
         bc['Child Of'].influence = influence
-        bc['Child Of'].name = "BB Child Of"
+        bc['Child Of'].name = "ONI Child Of"
         if invert == True:
             context_py = bpy.context.copy()
             context_py["constraint"] = bc.active
-            set_inverse(context_py, "BB Child Of")
+            set_inverse(context_py, "ONI Child Of")
             
         return
     elif type == 'COPY_LOCATION':
@@ -319,7 +319,7 @@ def add_constraint(
         bc['Copy Location'].target_space = target_space
         bc['Copy Location'].owner_space = owner_space
         bc['Copy Location'].influence = influence
-        bc['Copy Location'].name = "BB Copy Loc"
+        bc['Copy Location'].name = "ONI Copy Loc"
         return
     elif type == 'COPY_ROTATION':
         bc.new('COPY_ROTATION')
@@ -328,7 +328,7 @@ def add_constraint(
         bc['Copy Rotation'].target_space = target_space
         bc['Copy Rotation'].owner_space = owner_space
         bc['Copy Rotation'].influence = influence
-        bc['Copy Rotation'].name = "BB Copy Rot"
+        bc['Copy Rotation'].name = "ONI Copy Rot"
         return
     elif type == 'COPY_SCALE':
         bc.new('COPY_SCALE')
@@ -337,7 +337,7 @@ def add_constraint(
         bc['Copy Scale'].target_space = target_space
         bc['Copy Scale'].owner_space = owner_space
         bc['Copy Scale'].influence = influence
-        bc['Copy Scale'].name = "BB Copy Scale"
+        bc['Copy Scale'].name = "ONI Copy Scale"
         return
     elif type == 'COPY_TRANSFORMS':
         bc.new('COPY_TRANSFORMS')
@@ -346,7 +346,7 @@ def add_constraint(
         bc['Copy Transforms'].target_space = target_space
         bc['Copy Transforms'].owner_space = owner_space
         bc['Copy Transforms'].influence = influence
-        bc['Copy Transforms'].name = "BB Copy TRS"
+        bc['Copy Transforms'].name = "ONI Copy TRS"
         return
     else:
         print("add_constraint called with unknown type", type)
@@ -1039,10 +1039,10 @@ def percentage(percent, whole):
 def cleanup():
     print("running cleanup 1")
     try:
-        bpy.context.scene.bb_anim.property_unset("export_sl_anim_label")
-        bpy.context.scene.bb_anim.export_sl_anim_alert = False
-        bpy.context.scene.bb_anim_props.property_unset("export_sl_bvh_label")
-        bpy.context.scene.bb_anim_props.export_sl_bvh_alert = False
+        bpy.context.scene.oni_anim.property_unset("export_sl_anim_label")
+        bpy.context.scene.oni_anim.export_sl_anim_alert = False
+        bpy.context.scene.oni_anim_props.property_unset("export_sl_bvh_label")
+        bpy.context.scene.oni_anim_props.export_sl_bvh_alert = False
 
     except:
         print("utils::cleanup reports: Some things didn't clean but that's probably ok")
@@ -1371,9 +1371,9 @@ def view_mesh(armature=None, view=False, all=True):
 
     
     
-    directors = armObj.get('bb_sim_directors')
+    directors = armObj.get('oni_sim_directors')
     
-    d = armObj.get('bb_sim_director')
+    d = armObj.get('oni_sim_director')
     if d != None:
         if directors != None:
             directors.append(d)
@@ -2220,7 +2220,7 @@ def vertex_constraint(arm=None, bone=None, mesh=None, vertices=[], influence=1, 
     set_inverse(context_py, cname)
     
     
-    conObj.name = "BB Sim " + cname
+    conObj.name = "ONI Sim " + cname
 
     
     

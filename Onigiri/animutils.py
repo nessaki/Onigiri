@@ -49,13 +49,13 @@ def export_sl_anim(armature=None, path=None):
     bpy.context.view_layer.update()
     frame_current = bpy.context.scene.frame_current
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = anim 
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = anim 
 
-    if bb.export_sl_limitations_check_disabled != True:
-        if bb.animation_time > 60:
+    if oni.export_sl_limitations_check_disabled != True:
+        if oni.animation_time > 60:
             print("Skipping SL max time check")
             
     anim.export_sl_anim_label = "Saving: please wait..."
@@ -63,15 +63,15 @@ def export_sl_anim(armature=None, path=None):
     anim.export_sl_anim_alert = True
     bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)
 
-    anim_start_frame = bb.animation_start_frame
-    anim_end_frame = bb.animation_end_frame
-    anim_fps = bb.animation_fps
-    disable_location_offsets = bba.disable_location_offsets
-    export_volume_motion = bb.export_volume_motion
+    anim_start_frame = oni.animation_start_frame
+    anim_end_frame = oni.animation_end_frame
+    anim_fps = oni.animation_fps
+    disable_location_offsets = onia.disable_location_offsets
+    export_volume_motion = oni.export_volume_motion
     mark_tol = anim.mark_tol
     mark_tol_rot = anim.mark_tol_rot
     mark_tol_loc = anim.mark_tol_loc
-    fill_missing_keys = bba.fill_missing_keys
+    fill_missing_keys = onia.fill_missing_keys
 
     print("Resample is turned off until a rewrite, this is only useful for reducing file size which is less needed now")
     anim_resample = False
@@ -83,9 +83,9 @@ def export_sl_anim(armature=None, path=None):
     
     anim_deviation_rotation = anim.anim_deviation_rotation
     anim_deviation_location = anim.anim_deviation_location
-    anim_linear = bb_anim.anim_linear
+    anim_linear = oni_anim.anim_linear
 
-    high_fidelity = bb_anim.anim_high_fidelity
+    high_fidelity = oni_anim.anim_high_fidelity
     anim_use_source_keys = anim.anim_use_source_keys
     anim_use_source_keys_rotation = anim.anim_use_source_keys_rotation
     anim_use_source_keys_location = anim.anim_use_source_keys_location
@@ -93,18 +93,18 @@ def export_sl_anim(armature=None, path=None):
     anim_use_target_keys_rotation = anim.anim_use_target_keys_rotation
     anim_use_target_keys_location = anim.anim_use_target_keys_location
     anim_use_keys_smooth = anim.anim_use_keys_smooth
-    export_avastar_disabled = bb.export_avastar_disabled
-    export_avastar_deform_bones = bb.export_avastar_deform_bones
+    export_avastar_disabled = oni.export_avastar_disabled
+    export_avastar_deform_bones = oni.export_avastar_deform_bones
 
     ease_in = anim.anim_ease_in_duration
     ease_out = anim.anim_ease_out_duration
 
     export_mapped_animation = anim.export_mapped_animation
 
-    export_onigiri_disabled = bb.export_onigiri_disabled
+    export_onigiri_disabled = oni.export_onigiri_disabled
 
-    bb_split = bpy.context.window_manager.bb_split
-    split_enabled = bb_split.split_enabled
+    oni_split = bpy.context.window_manager.oni_split
+    split_enabled = oni_split.split_enabled
 
     if anim_start_frame == anim_end_frame:
         print("A frame range of zero was detected, this is non-motion and no content to export")
@@ -161,7 +161,7 @@ def export_sl_anim(armature=None, path=None):
         print("export_onigiri_disabled:", export_onigiri_disabled)
 
     if 1 == 0:
-        if bba.remove_isolated_keys:
+        if onia.remove_isolated_keys:
             if has_action == True:
                 print("Removing isolated keys")
                 print("Isolated keys removed:", remove_isolated_keys(armature=armObj.name))
@@ -230,7 +230,7 @@ def export_sl_anim(armature=None, path=None):
     time_slices = get_sl_time(total=total_time, tpf=time_per_frame, start=anim_start_frame, stop=anim_end_frame)
 
     is_avastar = False
-    if bb.export_avastar_disabled == False:
+    if oni.export_avastar_disabled == False:
         if armObj.get('avastar') != None and armObj.get('onigiri') == None:
             print("Processing an Avastar rig..")
             print("Frame range - frame_start / frame_end :", frame_start, "/", frame_end)
@@ -580,7 +580,7 @@ def export_sl_anim(armature=None, path=None):
         print("Translating avastar bone names")
         bone_list = []
         
-        if bb.export_avastar_deform_bones == True:
+        if oni.export_avastar_deform_bones == True:
             print("export avastar deform bones is True")
             
             for bone in bone_data:
@@ -679,7 +679,7 @@ def export_sl_anim(armature=None, path=None):
     if export_mapped_animation == True:
         print("Mapped animation export requested...")
 
-        rename_map = armObj.get('bb_onemap_rename')
+        rename_map = armObj.get('oni_onemap_rename')
         if rename_map == None:
             print("No rename_map on rig, processing normally")
         else:
@@ -748,13 +748,13 @@ def export_sl_anim(armature=None, path=None):
 
     if 1 == 0:
         print("KLUDGE: Final cleanup for location data")
-        if bba.disable_location_offsets == True:
+        if onia.disable_location_offsets == True:
             print("location offsets is disabled, removing...")
             for bone in bone_data:
                 if bone == 'mPelvis':
                     continue
                 bone_data[bone].pop("loc", "")
-        if bba.disable_pelvis_location_animation == True:
+        if onia.disable_pelvis_location_animation == True:
             print("pelvis location animation is disabled, removing...")
             if 'mPelvis' in bone_data:
                 bone_data['mPelvis'].pop('loc', '')
@@ -822,10 +822,10 @@ def write_animation(
     path=None,
     ):
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = anim 
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = anim 
 
     obj = bpy.data.objects
     armObj = obj[armature]
@@ -938,28 +938,28 @@ def write_animation(
 
         file_data.extend( file_content['constraints']['count'] )
 
-    bb_anim = bpy.context.scene.bb_anim
-    bb = bpy.context.scene.onigiri
+    oni_anim = bpy.context.scene.oni_anim
+    oni = bpy.context.scene.onigiri
     
-    if bb_anim.anim_details == True:
+    if oni_anim.anim_details == True:
         T = str( round(total_time, 2) )
-        F = str( round(bb.animation_fps, 2) )
-        L = str( int(bb_anim.anim_loop) )
+        F = str( round(oni.animation_fps, 2) )
+        L = str( int(oni_anim.anim_loop) )
         I = str( round(loop_in_point, 2) )
         O = str( round(loop_out_point, 2) )
-        E = str( round(bb_anim.anim_ease_in_duration, 2) )
-        Z = str( round(bb_anim.anim_ease_out_duration, 2) )
-        P = str( bb_anim.anim_base_priority )
+        E = str( round(oni_anim.anim_ease_in_duration, 2) )
+        Z = str( round(oni_anim.anim_ease_out_duration, 2) )
+        P = str( oni_anim.anim_base_priority )
 
         dets_enabled = {
-            "T": bb_anim.anim_details_time,
-            "F": bb_anim.anim_details_fps,
-            "L": bb_anim.anim_details_loop_enabled,
-            "I": bb_anim.anim_details_loop_in,
-            "O": bb_anim.anim_details_loop_out,
-            "E": bb_anim.anim_details_ease_in,
-            "Z": bb_anim.anim_details_ease_out,
-            "P": bb_anim.anim_details_priority,
+            "T": oni_anim.anim_details_time,
+            "F": oni_anim.anim_details_fps,
+            "L": oni_anim.anim_details_loop_enabled,
+            "I": oni_anim.anim_details_loop_in,
+            "O": oni_anim.anim_details_loop_out,
+            "E": oni_anim.anim_details_ease_in,
+            "Z": oni_anim.anim_details_ease_out,
+            "P": oni_anim.anim_details_priority,
             }
 
         details = {
@@ -1005,8 +1005,8 @@ def write_animation(
     animF.write(file_data)
     animF.close()
 
-    bpy.context.scene.bb_anim.property_unset("export_sl_anim_label")
-    bpy.context.scene.bb_anim.property_unset("export_sl_anim_label_short")
+    bpy.context.scene.oni_anim.property_unset("export_sl_anim_label")
+    bpy.context.scene.oni_anim.property_unset("export_sl_anim_label_short")
     anim.export_sl_anim_alert = False
 
     bpy.context.scene.frame_set(frame_current)
@@ -1036,10 +1036,10 @@ def write_mapped_animation(
     path=None
     ):
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = anim 
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = anim 
 
     obj = bpy.data.objects
     armObj = obj[armature]
@@ -1158,28 +1158,28 @@ def write_mapped_animation(
 
         file_data.extend( file_content['constraints']['count'] )
 
-    bb_anim = bpy.context.scene.bb_anim
-    bb = bpy.context.scene.onigiri
+    oni_anim = bpy.context.scene.oni_anim
+    oni = bpy.context.scene.onigiri
     
-    if bb_anim.anim_details == True:
+    if oni_anim.anim_details == True:
         T = str( round(total_time, 2) )
-        F = str( round(bb.animation_fps, 2) )
-        L = str( int(bb_anim.anim_loop) )
+        F = str( round(oni.animation_fps, 2) )
+        L = str( int(oni_anim.anim_loop) )
         I = str( round(loop_in_point, 2) )
         O = str( round(loop_out_point, 2) )
-        E = str( round(bb_anim.anim_ease_in_duration, 2) )
-        Z = str( round(bb_anim.anim_ease_out_duration, 2) )
-        P = str( bb_anim.anim_base_priority )
+        E = str( round(oni_anim.anim_ease_in_duration, 2) )
+        Z = str( round(oni_anim.anim_ease_out_duration, 2) )
+        P = str( oni_anim.anim_base_priority )
 
         dets_enabled = {
-            "T": bb_anim.anim_details_time,
-            "F": bb_anim.anim_details_fps,
-            "L": bb_anim.anim_details_loop_enabled,
-            "I": bb_anim.anim_details_loop_in,
-            "O": bb_anim.anim_details_loop_out,
-            "E": bb_anim.anim_details_ease_in,
-            "Z": bb_anim.anim_details_ease_out,
-            "P": bb_anim.anim_details_priority,
+            "T": oni_anim.anim_details_time,
+            "F": oni_anim.anim_details_fps,
+            "L": oni_anim.anim_details_loop_enabled,
+            "I": oni_anim.anim_details_loop_in,
+            "O": oni_anim.anim_details_loop_out,
+            "E": oni_anim.anim_details_ease_in,
+            "Z": oni_anim.anim_details_ease_out,
+            "P": oni_anim.anim_details_priority,
             }
 
         details = {
@@ -1225,8 +1225,8 @@ def write_mapped_animation(
     animF.write(file_data)
     animF.close()
 
-    bpy.context.scene.bb_anim.property_unset("export_sl_anim_label")
-    bpy.context.scene.bb_anim.property_unset("export_sl_anim_label_short")
+    bpy.context.scene.oni_anim.property_unset("export_sl_anim_label")
+    bpy.context.scene.oni_anim.property_unset("export_sl_anim_label_short")
     anim.export_sl_anim_alert = False
 
     bpy.context.scene.frame_set(frame_current)
@@ -1261,9 +1261,9 @@ def get_baked_animation(
     mrot = mark_tol_rot
     mloc = mark_tol_loc
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    bb_anim = bpy.context.scene.bb_anim
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    oni_anim = bpy.context.scene.oni_anim
 
     obj = bpy.data.objects
     armObj = obj[armature]
@@ -1332,10 +1332,10 @@ def get_baked_animation(
 
     keep_rots = set() 
     keep_locs = set() 
-    if bb_anim.anim_resample == True:
+    if oni_anim.anim_resample == True:
         print("resampling baked animation")
-        r = [i for i in range(frame_start, frame_end+1, bb_anim.anim_resample_rate_rotation)]
-        l = [i for i in range(frame_start, frame_end+1, bb_anim.anim_resample_rate_location)]
+        r = [i for i in range(frame_start, frame_end+1, oni_anim.anim_resample_rate_rotation)]
+        l = [i for i in range(frame_start, frame_end+1, oni_anim.anim_resample_rate_location)]
         keep_rots = set(r)
         keep_locs = set(l)
 
@@ -1355,7 +1355,7 @@ def get_baked_animation(
                         stage_one[bone]['locs'] = []
                     stage_one[bone]['locs'].append(frame)
     
-    if bb.export_volume_motion == False:
+    if oni.export_volume_motion == False:
         bones_del = []
         for bone in stage_one:
             if bone in volumes.vol_joints:
@@ -1366,7 +1366,7 @@ def get_baked_animation(
         print(bones_del)
 
     pelvis_bones = {'mpelvis', 'hip', 'hips'}
-    if bba.disable_pelvis_location_animation == True:
+    if onia.disable_pelvis_location_animation == True:
         
         bones_del = []
         for bone in stage_one:
@@ -1377,7 +1377,7 @@ def get_baked_animation(
             print("disable_pelvis_location_animation is True, removing root from location data:", bone)
             stage_one.pop(bone, "")
  
-    if bba.disable_location_offsets == True:
+    if onia.disable_location_offsets == True:
         
         bones_del = []
         for bone in stage_one:
@@ -1461,23 +1461,23 @@ def get_animated_frames(
     action=False,
     ):
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    bb_anim = bpy.context.scene.bb_anim
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    oni_anim = bpy.context.scene.oni_anim
 
-    export_volume_motion - bb.export_volume_motion
+    export_volume_motion - oni.export_volume_motion
 
     obj = bpy.data.objects
     armObj = obj[armature]
 
     rot_frames = []
     loc_frames = []
-    if bb_anim.anim_resample == True:
-        rots = [i for i in range(frame_start, frame_end+1, bb_anim.anim_resample_rate_rotation)]
+    if oni_anim.anim_resample == True:
+        rots = [i for i in range(frame_start, frame_end+1, oni_anim.anim_resample_rate_rotation)]
         rot_frames.append(frame_start)
         rot_frames.extend(rots)
         rot_frames.append(frame_end)
-        locs = [i for i in range(frame_start, frame_end+1, bb_anim.anim_resample_rate_location)]
+        locs = [i for i in range(frame_start, frame_end+1, oni_anim.anim_resample_rate_location)]
         loc_frames.append(frame_start)
         loc_frames.extend(locs)
         loc_frames.append(frame_end)
@@ -1490,7 +1490,7 @@ def get_animated_frames(
         for boneObj in armObj.data.bones:
             bone = boneObj.name
 
-            if bb.export_volume_motion == False:
+            if oni.export_volume_motion == False:
                 if bone in volumes.vol_joints:
                     continue
 
@@ -1499,9 +1499,9 @@ def get_animated_frames(
             frame_data[bone]['rot']['frames'] = rot_frames
             bone_lower = bone.lower()
             if bone_lower == 'mpelvis' or bone_lower == 'hip' or bone_lower == 'hips':
-                if bba.disable_pelvis_location_animation == True:
+                if onia.disable_pelvis_location_animation == True:
                     continue
-            if bba.disable_location_offsets == True:
+            if onia.disable_location_offsets == True:
                 continue
             frame_data[bone]['loc'] = {}
             frame_data[bone]['loc']['frames'] = loc_frames
@@ -1532,9 +1532,9 @@ def get_animated_frames(
         elif transform_type == 'location':
             bone_lower = real_bone.lower()
             if bone_lower == 'mpelvis' or bone_lower == 'hip' or bone_lower == 'hips':
-                if bba.disable_pelvis_location_animation == True:
+                if onia.disable_pelvis_location_animation == True:
                     continue
-            if bba.disable_location_offsets == True:
+            if onia.disable_location_offsets == True:
                 continue
             loc_rot = 'loc'
         elif transform_type == 'scale':
@@ -1560,7 +1560,7 @@ def get_animated_frames(
 
         frames = [int(k.co.x) for k in fc.keyframe_points]
 
-        if bb_anim.anim_resample == True:
+        if oni_anim.anim_resample == True:
             frames.append(frame_start)
             frames.append(frame_end)
         
@@ -1568,11 +1568,11 @@ def get_animated_frames(
         frame_numbers = list(sorted(frames_set))
 
         new_frames = []
-        if bb_anim.anim_resample == True:
+        if oni_anim.anim_resample == True:
             if loc_rot == 'rot':
-                stride = bb_anim.anim_resample_rate_rotation
+                stride = oni_anim.anim_resample_rate_rotation
             else:
-                stride = bb_anim.anim_resample_rate_location
+                stride = oni_anim.anim_resample_rate_location
 
             new_frames.append(frame_numbers[0])
 
@@ -1591,9 +1591,9 @@ def get_animated_keys(
     frame_start=0,
     frame_end=0
     ):
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    bb_anim = bpy.context.scene.bb_anim
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    oni_anim = bpy.context.scene.oni_anim
 
     obj = bpy.data.objects
     armObj = obj[armature]
@@ -1623,7 +1623,7 @@ def get_animated_keys(
 
         real_bone = fcurve_paths[bone_path]
 
-        if bb.export_volume_motion == False:
+        if oni.export_volume_motion == False:
             if real_bone in volumes.vol_joints:
                 continue
 
@@ -1643,10 +1643,10 @@ def get_animated_keys(
             
             bone_lower = real_bone.lower()
             if bone_lower == 'mpelvis' or bone_lower == 'hip' or bone_lower == 'hips':
-                if bba.disable_pelvis_location_animation == True:
+                if onia.disable_pelvis_location_animation == True:
                     continue
             
-            elif bba.disable_location_offsets == True:
+            elif onia.disable_location_offsets == True:
                 continue
 
             loc_rot = 'locs'
@@ -1707,10 +1707,10 @@ def get_source_keys(
     frame_start=0,
     frame_end=0
     ):
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = bpy.context.scene.bb_anim
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = bpy.context.scene.oni_anim
 
     use_rotation = anim.anim_use_source_keys_rotation
     use_location = anim.anim_use_source_keys_location
@@ -1741,7 +1741,7 @@ def get_source_keys(
 
         real_bone = fcurve_paths[bone_path]
 
-        if bb.export_volume_motion == False:
+        if oni.export_volume_motion == False:
             if real_bone in volumes.vol_joints:
                 continue
 
@@ -1793,10 +1793,10 @@ def get_target_keys(
     frame_end=0,
     ):
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = bpy.context.scene.bb_anim
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = bpy.context.scene.oni_anim
 
     use_rotation = anim.anim_use_target_keys_rotation
     use_location = anim.anim_use_target_keys_location
@@ -1818,7 +1818,7 @@ def get_target_keys(
                 
                 tarmObj = cObj.target
 
-                tarmReal = armObj.get('bb_motion_director')
+                tarmReal = armObj.get('oni_motion_director')
                 if tarmReal != None:
                     if utils.is_valid(tarmReal):
                         tarmObj = tarmReal
@@ -1857,7 +1857,7 @@ def get_target_keys(
 
                 real_bone = bone_targets[sbone][tarm][bone_path]
 
-                if bb.export_volume_motion == False:
+                if oni.export_volume_motion == False:
                     if sbone in volumes.vol_joints:
                         continue
 
@@ -2132,10 +2132,10 @@ def get_deviations(
     mark_tol_loc=0.001,
     ):
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = anim
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = anim
 
     drot = rotation
     dloc = location
@@ -2259,13 +2259,13 @@ def get_deviations(
     st = time.time()
 
     pelvis_bones = {'mpelvis', 'hip', 'hips'}
-    if bba.disable_pelvis_location_animation == True:
+    if onia.disable_pelvis_location_animation == True:
         for bone in lerp_data:
             bone_lower = bone.lower()
             if bone_lower in pelvis_bones:
                 del lerp_data[bone]
     
-    if bba.disable_location_offsets == True:
+    if onia.disable_location_offsets == True:
         for bone in lerp_data:
             bone_lower = bone.lower()
             if bone_lower not in pelvis_bones:
@@ -2328,7 +2328,7 @@ def get_motion(armature=None, frame_start=0, frame_end=0, frames=[], bones=[]):
     armObj = obj[armature]
     motion = {}
 
-    bb_anim = bpy.context.scene.bb_anim
+    oni_anim = bpy.context.scene.oni_anim
 
     if abs(frame_start - frame_end) == 0 and len(frames) == 0:
         print("get_motion reports: no frames to examine, this is an internal error probably, call the doctor!")
@@ -2478,10 +2478,10 @@ def calculate_time(
     anim_fps=None,
     ):
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = anim 
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = anim 
 
     time_calc = {}
 
@@ -2532,7 +2532,7 @@ def calculate_time(
     if 1 == 0:
         if anim.anim_loop == True:
             txt = ""
-            if bb_anim.anim_loop_advanced == True:
+            if oni_anim.anim_loop_advanced == True:
                 print("Advanced loop enabled")
                 if loop_in_point < 0:
                     txt = "Loop failure: loop start must be 0 or greater, not less"
@@ -2577,11 +2577,11 @@ def calculate_time(
         print("ease_out:", anim.anim_ease_out_duration)
         print("hand_pose", anim.anim_hand_pose)
         print("time_per_frame:", time_per_frame)
-        if bba.disable_location_offsets == True:
+        if onia.disable_location_offsets == True:
             print("locations: disabled")
         else:
             print("locations: enabled")
-        if bb.export_volume_motion == True:
+        if oni.export_volume_motion == True:
             print("export_volume_motion: enabled")
         else:
             print("export_volume_motion: disabled")
@@ -2843,22 +2843,22 @@ def remove_deps(armature=None):
 
 def recycle_actions():
     actions = {a.name for a in bpy.data.actions}
-    bb_alib = bpy.context.scene.bb_alib
-    if bb_alib.get('actions') == None:
-        bb_alib['actions'] = {}
+    oni_alib = bpy.context.scene.oni_alib
+    if oni_alib.get('actions') == None:
+        oni_alib['actions'] = {}
     
     del_actions = []
-    for a in bb_alib['actions'].keys():
+    for a in oni_alib['actions'].keys():
         if a not in actions:
             del_actions.append(a)
     
     for a in del_actions:
-        del bb_alib['actions'][a]
+        del oni_alib['actions'][a]
 
     for a in actions:
-        if bb_alib['actions'].get(a) == None:
-            bb_alib['actions'][a] = {}
-            bb_alib['actions'][a]['flagged'] = False
+        if oni_alib['actions'].get(a) == None:
+            oni_alib['actions'][a] = {}
+            oni_alib['actions'][a]['flagged'] = False
 
     return True
 
@@ -2900,7 +2900,7 @@ def attach_proxy(armature=None, proxy="ANIM_PROXY_RIG"):
         bc['Copy Location'].target_space = 'WORLD'
         bc['Copy Location'].owner_space = 'WORLD'
         bc['Copy Location'].influence = 1
-        bc['Copy Location'].name = "BB Copy Loc"
+        bc['Copy Location'].name = "ONI Copy Loc"
         bc = bpy.data.objects[tarm].pose.bones[tbone].constraints
         bc.new('COPY_ROTATION')
         bc['Copy Rotation'].target = bpy.data.objects[sarm]
@@ -2908,7 +2908,7 @@ def attach_proxy(armature=None, proxy="ANIM_PROXY_RIG"):
         bc['Copy Rotation'].target_space = 'WORLD'
         bc['Copy Rotation'].owner_space = 'WORLD'
         bc['Copy Rotation'].influence = 1
-        bc['Copy Rotation'].name = "BB Copy Rot"
+        bc['Copy Rotation'].name = "ONI Copy Rot"
  
     bpy.ops.object.mode_set(mode='OBJECT')
 
@@ -3084,12 +3084,12 @@ def get_speed_changes(
     tol=0.001,
     ):
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
-    anim = bpy.context.scene.bb_anim
-    bb_anim = anim 
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
+    anim = bpy.context.scene.oni_anim
+    oni_anim = anim 
 
-    anim_fps = bb.animation_fps
+    anim_fps = oni.animation_fps
     anim_start_frame = frame_start
     anim_end_frame = frame_end
     total_frames = abs(anim_start_frame - anim_end_frame - 1)
@@ -3245,7 +3245,7 @@ def convert_animated_controllers(source=None, target=None):
 
     obj = bpy.data.objects
     avaRig = obj[source]
-    bbRig = obj[target]
+    oniRig = obj[target]
 
     if avaRig.animation_data == None:
         print("convert_animated_controllers reports: no animation_data")
@@ -3286,8 +3286,8 @@ def convert_animated_controllers(source=None, target=None):
     bpy.context.view_layer.update()
 
     animObj = avaRig.animation_data.action.copy()
-    bbRig.animation_data_create()
-    bbRig.animation_data.action = animObj
+    oniRig.animation_data_create()
+    oniRig.animation_data.action = animObj
 
     return animObj 
 
@@ -3297,13 +3297,13 @@ def morph_to(source=None, target=None, morph=False):
         shifter.morpher_reset(arms=[source])
         return True
 
-    bb = bpy.context.scene.onigiri
+    oni = bpy.context.scene.onigiri
     obj = bpy.data.objects
     sourceObj = obj[source]
     targetObj = obj[target]
 
-    frame_start = bb.animation_start_frame
-    frame_end = bb.animation_end_frame
+    frame_start = oni.animation_start_frame
+    frame_end = oni.animation_end_frame
     frame_current = bpy.context.scene.frame_current
 
     print("would have morphed", source)
@@ -3370,7 +3370,7 @@ def transfer_motion(sarm=None, tarm=None):
         conObj.target_space = 'WORLD'
         conObj.owner_space = 'WORLD'
         conObj.influence = 1
-        conObj.name = "BB " + cname
+        conObj.name = "ONI " + cname
         cnames.append(conObj.name)
         
         bc = boneObj.constraints
@@ -3381,7 +3381,7 @@ def transfer_motion(sarm=None, tarm=None):
         conObj.target_space = 'WORLD'
         conObj.owner_space = 'WORLD'
         conObj.influence = 1
-        conObj.name = "BB " + cname
+        conObj.name = "ONI " + cname
         cnames.append(conObj.name)
 
         boneObj['cname'] = cnames
@@ -3390,7 +3390,7 @@ def transfer_motion(sarm=None, tarm=None):
 
     animObj = tarmObj.animation_data_create()
 
-    action = "BB_action_transfer"
+    action = "ONI_action_transfer"
     actionObj = bpy.data.actions.new(action)
 
     tarmObj.animation_data.action = actionObj
@@ -3496,7 +3496,7 @@ def transfer_motion(sarm=None, tarm=None):
 
 def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
 
-    bb = bpy.context.scene.onigiri
+    oni = bpy.context.scene.onigiri
 
     if sarm == None or tarm == None:
         print("bake_motion - nothing to do")
@@ -3531,7 +3531,7 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
 
     animObj = tarmObj.animation_data_create()
 
-    action = "BB_Baked"
+    action = "ONI_Baked"
     actionObj = bpy.data.actions.new(action)
     print("Created new action:", actionObj.name)
 
@@ -3743,7 +3743,7 @@ def merge_actions(actions=None, armature=None):
     if isinstance(armature, str):
         armObj = bpy.data.objects[armature]
 
-    action = "BB_Merged"
+    action = "ONI_Merged"
     animObj = bpy.data.actions.new(action)
     print("Created new action:", animObj.name)
 
@@ -3956,8 +3956,8 @@ def split_time(frame_start=0, frame_end=0, fill_fps=24, fill_time=60):
             name = newAction.name
             
             actions[name] = "" 
-            bb_alib['actions'][name] = {}
-            bb_alib['actions'][name]['flagged'] = True
+            oni_alib['actions'][name] = {}
+            oni_alib['actions'][name]['flagged'] = True
 
     actions = {}
     for count in range(clones):
@@ -3998,10 +3998,10 @@ def split_time(frame_start=0, frame_end=0, fill_fps=24, fill_time=60):
     return actions
 
 def write_lsl(source=None, target=None, actions=None, prefix="Anim", fps=24):
-    bb_split = bpy.context.window_manager.bb_split
+    oni_split = bpy.context.window_manager.oni_split
 
-    split_overlap = bb_split.split_overlap
-    split_delay = bb_split.split_delay
+    split_overlap = oni_split.split_overlap
+    split_delay = oni_split.split_delay
 
     n = 0
     anim_list = []
@@ -4060,16 +4060,16 @@ def write_lsl(source=None, target=None, actions=None, prefix="Anim", fps=24):
     code = f.read()
     f.close()
 
-    split_debug = str(bb_split.split_debug).upper()
-    split_kill = str(bb_split.split_kill).upper()
-    split_owner = str(bb_split.split_owner).upper()
-    split_loop = str(bb_split.split_loop).upper()
-    split_touch = str(bb_split.split_touch).upper()
-    split_listen = str(bb_split.split_listen).upper()
-    split_channel = str(bb_split.split_channel).upper()
-    split_start = bb_split.split_start
-    split_stop = bb_split.split_stop
-    split_on_start = str(bb_split.split_on_start).upper()
+    split_debug = str(oni_split.split_debug).upper()
+    split_kill = str(oni_split.split_kill).upper()
+    split_owner = str(oni_split.split_owner).upper()
+    split_loop = str(oni_split.split_loop).upper()
+    split_touch = str(oni_split.split_touch).upper()
+    split_listen = str(oni_split.split_listen).upper()
+    split_channel = str(oni_split.split_channel).upper()
+    split_start = oni_split.split_start
+    split_stop = oni_split.split_stop
+    split_on_start = str(oni_split.split_on_start).upper()
 
     code = code.replace( "%ANIM_LIST", anim_string, 1 )
     code = code.replace( "%TIME_LIST", time_string, 1 )

@@ -31,8 +31,8 @@ def get_director(object):
 
     
     
-    aObj = OBJ.get('bb_latch_actor', None)
-    dObj = OBJ.get('bb_latch_director', None)
+    aObj = OBJ.get('oni_latch_actor', None)
+    dObj = OBJ.get('oni_latch_director', None)
 
     
     
@@ -76,7 +76,7 @@ def attach(inRig=None, outRig=None):
     for boneObj in  outRig.data.bones:
         boneObj.hide = False
 
-    rename_map = outRig['bb_onemap_rename'].to_dict()
+    rename_map = outRig['oni_onemap_rename'].to_dict()
 
 
 
@@ -105,7 +105,7 @@ def attach(inRig=None, outRig=None):
         source=outRig, target=inRig,
         bone_map=rename_map, constraint="COPY_LOCATION",
         target_space='LOCAL', owner_space='LOCAL_WITH_PARENT',
-        influence=1, name="bb_latch_constraints",
+        influence=1, name="oni_latch_constraints",
         )
 
     
@@ -120,7 +120,7 @@ def attach(inRig=None, outRig=None):
         source=outRig, target=inRig,
         bone_map=rename_map, constraint="CHILD_OF",
         target_space='LOCAL', owner_space='LOCAL_WITH_PARENT',
-        influence=1, name="bb_latch_constraints",
+        influence=1, name="oni_latch_constraints",
         location_x=False, location_y=False, location_z=False,
         rotation_x=True, rotation_y=True, rotation_z=True,
         scale_x=False, scale_y=False, scale_z=False,

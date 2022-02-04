@@ -21,7 +21,7 @@ from . import utils
 
 def mapper_init():
     obj = bpy.data.objects
-    bmp = bpy.context.window_manager.bb_mapper
+    bmp = bpy.context.window_manager.oni_mapper
 
     
 
@@ -37,7 +37,7 @@ def mapper_init():
 
 def mapper_handler(context):
     obj = bpy.data.objects
-    bmp = bpy.context.window_manager.bb_mapper
+    bmp = bpy.context.window_manager.oni_mapper
 
     
     
@@ -151,7 +151,7 @@ def store_armature_data(armature=""):
     
     
     obj = bpy.data.objects
-    ani = bpy.context.window_manager.bb_animesh
+    ani = bpy.context.window_manager.oni_animesh
 
     armObj = obj[armature]
 
@@ -448,7 +448,7 @@ def restore_bone(armature="", bone="", type="", roll=False):
 def snap_to(source=""):
 
     
-    bmp = bpy.context.window_manager.bb_mapper
+    bmp = bpy.context.window_manager.oni_mapper
 
     if source == "":
         print("snap_to reports: no source")
@@ -691,7 +691,7 @@ def snap_to(source=""):
     obj[source]['mapped'] = 1
 
     try:
-        bpy.context.window_manager.bb_mapper.mapper_message = mapper_message = "Use (Attach) if you are animating"
+        bpy.context.window_manager.oni_mapper.mapper_message = mapper_message = "Use (Attach) if you are animating"
     except:
         print("snap_to reports: Called by unknown method.  No problem, continuing...")
 
@@ -736,7 +736,7 @@ def snap_to(source=""):
 def fly_paper(armature=""):
 
     obj = bpy.data.objects
-    bmp = bpy.context.window_manager.bb_mapper
+    bmp = bpy.context.window_manager.oni_mapper
 
     
     
@@ -895,7 +895,7 @@ def fly_paper(armature=""):
                     bc['Copy Location'].target_space = 'WORLD'
                     bc['Copy Location'].owner_space = 'WORLD'
                     bc['Copy Location'].influence = 1
-                    bc['Copy Location'].name = "BB Copy Loc"
+                    bc['Copy Location'].name = "ONI Copy Loc"
 
                     bc = bpy.data.objects[sarm].pose.bones[sbone].constraints
                     bc.new('COPY_ROTATION')
@@ -904,7 +904,7 @@ def fly_paper(armature=""):
                     bc['Copy Rotation'].target_space = 'WORLD'
                     bc['Copy Rotation'].owner_space = 'WORLD'
                     bc['Copy Rotation'].influence = 1
-                    bc['Copy Rotation'].name = "BB Copy Rot"
+                    bc['Copy Rotation'].name = "ONI Copy Rot"
 
         
         bpy.context.view_layer.update()

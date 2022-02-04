@@ -87,7 +87,7 @@ def add_locator():
 
 def add_markers(testing=False):
 
-    bb_sim = bpy.context.window_manager.bb_sim
+    oni_sim = bpy.context.window_manager.oni_sim
 
     
     state = utils.get_state()
@@ -95,11 +95,11 @@ def add_markers(testing=False):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.01, enter_editmode=False, align='WORLD', location=(0, 0, 0))
     headObj = bpy.context.object
     headObj.name = "MARKER_HEAD"
-    headObj.dimensions.xyz = bb_sim.sim_marker_size, bb_sim.sim_marker_size, bb_sim.sim_marker_size
+    headObj.dimensions.xyz = oni_sim.sim_marker_size, oni_sim.sim_marker_size, oni_sim.sim_marker_size
     headObj.select_set(False)
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.01, enter_editmode=False, align='WORLD', location=(0, 0, 0))
     tailObj = bpy.context.object
-    tailObj.dimensions.xyz = bb_sim.sim_marker_size, bb_sim.sim_marker_size, bb_sim.sim_marker_size
+    tailObj.dimensions.xyz = oni_sim.sim_marker_size, oni_sim.sim_marker_size, oni_sim.sim_marker_size
     tailObj.name = "MARKER_TAIL"
     tailObj.select_set(False)
 
@@ -280,12 +280,12 @@ def get_director(object):
         OBJ = bpy.data.objects[object]
 
     
-    aObj = OBJ.get('bb_sim_actor')
+    aObj = OBJ.get('oni_sim_actor')
     
     if aObj == None:
         print("Entry object may be an actor")
-        dObj = OBJ.get('bb_sim_director')
-        dObjs = OBJ.get('bb_sim_directors')
+        dObj = OBJ.get('oni_sim_director')
+        dObjs = OBJ.get('oni_sim_directors')
         
         if dObj == None and dObjs == None:
             print("A: No directors found on the given object")
@@ -310,8 +310,8 @@ def get_director(object):
     print("Entry object may be a director")
     if utils.is_valid(aObj):
         print("D: actor is valid")
-        dObj = aObj.get('bb_sim_director')
-        dObjs = aObj.get('bb_sim_directors')
+        dObj = aObj.get('oni_sim_director')
+        dObjs = aObj.get('oni_sim_directors')
         
         if dObj == None and dObjs == None:
             print("D: actor has no directors, this could be a bug")
@@ -359,13 +359,13 @@ def get_actor(object):
         print("sim::get_actor : object is not viable")
         return False
     
-    if OBJ.get('bb_sim_actor') != None:
-        return OBJ['bb_sim_actor']
+    if OBJ.get('oni_sim_actor') != None:
+        return OBJ['oni_sim_actor']
     
-    if OBJ.get('bb_sim_director') != None:
+    if OBJ.get('oni_sim_director') != None:
         return OBJ
     
-    if OBJ.get('bb_sim_directors') != None:
+    if OBJ.get('oni_sim_directors') != None:
         return OBJ
 
     
@@ -412,10 +412,10 @@ def build_bone(actor=None, director=None, head=None, tail=None, vertices=[]):
     
     
     
-    bname = "BB_SIM_BONE_" + utils.get_temp_name()
+    bname = "ONI_SIM_BONE_" + utils.get_temp_name()
     while bname in aObj.data.bones:
         print("Bone name collision", bname, "getting new one...")
-        bname = "BB_SIM_BONE_" + utils.get_temp_name()
+        bname = "ONI_SIM_BONE_" + utils.get_temp_name()
     
 
     boneObj = aObj.data.edit_bones.new(bname)
@@ -486,7 +486,7 @@ def build_bone(actor=None, director=None, head=None, tail=None, vertices=[]):
     utils.set_inverse(context_py, cname)
     
     
-    conObj.name = "BB Sim " + cname
+    conObj.name = "ONI Sim " + cname
 
     
     
@@ -533,7 +533,7 @@ def get_sim_armature(objects):
         return False, False
     actors = set()
     for o in mesh:
-        a = o.get('bb_sim_actor')
+        a = o.get('oni_sim_actor')
         if a == None:
             print("The object mesh", o.name, "has no actor")
             return False, False
@@ -542,7 +542,7 @@ def get_sim_armature(objects):
                 print("The object mesh", o.name, "has a simulator actor but the object is not available")
                 return False, False
         except:
-            print("The property bb_sim_actor on mesh object", o.name, "is damaged")
+            print("The property oni_sim_actor on mesh object", o.name, "is damaged")
             return False, False
         actors.add(a)
     if len(actors) == 0:
@@ -598,7 +598,7 @@ def export_fix(selected):
     
     qualified = {}
     for o in mesh:
-        a = o.get('bb_sim_actor')
+        a = o.get('oni_sim_actor')
         if a == None:
             continue
         try:
@@ -621,10 +621,10 @@ def export_fix(selected):
     
     
     for o in qualified:
-        aObj = o.get('bb_sim_actor')
+        aObj = o.get('oni_sim_actor')
         if aObj != None:
-            if aObj.get('bb_sim_director') != None:
-                dObj = aObj.get('bb_sim_director')
+            if aObj.get('oni_sim_director') != None:
+                dObj = aObj.get('oni_sim_director')
                 if dObj == None:
                     print("Something weird happened attempting to get the dynamic sim director")
                 else:
@@ -667,7 +667,7 @@ def export_fix(selected):
 
 def sync(aObj):
 
-    bb_sim = bpy.context.window_manager.bb_sim
+    oni_sim = bpy.context.window_manager.oni_sim
 
     try:
         if aObj.name not in bpy.context.scene.objects:
@@ -677,7 +677,7 @@ def sync(aObj):
         print("sim::sync reports: invalid objecdt")
         return False
     
-    dObj = aObj.get('bb_sim_director')
+    dObj = aObj.get('oni_sim_director')
     if dObj == None:
         print("Can't sync, no director")
         return False
@@ -719,11 +719,11 @@ def sync(aObj):
     for bone in heads:
         hloc = heads[bone]
         vertices = []
-        if bb_sim.sim_path_radius == 0:
+        if oni_sim.sim_path_radius == 0:
             loc, index, dist = kd.find(hloc)  
             vertices.append(index)
         else:
-            for loc, index, dist in kd.find_range(hloc, bb_sim.sim_path_radius):
+            for loc, index, dist in kd.find_range(hloc, oni_sim.sim_path_radius):
                 vertices.append(index)
         
         G = dObj.vertex_groups.new( name = bone )
@@ -835,7 +835,7 @@ def vertex_constraint(arm=None, bone=None, mesh=None, vertices=[], influence=1, 
     set_inverse(context_py, cname)
     
     
-    conObj.name = "BB Sim " + cname
+    conObj.name = "ONI Sim " + cname
 
     
     

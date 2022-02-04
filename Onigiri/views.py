@@ -89,26 +89,26 @@ def viewable_layers(context):
 
 
 
-    bb_view = bpy.context.window_manager.bb_view
+    oni_view = bpy.context.window_manager.oni_view
     so = len(bpy.context.selected_objects)
     if so != 1:
-        bb_view.rig_author_name = "Unknown"
-        bb_view.rig_author_property = ""
+        oni_view.rig_author_name = "Unknown"
+        oni_view.rig_author_property = ""
         return
     o = bpy.context.selected_objects[0]
     if o.type != 'ARMATURE':
-        bb_view.rig_author_name = "Unknown"
-        bb_view.rig_author_property = ""
+        oni_view.rig_author_name = "Unknown"
+        oni_view.rig_author_property = ""
         return
     
     for rig in view_layers:
         if rig in o:
-            bb_view.rig_author_name = view_layers[rig]['author']
-            bb_view.rig_author_property = rig
+            oni_view.rig_author_name = view_layers[rig]['author']
+            oni_view.rig_author_property = rig
             break
     
     
-    bb_view.rig_name = o.data.name
+    oni_view.rig_name = o.data.name
     return 
 
 
@@ -118,10 +118,10 @@ def viewable_layers(context):
 
 
 def cleanup(context):
-    if getattr("bpy.context.window_manager", "bb_view", None) != None:
-        bbv = bpy.context.window_manager.bb_view
-        if bbv.get('states') != None:
-            del bbv['states']
+    if getattr("bpy.context.window_manager", "oni_view", None) != None:
+        oniv = bpy.context.window_manager.oni_view
+        if oniv.get('states') != None:
+            del oniv['states']
 
 
 
@@ -180,7 +180,7 @@ def get_unique_name():
 
 def see_all():
     obj = bpy.data.objects
-    bbv = bpy.context.window_manager.bb_view
+    oniv = bpy.context.window_manager.oni_view
     scene_name = bpy.context.scene.name
     for c in bpy.data.collections:
         c.hide_viewport = False
@@ -220,7 +220,7 @@ def see_all():
 
 def save_state():
     obj = bpy.data.objects
-    bbv = bpy.context.window_manager.bb_view
+    oniv = bpy.context.window_manager.oni_view
 
     
     
@@ -233,14 +233,14 @@ def save_state():
 
     
     
-    if bbv.get('states') == None:
+    if oniv.get('states') == None:
         
-        bbv['states'] = dict()
-        bbv['states']['names'] = dict()
-        bbv['states']['data'] = dict()
+        oniv['states'] = dict()
+        oniv['states']['names'] = dict()
+        oniv['states']['data'] = dict()
 
     
-    if scene_name in bbv['states']['names']:
+    if scene_name in oniv['states']['names']:
         print("save_states reports: you did a dum, fix your program")
         return False
 
@@ -249,31 +249,31 @@ def save_state():
     
     
     
-    bbv['states']['names'][scene_name] = ID
-    bbv['states']['data'] = dict()
-    bbv['states']['data'][ID] = dict()
-    bbv['states']['data'][ID]['collections'] = dict()
-    bbv['states']['data'][ID]['armatures'] = dict() 
-    bbv['states']['data'][ID]['objects'] = dict()
-    bbv['states']['data'][ID]['layers'] = dict()
+    oniv['states']['names'][scene_name] = ID
+    oniv['states']['data'] = dict()
+    oniv['states']['data'][ID] = dict()
+    oniv['states']['data'][ID]['collections'] = dict()
+    oniv['states']['data'][ID]['armatures'] = dict() 
+    oniv['states']['data'][ID]['objects'] = dict()
+    oniv['states']['data'][ID]['layers'] = dict()
 
     
     
     
     
     for c in bpy.data.collections:
-        bbv['states']['data'][ID]['collections'][c.name] = dict()
-        bbv['states']['data'][ID]['collections'][c.name]['hide_viewport'] = c.hide_viewport
-        bbv['states']['data'][ID]['collections'][c.name]['hide_select'] = c.hide_select
+        oniv['states']['data'][ID]['collections'][c.name] = dict()
+        oniv['states']['data'][ID]['collections'][c.name]['hide_viewport'] = c.hide_viewport
+        oniv['states']['data'][ID]['collections'][c.name]['hide_select'] = c.hide_select
         c.hide_viewport = False
         c.hide_select = False
 
     
     
     for o in bpy.data.objects:
-        bbv['states']['data'][ID]['objects'][o.name] = dict()
-        bbv['states']['data'][ID]['objects'][o.name]['hide_select'] = o.hide_select
-        bbv['states']['data'][ID]['objects'][o.name]['hide_viewport'] = o.hide_viewport
+        oniv['states']['data'][ID]['objects'][o.name] = dict()
+        oniv['states']['data'][ID]['objects'][o.name]['hide_select'] = o.hide_select
+        oniv['states']['data'][ID]['objects'][o.name]['hide_viewport'] = o.hide_viewport
         o.hide_select = False
         o.hide_viewport = False
 
@@ -298,18 +298,18 @@ def save_state():
         
         
         bpy.context.window.view_layer = bpy.data.scenes[scene_name].view_layers[view_layer] 
-        bbv['states']['data'][ID]['layers'][view_layer] = dict()
-        bbv['states']['data'][ID]['layers'][view_layer]['objects'] = dict()
-        bbv['states']['data'][ID]['layers'][view_layer]['collections'] = dict()
-        bbv['states']['data'][ID]['layers'][view_layer]['selections'] = [a.name for a in bpy.context.selected_objects]
+        oniv['states']['data'][ID]['layers'][view_layer] = dict()
+        oniv['states']['data'][ID]['layers'][view_layer]['objects'] = dict()
+        oniv['states']['data'][ID]['layers'][view_layer]['collections'] = dict()
+        oniv['states']['data'][ID]['layers'][view_layer]['selections'] = [a.name for a in bpy.context.selected_objects]
 
         
         if bpy.context.view_layer.objects.active == None:
-            bbv['states']['data'][ID]['layers'][view_layer]['active_object'] = None
+            oniv['states']['data'][ID]['layers'][view_layer]['active_object'] = None
         else:
-            bbv['states']['data'][ID]['layers'][view_layer]['active_object'] = bpy.context.view_layer.objects.active.name
+            oniv['states']['data'][ID]['layers'][view_layer]['active_object'] = bpy.context.view_layer.objects.active.name
 
-        bbv['states']['data'][ID]['layers'][view_layer]['mode'] = bpy.context.mode
+        oniv['states']['data'][ID]['layers'][view_layer]['mode'] = bpy.context.mode
 
         if bpy.context.mode != 'OBJECT':
             bpy.ops.object.mode_set(mode='OBJECT')
@@ -319,14 +319,14 @@ def save_state():
         
         for colObj in vlObj.layer_collection.children:
             cname = colObj.name
-            bbv['states']['data'][ID]['layers'][view_layer]['collections'][cname] = dict()
-            bbv['states']['data'][ID]['layers'][view_layer]['collections'][cname]['hide_viewport'] =                vlObj.layer_collection.children[cname].hide_viewport
+            oniv['states']['data'][ID]['layers'][view_layer]['collections'][cname] = dict()
+            oniv['states']['data'][ID]['layers'][view_layer]['collections'][cname]['hide_viewport'] =                vlObj.layer_collection.children[cname].hide_viewport
             vlObj.layer_collection.children[cname].hide_viewport = False
 
         
         
         for o in bpy.data.objects:
-            bbv['states']['data'][ID]['layers'][view_layer]['objects'][o.name] = o.hide_get()
+            oniv['states']['data'][ID]['layers'][view_layer]['objects'][o.name] = o.hide_get()
             o.hide_set(False)
 
     
@@ -336,10 +336,10 @@ def save_state():
     for o in bpy.data.objects:
         if o.type != 'ARMATURE':
             continue
-        bbv['states']['data'][ID]['armatures'][o.name] = dict()
-        bbv['states']['data'][ID]['armatures'][o.name]['edit_hide'] = dict()
-        bbv['states']['data'][ID]['armatures'][o.name]['pose_hide'] = dict()
-        bbv['states']['data'][ID]['armatures'][o.name]['hide_select'] = dict()
+        oniv['states']['data'][ID]['armatures'][o.name] = dict()
+        oniv['states']['data'][ID]['armatures'][o.name]['edit_hide'] = dict()
+        oniv['states']['data'][ID]['armatures'][o.name]['pose_hide'] = dict()
+        oniv['states']['data'][ID]['armatures'][o.name]['hide_select'] = dict()
         o.select_set(True)
         bpy.context.view_layer.objects.active = o
 
@@ -347,29 +347,29 @@ def save_state():
         bpy.ops.object.mode_set(mode='POSE')
         for boneObj in o.data.bones:
             bname = boneObj.name
-            bbv['states']['data'][ID]['armatures'][o.name]['pose_hide'][bname] = boneObj.hide
-            bbv['states']['data'][ID]['armatures'][o.name]['hide_select'][bname] = boneObj.hide_select
+            oniv['states']['data'][ID]['armatures'][o.name]['pose_hide'][bname] = boneObj.hide
+            oniv['states']['data'][ID]['armatures'][o.name]['hide_select'][bname] = boneObj.hide_select
             boneObj.hide = False
             boneObj.hide_select = False
         
         bpy.ops.object.mode_set(mode='EDIT')
         for boneObj in o.data.edit_bones:
             bname = boneObj.name
-            bbv['states']['data'][ID]['armatures'][o.name]['edit_hide'][bname] = boneObj.hide
+            oniv['states']['data'][ID]['armatures'][o.name]['edit_hide'][bname] = boneObj.hide
             boneObj.hide = False
         bpy.ops.object.mode_set(mode='OBJECT')
         o.select_set(False)
 
         
-        for name in bbv['states']['data'][ID]['layers'][view_layer]['selections']:
+        for name in oniv['states']['data'][ID]['layers'][view_layer]['selections']:
             obj[name].select_set(True)
-        this_mode = bbv['states']['data'][ID]['layers'][view_layer]['mode']
+        this_mode = oniv['states']['data'][ID]['layers'][view_layer]['mode']
         if this_mode != 'OBJECT':
             if this_mode == 'EDIT_ARMATURE':
                 bpy.ops.object.mode_set(mode='EDIT')
             else:
                 bpy.ops.object.mode_set(mode=this_mode)
-        active_object = bbv['states']['data'][ID]['layers'][view_layer]['active_object']
+        active_object = oniv['states']['data'][ID]['layers'][view_layer]['active_object']
         if active_object == None:
             bpy.context.view_layer.objects.active = None
         else:
@@ -387,17 +387,17 @@ def restore_state():
     
 
     obj = bpy.context.scene.objects
-    bbv = bpy.context.window_manager.bb_view
+    oniv = bpy.context.window_manager.oni_view
 
-    if bbv.get('states') == None:
+    if oniv.get('states') == None:
         print("Nothing to restore")
         return False
-    if bbv['states'].get('names') == None:
+    if oniv['states'].get('names') == None:
         print("got base but names missing")
         return False
 
     scene_name = bpy.context.scene.name
-    if scene_name not in bbv['states']['names']:
+    if scene_name not in oniv['states']['names']:
         print("scene not saved, nothing to restore")
         return False
 
@@ -425,12 +425,12 @@ def restore_state():
         o.select_set(False)
     
 
-    ID = bbv['states']['names'][scene_name]
+    ID = oniv['states']['names'][scene_name]
 
     print("Restoring state for scene", scene_name, "with ID", ID)
 
     
-    for oname in bbv['states']['data'][ID]['armatures']:
+    for oname in oniv['states']['data'][ID]['armatures']:
         if oname not in obj:
             print("Missing armature:", oname)
             continue
@@ -439,35 +439,35 @@ def restore_state():
         bpy.ops.object.mode_set(mode='POSE')
 
         
-        for bname in bbv['states']['data'][ID]['armatures'][oname]['pose_hide']:
+        for bname in oniv['states']['data'][ID]['armatures'][oname]['pose_hide']:
             if bname in obj[oname].data.bones:
-                obj[oname].data.bones[bname].hide = bbv['states']['data'][ID]['armatures'][oname]['pose_hide'][bname]
-                obj[oname].data.bones[bname].hide_select = bbv['states']['data'][ID]['armatures'][oname]['hide_select'][bname]
+                obj[oname].data.bones[bname].hide = oniv['states']['data'][ID]['armatures'][oname]['pose_hide'][bname]
+                obj[oname].data.bones[bname].hide_select = oniv['states']['data'][ID]['armatures'][oname]['hide_select'][bname]
         
         bpy.ops.object.mode_set(mode='EDIT')
-        for bname in bbv['states']['data'][ID]['armatures'][oname]['edit_hide']:
+        for bname in oniv['states']['data'][ID]['armatures'][oname]['edit_hide']:
             if bname in obj[oname].data.edit_bones:
-                obj[oname].data.edit_bones[bname].hide = bbv['states']['data'][ID]['armatures'][oname]['edit_hide'][bname]
+                obj[oname].data.edit_bones[bname].hide = oniv['states']['data'][ID]['armatures'][oname]['edit_hide'][bname]
         bpy.ops.object.mode_set(mode='OBJECT')
         obj[oname].select_set(False)
 
     
-    for cname in bbv['states']['data'][ID]['collections']:
+    for cname in oniv['states']['data'][ID]['collections']:
         if cname in bpy.data.collections:
-            bpy.data.collections[cname].hide_viewport = bbv['states']['data'][ID]['collections'][cname]['hide_viewport']
-            bpy.data.collections[cname].hide_select = bbv['states']['data'][ID]['collections'][cname]['hide_select']
+            bpy.data.collections[cname].hide_viewport = oniv['states']['data'][ID]['collections'][cname]['hide_viewport']
+            bpy.data.collections[cname].hide_select = oniv['states']['data'][ID]['collections'][cname]['hide_select']
         else:
             print("collection missing:", c)
     
-    for oname in bbv['states']['data'][ID]['objects']:
+    for oname in oniv['states']['data'][ID]['objects']:
         if oname in obj:
-            obj[oname].hide_select = bbv['states']['data'][ID]['objects'][oname]['hide_select']
-            obj[oname].hide_viewport = bbv['states']['data'][ID]['objects'][oname]['hide_viewport']
+            obj[oname].hide_select = oniv['states']['data'][ID]['objects'][oname]['hide_select']
+            obj[oname].hide_viewport = oniv['states']['data'][ID]['objects'][oname]['hide_viewport']
         else:
             print("object missing from scene:", oname)
     
     active_view = bpy.context.view_layer.name
-    for view_layer in bbv['states']['data'][ID]['layers']:
+    for view_layer in oniv['states']['data'][ID]['layers']:
         if view_layer not in  bpy.context.scene.view_layers:
             print("View layer missing:", view_layer)
             continue
@@ -476,15 +476,15 @@ def restore_state():
         
         bpy.context.window.view_layer = bpy.data.scenes[scene_name].view_layers[view_layer]
         
-        for cname in bbv['states']['data'][ID]['layers'][view_layer]['collections']:
-            vlObj.layer_collection.children[cname].hide_viewport =                bbv['states']['data'][ID]['layers'][view_layer]['collections'][cname]['hide_viewport']
+        for cname in oniv['states']['data'][ID]['layers'][view_layer]['collections']:
+            vlObj.layer_collection.children[cname].hide_viewport =                oniv['states']['data'][ID]['layers'][view_layer]['collections'][cname]['hide_viewport']
 
         
-        for oname in bbv['states']['data'][ID]['layers'][view_layer]['objects']:
+        for oname in oniv['states']['data'][ID]['layers'][view_layer]['objects']:
             if oname not in obj:
                 print("object missing in scene:", oname)
                 continue
-            hide_state = bbv['states']['data'][ID]['layers'][view_layer]['objects'][oname]
+            hide_state = oniv['states']['data'][ID]['layers'][view_layer]['objects'][oname]
             obj[oname].hide_set(hide_state)
 
 
@@ -495,8 +495,8 @@ def restore_state():
         obj[oname].select_set(True)
     if active_object != None:
         bpy.context.view_layer.objects.active = obj[active_object]
-    del bbv['states']['data'][ID]
-    del bbv['states']['names'][scene_name]
+    del oniv['states']['data'][ID]
+    del oniv['states']['names'][scene_name]
 
     return True
 
@@ -507,8 +507,8 @@ def restore_state():
 class OnigiriViewProperties(bpy.types.PropertyGroup):
 
     def update_viewable_layers(self, context):
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
 
     dummy : bpy.props.BoolProperty(default=False)
@@ -572,7 +572,7 @@ sure that you DON'T save your file after.  Save BEFORE using"""
 
 class OnigiriPanelView(bpy.types.Panel):
     """Viewable Options"""
-    bl_idname = "OBJECT_PT_bento_buddy_view"
+    bl_idname = "OBJECT_PT_onigiri_view"
     bl_label = "Viewable"
     bl_space_type = "VIEW_3D"
     bl_category = "Onigiri"
@@ -581,7 +581,7 @@ class OnigiriPanelView(bpy.types.Panel):
 
     def draw(self, context):
         obj = bpy.data.objects
-        bb_view = bpy.context.window_manager.bb_view
+        oni_view = bpy.context.window_manager.oni_view
 
         layout = self.layout
         
@@ -592,14 +592,14 @@ class OnigiriPanelView(bpy.types.Panel):
         
         row = self.layout.row(align=True)
         
-        if bb_view.get('states') == None:
+        if oni_view.get('states') == None:
             
-            bb_view['states'] = dict()
-            bb_view['states']['names'] = dict()
+            oni_view['states'] = dict()
+            oni_view['states']['names'] = dict()
 
         
         scene_name = bpy.context.scene.name
-        if scene_name not in bb_view['states'].get('names'):
+        if scene_name not in oni_view['states'].get('names'):
             
             row.operator(
                 "onigiri.access_everything",
@@ -619,12 +619,12 @@ class OnigiriPanelView(bpy.types.Panel):
         layout = self.layout
         box = layout.box()
         box.label(
-            text = "Rig View Options: " + bb_view.rig_author_name
+            text = "Rig View Options: " + oni_view.rig_author_name
             )
         
         
-        if bb_view.rig_author_property != "": 
-            prop_name = bb_view.rig_author_property
+        if oni_view.rig_author_property != "": 
+            prop_name = oni_view.rig_author_property
             col = box.column(align = True)
             for i in range(0, len(view_layers_order[prop_name]), 2):
                 buttons = view_layers_order[prop_name][i:i+2]
@@ -632,7 +632,7 @@ class OnigiriPanelView(bpy.types.Panel):
                 row = col.row(align=True)
                 for b in buttons:
                     row.prop(
-                        bpy.data.armatures[bb_view.rig_name],
+                        bpy.data.armatures[oni_view.rig_name],
                         "layers",
                         index = view_layers[prop_name]['name'][b],
                         toggle=True,
@@ -641,26 +641,26 @@ class OnigiriPanelView(bpy.types.Panel):
 
         if 1 == 0:
             row.prop(
-                bb_view,
+                oni_view,
                 "dummy",
                 toggle=True,
                 text = "Volume Bones"
                 )
             row.prop(
-                bb_view,
+                oni_view,
                 "dummy",
                 toggle=True,
                 text = "Non-Human Bones"
                 )
             row = col.row(align=True)
             row.prop(
-                bb_view,
+                oni_view,
                 "dummy",
                 toggle=True,
                 text = "Face Bones"
                 )
             row.prop(
-                bb_view,
+                oni_view,
                 "dummy",
                 toggle=True,
                 text = "Hand Bones"

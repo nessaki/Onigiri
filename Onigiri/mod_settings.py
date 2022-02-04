@@ -1,24 +1,24 @@
 
 import traceback
 
-bb_settings = {}
+oni_settings = {}
 
-bb_settings["layers"] = {}
-bb_settings["layers"]["mbones"] = 1
-bb_settings["layers"]["vbones"] = 2
-bb_settings["layers"]["abones"] = 3
-bb_settings["layers"]["nbones"] = 4
-bb_settings["layers"]["extended"] = 5
-bb_settings["layers"]["face"] = 6
-bb_settings["layers"]["hand"] = 7
+oni_settings["layers"] = {}
+oni_settings["layers"]["mbones"] = 1
+oni_settings["layers"]["vbones"] = 2
+oni_settings["layers"]["abones"] = 3
+oni_settings["layers"]["nbones"] = 4
+oni_settings["layers"]["extended"] = 5
+oni_settings["layers"]["face"] = 6
+oni_settings["layers"]["hand"] = 7
 
-bb_settings['debug'] = False
+oni_settings['debug'] = False
 
-bb_settings['proxy_type'] = "empty"
+oni_settings['proxy_type'] = "empty"
 
-bb_settings['mh_vcount'] = 13380
+oni_settings['mh_vcount'] = 13380
 
-bb_settings['mh_edges'] = [
+oni_settings['mh_edges'] = [
     11556,
     24851,
     11788,
@@ -26,75 +26,75 @@ bb_settings['mh_edges'] = [
     12203,
     25465]
 
-bb_settings["arg"] = ""
+oni_settings["arg"] = ""
 
-bb_settings["save_state"] = True
+oni_settings["save_state"] = True
 
-bb_settings["fly_paper"] = True
+oni_settings["fly_paper"] = True
 
-bb_settings["set_rotation"] = True
+oni_settings["set_rotation"] = True
 
-bb_settings["keep_rotation"] = False
+oni_settings["keep_rotation"] = False
 
-bb_settings["source"] = "" 
+oni_settings["source"] = "" 
 
-bb_settings["terminate"] = False
-bb_settings["terminate_handler"] = False
+oni_settings["terminate"] = False
+oni_settings["terminate_handler"] = False
 
-bb_settings["sl_joint_total"] = 110
-bb_settings["sl_joint_influences"] = 4 
+oni_settings["sl_joint_total"] = 110
+oni_settings["sl_joint_influences"] = 4 
 
-bb_settings["count"] = 0 
+oni_settings["count"] = 0 
 
-bb_settings["paths"] = {}
-bb_settings["paths"]["presets"] = "/presets/"   
-bb_settings["paths"]["data"] = "/data/"         
-bb_settings["paths"]["devkit"] = "/devkit/"         
-bb_settings["paths"]["code"] = "/code/"         
-bb_settings["paths"]["icons"] = "/icons"        
-bb_settings["paths"]["characters"] = "/characters/"        
+oni_settings["paths"] = {}
+oni_settings["paths"]["presets"] = "/presets/"   
+oni_settings["paths"]["data"] = "/data/"         
+oni_settings["paths"]["devkit"] = "/devkit/"         
+oni_settings["paths"]["code"] = "/code/"         
+oni_settings["paths"]["icons"] = "/icons"        
+oni_settings["paths"]["characters"] = "/characters/"        
 
-bb_settings["files"] = {}
-bb_settings["files"]["reset"] = "/reset.pkl"
-bb_settings["files"]["bvh_template"] = "/bvh_template.txt"
-bb_settings["files"]["anim_data"] = "/anim_data.py"
-bb_settings["files"]["joint_data"] = "/joint_data.py"
+oni_settings["files"] = {}
+oni_settings["files"]["reset"] = "/reset.pkl"
+oni_settings["files"]["bvh_template"] = "/bvh_template.txt"
+oni_settings["files"]["anim_data"] = "/anim_data.py"
+oni_settings["files"]["joint_data"] = "/joint_data.py"
 
-bb_settings["files"]["lsl_animation"] = "/bulk_export_fill_avatar.txt"
-bb_settings["files"]["lsl_animmesh"] = "/bulk_export_fill_animesh.txt"
+oni_settings["files"]["lsl_animation"] = "/bulk_export_fill_avatar.txt"
+oni_settings["files"]["lsl_animmesh"] = "/bulk_export_fill_animesh.txt"
 
-bb_settings["files"]["lsl_split_animation"] = "/bulk_export_split_avatar.txt"
-bb_settings["files"]["lsl_split_animmesh"] = "/bulk_export_split_animesh.txt"
+oni_settings["files"]["lsl_split_animation"] = "/bulk_export_split_avatar.txt"
+oni_settings["files"]["lsl_split_animmesh"] = "/bulk_export_split_animesh.txt"
 
-bb_settings["files"]["bone_orientation"] = "/bone_orientation.mtx"
+oni_settings["files"]["bone_orientation"] = "/bone_orientation.mtx"
 
-bb_settings["files"]["rigs"] = {}
-bb_settings["files"]["rigs"]["lib"] = "bb_rig_lib.blend" 
-bb_settings["files"]["rigs"]["types"] = {}
-bb_settings["files"]["rigs"]["types"]["base"] = "OnigiriBase"
-bb_settings["files"]["rigs"]["types"]["animation"] = "Onigiri"
+oni_settings["files"]["rigs"] = {}
+oni_settings["files"]["rigs"]["lib"] = "oni_rig_lib.blend" 
+oni_settings["files"]["rigs"]["types"] = {}
+oni_settings["files"]["rigs"]["types"]["base"] = "OnigiriBase"
+oni_settings["files"]["rigs"]["types"]["animation"] = "Onigiri"
 
-bb_settings["map_to_mbones"] = {}
-bb_settings["map_to_mbones"]["flags_new"] = {}
-bb_settings["map_to_mbones"]["flags_new"]["rename_to"] = 0
-bb_settings["map_to_mbones"]["flags_new"]["unlink_bones"] = 0
-bb_settings["map_to_mbones"]["flags_new"]["create_links"] = 0
-bb_settings["map_to_mbones"]["flags_new"]["use_connect_state"] = 1
-bb_settings["map_to_mbones"]["flags_new"]["pretty_places"] = 0
-bb_settings["map_to_mbones"]["flags_old"] = {}
+oni_settings["map_to_mbones"] = {}
+oni_settings["map_to_mbones"]["flags_new"] = {}
+oni_settings["map_to_mbones"]["flags_new"]["rename_to"] = 0
+oni_settings["map_to_mbones"]["flags_new"]["unlink_bones"] = 0
+oni_settings["map_to_mbones"]["flags_new"]["create_links"] = 0
+oni_settings["map_to_mbones"]["flags_new"]["use_connect_state"] = 1
+oni_settings["map_to_mbones"]["flags_new"]["pretty_places"] = 0
+oni_settings["map_to_mbones"]["flags_old"] = {}
 
-bb_settings["map_to_template"] = {}
-bb_settings["map_to_template"]["path"] = ""
+oni_settings["map_to_template"] = {}
+oni_settings["map_to_template"]["path"] = ""
 
-bb_settings["map_to_template"]["flags_new"] = {}
-bb_settings["map_to_template"]["flags_new"]["rename_to"] = 0
-bb_settings["map_to_template"]["flags_new"]["unlink_bones"] = 0
-bb_settings["map_to_template"]["flags_new"]["create_links"] = 0
-bb_settings["map_to_template"]["flags_new"]["use_connect_state"] = 1
-bb_settings["map_to_template"]["flags_new"]["pretty_places"] = 0
-bb_settings["map_to_template"]["flags_old"] = {}
+oni_settings["map_to_template"]["flags_new"] = {}
+oni_settings["map_to_template"]["flags_new"]["rename_to"] = 0
+oni_settings["map_to_template"]["flags_new"]["unlink_bones"] = 0
+oni_settings["map_to_template"]["flags_new"]["create_links"] = 0
+oni_settings["map_to_template"]["flags_new"]["use_connect_state"] = 1
+oni_settings["map_to_template"]["flags_new"]["pretty_places"] = 0
+oni_settings["map_to_template"]["flags_old"] = {}
 
-bb_settings['dae_export_options'] = {
+oni_settings['dae_export_options'] = {
     "dae_apply_modifiers": "Apply Modifiers",
     "dae_selected": "Selection Only",
     "dae_include_children": "Include Children",

@@ -54,8 +54,8 @@ def sl_bvh_export(
     if vbones == None:
         vbones = mbones
 
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
     obj = bpy.data.objects
 
     
@@ -100,9 +100,9 @@ def sl_bvh_export(
 
     print("Exporting animation for", armature)
     animation_scale = 39.3701
-    animation_fps = bb.animation_fps
-    animation_start_frame = bb.animation_start_frame
-    animation_end_frame = bb.animation_end_frame
+    animation_fps = oni.animation_fps
+    animation_start_frame = oni.animation_start_frame
+    animation_end_frame = oni.animation_end_frame
 
     
     
@@ -232,9 +232,9 @@ def sl_bvh_export(
     if buffer != True:
         try:
             os.remove(bvh_temp_name)
-            print("BB BVH Cleanup...")
+            print("ONI BVH Cleanup...")
         except:
-            print("BB Warning: unable to remove temporary file:", bvh_temp_name)
+            print("ONI Warning: unable to remove temporary file:", bvh_temp_name)
 
     return True
 

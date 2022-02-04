@@ -35,7 +35,7 @@ def get_fcurve_data(armature):
         elif transform_type == 'location':
             loc_rot = 'loc'
         else:
-            if bb_settings['debug'] == True:
+            if oni_settings['debug'] == True:
                 print("incompatible transform type:", transform_type, rot_mode)
             continue
 

@@ -59,15 +59,15 @@ def update_preset_source(report=False):
             
             default[prop] = preset[prop]
     else:
-        if armObj.get('bb_devkit_preset') == None:
+        if armObj.get('oni_devkit_preset') == None:
             if report == False:
                 print("Associated armature contains no preset, applying...")
         else:
             if report == False:
                 print("Armature preset updating...")
-        armObj['bb_devkit_preset'] = {}
+        armObj['oni_devkit_preset'] = {}
         for prop in preset:
-            armObj['bb_devkit_preset'][prop] = preset
+            armObj['oni_devkit_preset'][prop] = preset
 
     return True
     
@@ -75,7 +75,7 @@ def get_properties(group=None):
     prop_group = group
     
     if group == None:
-        prop_group = bpy.context.scene.bb_devkit
+        prop_group = bpy.context.scene.oni_devkit
     presets = {}
     for prop in prop_group.__annotations__.keys():
         presets[prop] = getattr(prop_group, prop)
@@ -90,18 +90,18 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
 
     obj = bpy.data.objects
 
-    bb_devkit = bpy.context.scene.bb_devkit
+    oni_devkit = bpy.context.scene.oni_devkit
 
-    export_path_to_pelvis = bb_devkit.export_path_to_pelvis
-    export_joints = bb_devkit.export_joints
-    export_full_rig = bb_devkit.export_full_rig
-    apply_location = bb_devkit.apply_location
-    apply_rotation = bb_devkit.apply_rotation
-    apply_scale = bb_devkit.apply_scale
-    export_normalized_weights = bb_devkit.export_normalized_weights
-    normalize_bones = bb_devkit.normalize_bones
+    export_path_to_pelvis = oni_devkit.export_path_to_pelvis
+    export_joints = oni_devkit.export_joints
+    export_full_rig = oni_devkit.export_full_rig
+    apply_location = oni_devkit.apply_location
+    apply_rotation = oni_devkit.apply_rotation
+    apply_scale = oni_devkit.apply_scale
+    export_normalized_weights = oni_devkit.export_normalized_weights
+    normalize_bones = oni_devkit.normalize_bones
 
-    rotate_for_sl = bb_devkit.rotate_for_sl
+    rotate_for_sl = oni_devkit.rotate_for_sl
 
     selected = bpy.context.selected_objects
     active = bpy.context.active_object
@@ -233,7 +233,7 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
             bpy.ops.object.transform_apply(scale=apply_scale, rotation=apply_rotation, location=apply_location)
         utils.activate(active)
 
-    if bb_devkit.remove_empty_groups == True:
+    if oni_devkit.remove_empty_groups == True:
         print("devkit::export_dae - remove empty groups indicated")
         bpy.ops.onigiri.remove_unused_groups(method="best")
 
@@ -261,14 +261,14 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
     for o in bpy.context.selected_objects:
         if "&" in o.name:
             o['name'] = o.name
-            o['bb_xml_fix'] = True
+            o['oni_xml_fix'] = True
             name = o.name.replace("&", "_")
             o.name = name
     if "&" in armObj.name:
         armObj['name'] = armObj.name
         name = armObj.name.replace("&", "_")
         armObj.name = name
-        armObj['bb_xml_fix'] = True
+        armObj['oni_xml_fix'] = True
 
     print("devkit::export_dae - Exporting initial collada before processing...")
 
@@ -281,7 +281,7 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
     bpy.ops.wm.collada_export(
         filepath = file_path,
         check_existing = False,
-        apply_modifiers = bb_devkit.dae_apply_modifiers,
+        apply_modifiers = oni_devkit.dae_apply_modifiers,
         export_mesh_type_selection='render',
         selected = True,
         include_children = False,
@@ -302,15 +302,15 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
     print("devkit::export_dae - collada export complete!")
 
     for o in bpy.context.selected_objects:
-        if o.get('bb_xml_fix'):
+        if o.get('oni_xml_fix'):
             name = o['name']
             o.name = name
-            o.pop('bb_xml_fix')
+            o.pop('oni_xml_fix')
             o.pop('name')
-    if armObj.get('bb_xml_fix') == True:
+    if armObj.get('oni_xml_fix') == True:
         name = armObj['name']
         armObj.name = name
-        armObj.pop('bb_xml_fix')
+        armObj.pop('oni_xml_fix')
         armObj.pop('name')
 
     print("devkit::export_dae - Restoring deform bones...")
@@ -456,7 +456,7 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
                             else:
                                 realRig = real
 
-                            rename_map = realRig.get('bb_onemap_rename')
+                            rename_map = realRig.get('oni_onemap_rename')
 
                             if rename_map:
                                 print("devkit::export_dae reports - found a rename_map")
@@ -473,7 +473,7 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
                                 if sl_bone in names_set:
                                     print("Skipping name in name_set:", sl_bone)
                                     continue
-                                if boneObj.get('bb_joint_export') == None:
+                                if boneObj.get('oni_joint_export') == None:
                                     continue
                                 
                                 bone_path = rigutils.get_bone_path(armObj, sl_bone)
@@ -684,11 +684,11 @@ def export_dae(matrices=None, joint='bone_data', file=None, real=None):
     try:
         if testing == False:
             os.remove(file_path)
-            print("BB dae cleanup")
+            print("ONI dae cleanup")
         else:
             print("Testing phase, file [", file_path, "] was not removed", sep="")
     except:
-        print("BB Warning: unable to remove temporary file:", file_path)
+        print("ONI Warning: unable to remove temporary file:", file_path)
 
     pretty_dae(file_in=file_out, file_out=file_out)
 
@@ -816,7 +816,7 @@ def has_devkit_armature(object=None):
         else:
             OBJ = object
         if OBJ.type == 'ARMATURE':
-            if OBJ.get('bb_devkit_presets') != None:
+            if OBJ.get('oni_devkit_presets') != None:
                 print("found devkit armature", OBJ.name)
                 return OBJ 
             else:
@@ -828,7 +828,7 @@ def has_devkit_armature(object=None):
         if len(match) == 1:
             armObj = M.object
             if utils.is_valid(armObj):
-                if armObj.get('bb_devkit_presets') != None:
+                if armObj.get('oni_devkit_presets') != None:
                     print("found armature:", armObj.name)
                     return armObj
                 else:
@@ -865,7 +865,7 @@ def has_devkit_armature(object=None):
     if len(mesh) == 0 and len(arms) == 1:
         
         armObj = arms[0]
-        if armObj.get('bb_devkit_presets') != None:
+        if armObj.get('oni_devkit_presets') != None:
             print("devkit::get_devkit_armature reports : Found devkit armature on the single selected armature:", armObj.name)
             return armObj
         else:
@@ -909,16 +909,16 @@ def save_default_presets(path):
 
     import pprint
 
-    bb_devkit = bpy.context.scene.bb_devkit
+    oni_devkit = bpy.context.scene.oni_devkit
     presets_backup = {}
-    for prop in bb_devkit.keys():
-        presets_backup[prop] = getattr(bb_devkit, prop)
-        bb_splice.property_unset(prop)
+    for prop in oni_devkit.keys():
+        presets_backup[prop] = getattr(oni_devkit, prop)
+        oni_splice.property_unset(prop)
     presets = {}
-    for prop in bb_devkit.keys():
-        presets[prop] = bb_devkit[prop]
+    for prop in oni_devkit.keys():
+        presets[prop] = oni_devkit[prop]
     for prop in presets_backup:
-        bb_devkit[prop] = presets_backup[prop]
+        oni_devkit[prop] = presets_backup[prop]
 
     f = open(path, "w", encoding='UTF8')
     f.write(formatted)
@@ -927,16 +927,16 @@ def save_default_presets(path):
 
 def set_defaults(all=True, area="devkit"):
 
-    bb_devkit = bpy.context.scene.bb_devkit
+    oni_devkit = bpy.context.scene.oni_devkit
 
     presets = {}
     properties = set()
-    for prop in bb_devkit.__annotations__.keys():
+    for prop in oni_devkit.__annotations__.keys():
         properties.add(prop)
 
     if all == True:
         for prop in properties:
-            bb_devkit.property_unset(prop)
+            oni_devkit.property_unset(prop)
     else:
         
         reset_props = set()
@@ -949,14 +949,14 @@ def set_defaults(all=True, area="devkit"):
         elif area == "dae":
             for prop in properties:
                 if prop.startswith("dae_"):
-                    bb_devkit.property_unset(prop)
+                    oni_devkit.property_unset(prop)
         else:
             print("all is False but the area doesn't match anything")
             return False
 
         for prop in reset_props:
             try:
-                bb_devkit.property_unset(prop)
+                oni_devkit.property_unset(prop)
             except:
                 print("Couldn't reset", prop)
 
@@ -964,9 +964,9 @@ def set_defaults(all=True, area="devkit"):
 
 def load_defaults(file=None, extend=False, report=False):
     print("devkit::load_defaults runs")
-    from . import bb_settings
+    from . import oni_settings
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    devkit_path = bb_settings['paths']['devkit']
+    devkit_path = oni_settings['paths']['devkit']
 
     if file != None:
         file_name = files[file]
@@ -1003,12 +1003,12 @@ def load_defaults(file=None, extend=False, report=False):
         if extend == True:
             if report == True:
                 print("Error loading default presets, generating from current...")
-            bb_devkit = bpy.context.scene.bb_devkit
+            oni_devkit = bpy.context.scene.oni_devkit
             properties = set()
-            for prop in bb_devkit.__annotations__.keys():
+            for prop in oni_devkit.__annotations__.keys():
                 properties.add(prop)
             for prop in properties:
-                presets[prop] = getattr(bb_devkit, prop)
+                presets[prop] = getattr(oni_devkit, prop)
 
     if report == True:
         print("devkit::load_defaults : defaults loaded")
@@ -1340,7 +1340,7 @@ def reshape(armObj, matrices=None, bone_type="bind_data", rotate=False, copy=Fal
     
     if matrices == None:
         print("devkit::reshape reports : no matrices offered")
-        transforms = armObj.get('bb_collada_matrices')
+        transforms = armObj.get('oni_collada_matrices')
         if transforms == None:
             print("devkit::reshape reports : no matrices on the armature object")
             return False

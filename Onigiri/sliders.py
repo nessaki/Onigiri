@@ -8,7 +8,7 @@ import mathutils
 from . import utils
 
 # from . import mod_settings
-# from .mod_settings import bb_settings
+# from .mod_settings import oni_settings
 
 # ------------------------------------------------------------------------------------------------
 # props
@@ -30,7 +30,7 @@ if 1 == 1:
         props['add_selected_enabled'] = False
         props['del_selected_enabled'] = False
         props['pose_bones'] = []
-        props['ui'] = set('bb_sliders_scale')
+        props['ui'] = set('oni_sliders_scale')
 
     # Using this instead of loading mod_settings.
     props['terminate'] = False
@@ -47,7 +47,7 @@ if 1 == 1:
 
     # I want to record what the last rig was before the current one was selected.  This way I can
     # revert the last rig back to the original bone scale inheritance if they select a new rig or
-    # object.  Once I find the last rig I restore all of the bones 'bb_sliders_inherit' properties,
+    # object.  Once I find the last rig I restore all of the bones 'oni_sliders_inherit' properties,
     # set the last_rig to None and let the UI detect that it will be a first run on the new object.
     props['last_rig'] = None
     props['this_rig'] = None
@@ -62,7 +62,7 @@ def update_location_x(self, context):
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
-    boneObj.location[0] = self.bb_sliders_location_x
+    boneObj.location[0] = self.oni_sliders_location_x
 def update_location_y(self, context):
     if props['terminate'] == True:
         print("Terminating recursion")
@@ -70,7 +70,7 @@ def update_location_y(self, context):
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
-    boneObj.location[1] = self.bb_sliders_location_y
+    boneObj.location[1] = self.oni_sliders_location_y
 def update_location_z(self, context):
     if props['terminate'] == True:
         print("Terminating recursion")
@@ -78,7 +78,7 @@ def update_location_z(self, context):
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
-    boneObj.location[2] = self.bb_sliders_location_z
+    boneObj.location[2] = self.oni_sliders_location_z
 
 def update_scale_x(self, context):
     if props['terminate'] == True:
@@ -87,11 +87,11 @@ def update_scale_x(self, context):
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
-    boneObj.scale[0] = 1 + self.bb_sliders_scale_x
-    if self.bb_sliders_scale_y_lock == True:
-        boneObj.scale[1] = 1 + self.bb_sliders_scale_x
-    if self.bb_sliders_scale_z_lock == True:
-        boneObj.scale[2] = 1 + self.bb_sliders_scale_x
+    boneObj.scale[0] = 1 + self.oni_sliders_scale_x
+    if self.oni_sliders_scale_y_lock == True:
+        boneObj.scale[1] = 1 + self.oni_sliders_scale_x
+    if self.oni_sliders_scale_z_lock == True:
+        boneObj.scale[2] = 1 + self.oni_sliders_scale_x
 def update_scale_y(self, context):
     if props['terminate'] == True:
         print("Terminating recursion")
@@ -99,11 +99,11 @@ def update_scale_y(self, context):
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
-    boneObj.scale[1] = 1 + self.bb_sliders_scale_y
-    if self.bb_sliders_scale_x_lock == True:
-        boneObj.scale[0] = 1 + self.bb_sliders_scale_y
-    if self.bb_sliders_scale_z_lock == True:
-        boneObj.scale[2] = 1 + self.bb_sliders_scale_y
+    boneObj.scale[1] = 1 + self.oni_sliders_scale_y
+    if self.oni_sliders_scale_x_lock == True:
+        boneObj.scale[0] = 1 + self.oni_sliders_scale_y
+    if self.oni_sliders_scale_z_lock == True:
+        boneObj.scale[2] = 1 + self.oni_sliders_scale_y
 def update_scale_z(self, context):
     if props['terminate'] == True:
         print("Terminating recursion")
@@ -111,11 +111,11 @@ def update_scale_z(self, context):
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
-    boneObj.scale[2] = 1 + self.bb_sliders_scale_z
-    if self.bb_sliders_scale_x_lock == True:
-        boneObj.scale[0] = 1 + self.bb_sliders_scale_z
-    if self.bb_sliders_scale_y_lock == True:
-        boneObj.scale[1] = 1 + self.bb_sliders_scale_z
+    boneObj.scale[2] = 1 + self.oni_sliders_scale_z
+    if self.oni_sliders_scale_x_lock == True:
+        boneObj.scale[0] = 1 + self.oni_sliders_scale_z
+    if self.oni_sliders_scale_y_lock == True:
+        boneObj.scale[1] = 1 + self.oni_sliders_scale_z
 
 # ------------------------------------------------------------------------------------------------
 # reset
@@ -136,16 +136,16 @@ def reset(boneObj):
 
     boneObj.matrix_basis = mathutils.Matrix()
 
-    boneObj.property_unset("bb_sliders_location_x")
-    boneObj.property_unset("bb_sliders_location_y")
-    boneObj.property_unset("bb_sliders_location_z")
+    boneObj.property_unset("oni_sliders_location_x")
+    boneObj.property_unset("oni_sliders_location_y")
+    boneObj.property_unset("oni_sliders_location_z")
 
-    boneObj.property_unset("bb_sliders_scale_x")
-    boneObj.property_unset("bb_sliders_scale_y")
-    boneObj.property_unset("bb_sliders_scale_z")
-    boneObj.property_unset("bb_sliders_scale_x_lock")
-    boneObj.property_unset("bb_sliders_scale_y_lock")
-    boneObj.property_unset("bb_sliders_scale_z_lock")
+    boneObj.property_unset("oni_sliders_scale_x")
+    boneObj.property_unset("oni_sliders_scale_y")
+    boneObj.property_unset("oni_sliders_scale_z")
+    boneObj.property_unset("oni_sliders_scale_x_lock")
+    boneObj.property_unset("oni_sliders_scale_y_lock")
+    boneObj.property_unset("oni_sliders_scale_z_lock")
 
 # ------------------------------------------------------------------------------------------------
 # set inherit
@@ -162,7 +162,7 @@ def set_rig(armObj=None):
     for boneObj in armObj.pose.bones:
         dBone = boneObj.bone
         # Get our property or, if it doesn't exist, it's own for a filler hastening this function.
-        boneObj['bb_sliders_inherit'] = dBone.inherit_scale
+        boneObj['oni_sliders_inherit'] = dBone.inherit_scale
         dBone.inherit_scale = 'NONE'  # yes it's cap, it's a key word
 
         # UPDATE: I can't do this here!  I need to do it in "sliders_store".
@@ -170,13 +170,13 @@ def set_rig(armObj=None):
         # Note that these two properties are not the same, one is on the data bone and one is on
         # the pose bone for their corresponding data.  At the time of this writing I didn't
         # need the pose matrix but I may use it later to restore their previous pose.
-#        boneObj['bb_sliders_matrix'] = boneObj.matrix.copy()
+#        boneObj['oni_sliders_matrix'] = boneObj.matrix.copy()
         # This will give me the same matrix as edit, minus the roll, which I can get from ...
         # utils.get_bone_roll(mat).  I'll only be using this if they want to restore the rig
         # to the state before the damage or to the "store" state.
- #       boneObj.bone['bb_sliders_matrix'] = boneObj.bone.matrix.copy()
- #       boneObj.bone['bb_sliders_head_local'] = boneObj.bone.head_local.copy()
- #       boneObj.bone['bb_sliders_tail_local'] = boneObj.bone.tail_local.copy()
+ #       boneObj.bone['oni_sliders_matrix'] = boneObj.bone.matrix.copy()
+ #       boneObj.bone['oni_sliders_head_local'] = boneObj.bone.head_local.copy()
+ #       boneObj.bone['oni_sliders_tail_local'] = boneObj.bone.tail_local.copy()
 
     return True
 # ------------------------------------------------------------------------------------------------

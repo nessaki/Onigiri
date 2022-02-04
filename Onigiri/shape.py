@@ -216,8 +216,8 @@ def get_director(object, report=False):
 
     
     
-    aObj = OBJ.get('bb_motion_actor', None)
-    dObj = OBJ.get('bb_motion_director', None)
+    aObj = OBJ.get('oni_motion_actor', None)
+    dObj = OBJ.get('oni_motion_director', None)
 
     
     

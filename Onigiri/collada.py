@@ -80,7 +80,7 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
     
     
     
-    bb_devkit = bpy.context.scene.bb_devkit
+    oni_devkit = bpy.context.scene.oni_devkit
 
     
     
@@ -100,7 +100,7 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
 
     
     
-    bb_mesh = bpy.context.scene.bb_devkit
+    oni_mesh = bpy.context.scene.oni_devkit
 
     ccp = bpy.context.window_manager.cc_props
 
@@ -108,8 +108,8 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
     
     
     
-    use_rig_data = bb_devkit.use_rig_data
-    use_bind_data = bb_devkit.use_bind_data
+    use_rig_data = oni_devkit.use_rig_data
+    use_bind_data = oni_devkit.use_bind_data
     
     
     
@@ -118,10 +118,10 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
     
     
     
-    use_app_compatible_data = bb_devkit.use_app_compatible_data
+    use_app_compatible_data = oni_devkit.use_app_compatible_data
     
     if use_app_compatible_data == True:
-        if armObj.get('bb_devkit_transforms') == None:
+        if armObj.get('oni_devkit_transforms') == None:
             use_app_compatible_data = False
             use_rig_data = True
             
@@ -139,32 +139,32 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
             use_bind_data = False
             use_rig_data = True
 
-    process_volume_bones = bb_devkit.process_volume_bones
-    process_attachment_bones = bb_devkit.process_attachment_bones
+    process_volume_bones = oni_devkit.process_volume_bones
+    process_attachment_bones = oni_devkit.process_attachment_bones
 
     if process_attachment_bones == True:
         print("Attachment bones enabled")
 
-    rotate_for_sl = bb_devkit.rotate_for_sl
+    rotate_for_sl = oni_devkit.rotate_for_sl
 
-    use_offset_location = bb_devkit.use_offset_location
-    use_offset_rotation = bb_devkit.use_offset_rotation
-    use_offset_scale = bb_devkit.use_offset_scale
-
-    
-    
-    export_path_to_pelvis = bb_devkit.export_path_to_pelvis
+    use_offset_location = oni_devkit.use_offset_location
+    use_offset_rotation = oni_devkit.use_offset_rotation
+    use_offset_scale = oni_devkit.use_offset_scale
 
     
     
-    export_full_rig = bb_devkit.export_full_rig
+    export_path_to_pelvis = oni_devkit.export_path_to_pelvis
+
+    
+    
+    export_full_rig = oni_devkit.export_full_rig
 
     
     
     
     
     
-    if realObj.get('bb_devkit_transforms') != None or realObj.get('bb_dae_bind') != None:
+    if realObj.get('oni_devkit_transforms') != None or realObj.get('oni_dae_bind') != None:
         export_path_to_pelvis = False
         export_full_rig = False
 
@@ -181,7 +181,7 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
 
     
     
-    if use_app_compatible_data == True and armObj.get('bb_devkit_transforms') != None:
+    if use_app_compatible_data == True and armObj.get('oni_devkit_transforms') != None:
         print("Exporting using compatible transforms")
 
         
@@ -194,11 +194,11 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
         
         
         bind_pose = {}
-        for bone in armObj['bb_devkit_transforms']['bind_pose']:
-            bind_pose[bone] = mathutils.Matrix(armObj['bb_devkit_transforms']['bind_pose'][bone])
+        for bone in armObj['oni_devkit_transforms']['bind_pose']:
+            bind_pose[bone] = mathutils.Matrix(armObj['oni_devkit_transforms']['bind_pose'][bone])
         joint_pose = {}
-        for bone in armObj['bb_devkit_transforms']['joint_pose']:
-            joint_pose[bone] = mathutils.Matrix(armObj['bb_devkit_transforms']['joint_pose'][bone])
+        for bone in armObj['oni_devkit_transforms']['joint_pose']:
+            joint_pose[bone] = mathutils.Matrix(armObj['oni_devkit_transforms']['joint_pose'][bone])
 
         edit_dae(
             file_in=file_in,
@@ -213,7 +213,7 @@ def write_collada(armature="", root="", write=False, file_in="", file_out="", re
             process_volume_bones=process_volume_bones,
             )
 
-        bb_devkit.rotate_for_sl = rotate_for_sl
+        oni_devkit.rotate_for_sl = rotate_for_sl
 
         return True
 

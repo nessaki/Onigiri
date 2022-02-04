@@ -64,21 +64,21 @@ def write_collada(armature="", root="", write=False, file_in="", file_out=""):
     transforms = rigutils.get_bone_transforms(armature=armature, rig_data=rig_data)
 
     ccp = bpy.context.window_manager.cc_props
-    bb_mesh = bpy.context.scene.bb_mesh
+    oni_mesh = bpy.context.scene.oni_mesh
 
     if 1 == 0:
-        use_rig_data = bb_mesh.use_rig_data
-        use_bind_data = bb_mesh.use_bind_data
-        process_volume_bones = bb_mesh.process_volume_bones
-        rotate_for_sl = bb_mesh.rotate_for_sl
+        use_rig_data = oni_mesh.use_rig_data
+        use_bind_data = oni_mesh.use_bind_data
+        process_volume_bones = oni_mesh.process_volume_bones
+        rotate_for_sl = oni_mesh.rotate_for_sl
 
-        use_offset_volume = bb_mesh.use_offset_volume
+        use_offset_volume = oni_mesh.use_offset_volume
         
-        use_offset_location = bb_mesh.use_offset_location
+        use_offset_location = oni_mesh.use_offset_location
         
-        use_offset_rotation = bb_mesh.use_offset_rotation
+        use_offset_rotation = oni_mesh.use_offset_rotation
         
-        use_offset_scale = bb_mesh.use_offset_scale
+        use_offset_scale = oni_mesh.use_offset_scale
 
     bind_pose = {}
     joint_pose = {}

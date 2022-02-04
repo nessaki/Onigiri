@@ -50,37 +50,37 @@ if True:
 
 if True:
 
-    bb_mixer = {}
-    bb_mixer['source'] = ""
+    oni_mixer = {}
+    oni_mixer['source'] = ""
     
-    bb_mixer['bone_location_set'] = ""
-    bb_mixer['bone_rotation_set'] = ""
-    bb_mixer['bone_scale_set'] = ""
+    oni_mixer['bone_location_set'] = ""
+    oni_mixer['bone_rotation_set'] = ""
+    oni_mixer['bone_scale_set'] = ""
 
-    bb_mixer['constraints'] = {}
+    oni_mixer['constraints'] = {}
     for bone in skel.avatar_skeleton:
         bone_type = skel.avatar_skeleton[bone]['type']
         
         if 1 == 1:
-            bb_mixer['constraints'][bone] = {}
-            bb_mixer['constraints'][bone]['location'] = None
-            bb_mixer['constraints'][bone]['rotation'] = None
-            bb_mixer['constraints'][bone]['scale'] = None
+            oni_mixer['constraints'][bone] = {}
+            oni_mixer['constraints'][bone]['location'] = None
+            oni_mixer['constraints'][bone]['rotation'] = None
+            oni_mixer['constraints'][bone]['scale'] = None
             
-            bb_mixer['constraints'][bone]['child_of'] = None
+            oni_mixer['constraints'][bone]['child_of'] = None
 
-    bb_paint = {}
-    bb_paint['use_frontface'] = False
-    bb_paint['use_frontface_falloff'] = False
-    bb_paint['falloff_shape'] = 'PROJECTED'
-    bb_paint['object'] = None 
+    oni_paint = {}
+    oni_paint['use_frontface'] = False
+    oni_paint['use_frontface_falloff'] = False
+    oni_paint['falloff_shape'] = 'PROJECTED'
+    oni_paint['object'] = None 
 
-    bb_alib = {}
+    oni_alib = {}
     
-    bb_alib['actions'] = {}
+    oni_alib['actions'] = {}
 
-    bb_alib['active_action'] = None
+    oni_alib['active_action'] = None
 
-    bb_alib['frame_start'] = 1
+    oni_alib['frame_start'] = 1
 
-    bb_alib['count'] = 0
+    oni_alib['count'] = 0

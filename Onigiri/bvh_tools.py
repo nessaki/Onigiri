@@ -16,7 +16,7 @@ from . import curves
 
 def read(doc=None, sl_only=True, export_volumes=True, mark_tol=True, rot_tol=0.0001, loc_tol=0.00001):
 
-    bba = bpy.context.scene.bb_anim_props
+    onia = bpy.context.scene.oni_anim_props
 
     if doc == None:
         print("bvh_tools::read reports: no xml, I need an xml object from ElementTree")
@@ -105,7 +105,7 @@ def read(doc=None, sl_only=True, export_volumes=True, mark_tol=True, rot_tol=0.0
 
                 bone_lower = bone.lower()
                 if bone_lower == 'mpelvis' or bone == 'hip' or bone == 'hips':
-                    if bba.disable_pelvis_location_animation == False:
+                    if onia.disable_pelvis_location_animation == False:
                         data['joints'][bone]['loc'].append(tuple(locs))
                 else:
                     data['joints'][bone]['loc'].append(tuple(locs))
@@ -124,10 +124,10 @@ def read(doc=None, sl_only=True, export_volumes=True, mark_tol=True, rot_tol=0.0
             
             pointer += chans
 
-    bba = bpy.context.scene.onigiri
+    onia = bpy.context.scene.onigiri
     armObj = bpy.context.object
-    anim_start_frame = bba.animation_start_frame
-    anim_end_frame = bba.animation_end_frame
+    anim_start_frame = onia.animation_start_frame
+    anim_end_frame = onia.animation_end_frame
 
     armrot = pill.rotate_matrix(armObj.matrix_world, [0,0,90])
 
@@ -533,14 +533,14 @@ def compose_bvh_buffers(context=False, return_type="bvh", scale_factor="meters")
             return False
 
     obj = bpy.data.objects
-    bb = bpy.context.scene.onigiri
-    bba = bpy.context.scene.bb_anim_props
+    oni = bpy.context.scene.onigiri
+    onia = bpy.context.scene.oni_anim_props
     armObj = bpy.context.selected_objects[0]
 
     animation_scale = scale
-    animation_fps = bb.animation_fps
-    animation_start_frame = bb.animation_start_frame
-    animation_end_frame = bb.animation_end_frame
+    animation_fps = oni.animation_fps
+    animation_start_frame = oni.animation_start_frame
+    animation_end_frame = oni.animation_end_frame
 
     if bpy.context.mode != 'OBJECT':
         bpy.ops.object.mode_set(mode='OBJECT')
@@ -565,7 +565,7 @@ def compose_bvh_buffers(context=False, return_type="bvh", scale_factor="meters")
         frame_start=animation_start_frame,
         frame_end=animation_end_frame,
         rotate_mode='NATIVE',
-        root_transform_only=bba.disable_location_offsets,
+        root_transform_only=onia.disable_location_offsets,
         buffer=True,
         )
 
@@ -583,7 +583,7 @@ def compose_bvh_buffers(context=False, return_type="bvh", scale_factor="meters")
         frame_start=animation_start_frame,
         frame_end=animation_end_frame,
         rotate_mode='NATIVE',
-        root_transform_only=bba.disable_location_offsets,
+        root_transform_only=onia.disable_location_offsets,
         buffer=True,
         )
 

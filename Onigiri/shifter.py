@@ -44,7 +44,7 @@ if 1 == 1:
 
 
 def snap(sarm=None, tarms=[], type="rig", source=[]):
-    bbm = bpy.context.window_manager.bb_mapper
+    onim = bpy.context.window_manager.oni_mapper
     obj = bpy.data.objects
     sarmObj = obj[sarm]
 
@@ -193,8 +193,8 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
     
     
 
-    lname = "BB Copy Loc"
-    rname = "BB Copy Rot"
+    lname = "ONI Copy Loc"
+    rname = "ONI Copy Rot"
 
     obj[glue].select_set(False)
     obj[sarm].select_set(True)
@@ -321,23 +321,23 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
 
     
     
-    if bbm.get('clean') == None:
-        bbm['clean'] = {}
-    if bbm['clean'].get('objects') == None:
-        bbm['clean']['objects'] = list()
-    if bbm['clean'].get('constraints') == None:
-        bbm['clean']['constraints'] = list()
+    if onim.get('clean') == None:
+        onim['clean'] = {}
+    if onim['clean'].get('objects') == None:
+        onim['clean']['objects'] = list()
+    if onim['clean'].get('constraints') == None:
+        onim['clean']['constraints'] = list()
 
-    if glue not in bbm['clean']['objects']:
+    if glue not in onim['clean']['objects']:
         
-        temp_list = list(bbm['clean']['objects'])
+        temp_list = list(onim['clean']['objects'])
         temp_list.append(glue)
-        bbm['clean']['objects'] = temp_list
-    if tarm not in bbm['clean']['constraints']:
+        onim['clean']['objects'] = temp_list
+    if tarm not in onim['clean']['constraints']:
         
-        temp_list = list(bbm['clean']['constraints'])
+        temp_list = list(onim['clean']['constraints'])
         temp_list.append(glue)
-        bbm['clean']['constraints'] = temp_list
+        onim['clean']['constraints'] = temp_list
 
 
 
@@ -488,23 +488,23 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
 
 
     
-    if bbm.get('clean') == None:
-        bbm['clean'] = {}
-    if bbm['clean'].get('objects') == None:
-        bbm['clean']['objects'] = list()
-    if bbm['clean'].get('constraints') == None:
-        bbm['clean']['constraints'] = list()
+    if onim.get('clean') == None:
+        onim['clean'] = {}
+    if onim['clean'].get('objects') == None:
+        onim['clean']['objects'] = list()
+    if onim['clean'].get('constraints') == None:
+        onim['clean']['constraints'] = list()
 
-    if glue not in bbm['clean']['objects']:
+    if glue not in onim['clean']['objects']:
         
-        temp_list = list(bbm['clean']['objects'])
+        temp_list = list(onim['clean']['objects'])
         temp_list.append(glue)
-        bbm['clean']['objects'] = temp_list
-    if tarm not in bbm['clean']['constraints']:
+        onim['clean']['objects'] = temp_list
+    if tarm not in onim['clean']['constraints']:
         
-        temp_list = list(bbm['clean']['constraints'])
+        temp_list = list(onim['clean']['constraints'])
         temp_list.append(glue)
-        bbm['clean']['constraints'] = temp_list
+        onim['clean']['constraints'] = temp_list
 
     bpy.context.scene.frame_set(current_frame)
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -541,7 +541,7 @@ def morph(
     frame_start=1, frame_range=3, reverse=False, peak=2,
     location=True, rotation=True, scale=False):
 
-    ss = bpy.context.scene.bb_shifter
+    ss = bpy.context.scene.oni_shifter
     obj = bpy.data.objects
     sarmObj = obj[sarm]
 
@@ -653,9 +653,9 @@ def morph(
     
     
 
-    lname = "BB Copy Location"
-    rname = "BB Copy Rotation"
-    sname = "BB Copy Scale"
+    lname = "ONI Copy Location"
+    rname = "ONI Copy Rotation"
+    sname = "ONI Copy Scale"
 
     obj[glue].select_set(False)
     obj[sarm].select_set(True)
@@ -1024,9 +1024,9 @@ def freeze(sarm):
     sarmObj.select_set(True)
     bpy.context.view_layer.objects.active = sarmObj
 
-    lname = "BB Copy Loc"
-    rname = "BB Copy Rot"
-    sname = "BB Copy Sca"
+    lname = "ONI Copy Loc"
+    rname = "ONI Copy Rot"
+    sname = "ONI Copy Sca"
     bpy.ops.object.mode_set(mode='POSE')
 
     
@@ -1040,7 +1040,7 @@ def freeze(sarm):
         conObj.target_space = 'WORLD'
         conObj.owner_space = 'WORLD'
         conObj.influence = 1
-        conObj.name = "BB Copy TRS"
+        conObj.name = "ONI Copy TRS"
 
     
     if 1 == 0:

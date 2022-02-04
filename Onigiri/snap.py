@@ -124,8 +124,8 @@ def get_director(armature=None):
 
     
     
-    outRig = armObj.get('bb_snap_actor', None)
-    inRig = armObj.get('bb_snap_director', None)
+    outRig = armObj.get('oni_snap_actor', None)
+    inRig = armObj.get('oni_snap_director', None)
 
     
     
@@ -187,13 +187,13 @@ def apply_map(director=None, actor=None):
     inRig = director
     outRig = actor
 
-    bb_snap = bpy.context.window_manager.bb_snap
+    oni_snap = bpy.context.window_manager.oni_snap
 
-    follow = bb_snap.snap_follow
+    follow = oni_snap.snap_follow
     
     
 
-    release = bb_snap.snap_release
+    release = oni_snap.snap_release
 
     
     
@@ -220,7 +220,7 @@ def apply_map(director=None, actor=None):
         boneObj.bone_group = outRig.pose.bone_groups[actor_group_base]
 
     
-    rename = inRig.get('bb_onemap_rename', {})
+    rename = inRig.get('oni_onemap_rename', {})
     director_group_mapped = props['director_group_mapped']
     actor_group_mapped = props['actor_group_mapped']
 
@@ -426,11 +426,11 @@ def update_map(inRig=None, anchor=None, target=None, report=False):
     if isinstance(target, str) == False:
         target = tbone.name
 
-    if inRig.get('bb_onemap_rename') == None:
+    if inRig.get('oni_onemap_rename') == None:
         if report == True:
             print("The inRig doesn't have a rename map")
         return False
-    rename_map = inRig['bb_onemap_rename'].to_dict()
+    rename_map = inRig['oni_onemap_rename'].to_dict()
     rename_rev = {}
     for bone in rename_map:
         rename_rev[ rename_map[bone] ] = bone
@@ -443,7 +443,7 @@ def update_map(inRig=None, anchor=None, target=None, report=False):
         rename_map.pop(old_anchor, "")
 
     rename_map[anchor] = target
-    inRig['bb_onemap_rename'] = rename_map
+    inRig['oni_onemap_rename'] = rename_map
 
     return True
 
@@ -461,16 +461,16 @@ def save_map(input=None, file=None):
     code = {}
     lock = {}
 
-    if len(inRig.get('bb_onemap_rename', {})) != 0:
-        rename = inRig['bb_onemap_rename'].to_dict()
-    if len(inRig.get('bb_onemap_reskin', {})) != 0:
-        reskin = inRig['bb_onemap_reskin'].to_dict()
-    if len(inRig.get('bb_onemap_pose', {})) != 0:
-        pose = inRig['bb_onemap_pose'].to_dict()
-    if len(inRig.get('bb_onemap_code', {})) != 0:
-        code = inRig['bb_onemap_code'].to_dict()
-    if len(inRig.get('bb_onemap_lock', {})) != 0:
-        lock = inRig['bb_onemap_lock'].to_dict()
+    if len(inRig.get('oni_onemap_rename', {})) != 0:
+        rename = inRig['oni_onemap_rename'].to_dict()
+    if len(inRig.get('oni_onemap_reskin', {})) != 0:
+        reskin = inRig['oni_onemap_reskin'].to_dict()
+    if len(inRig.get('oni_onemap_pose', {})) != 0:
+        pose = inRig['oni_onemap_pose'].to_dict()
+    if len(inRig.get('oni_onemap_code', {})) != 0:
+        code = inRig['oni_onemap_code'].to_dict()
+    if len(inRig.get('oni_onemap_lock', {})) != 0:
+        lock = inRig['oni_onemap_lock'].to_dict()
 
 
 
