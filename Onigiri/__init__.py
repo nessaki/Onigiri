@@ -6643,7 +6643,7 @@ keep your product as is with the ability to continue working on it"""
 
         oni_devkit.fix_broken_bones = False
         export_deform_bones_only = oni_devkit.dae_deform_bones_only
-        print("Setting rig data to True, if this causes and issue contact support in Discord")
+        print("Setting rig data to True")
         oni_devkit.use_rig_data = True
         print("Setting onigiri_converted flag on the rig to ensure custom bone properties")
         proxyObj['onigiri_converted'] = True
@@ -21474,36 +21474,36 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
 
     mapper_pack_bones_origin_x : bpy.props.FloatProperty(
         name = "origin x",
-        description = "The X location of the first packed bone placed.  This is for visual readability.",
+        description = "The X location of the first packed bone placed.  This is for easy reading.",
         default = -1.17,
         )
     mapper_pack_bones_origin_y : bpy.props.FloatProperty(
         name = "origin y",
-        description = "The Y location of the first packed bone placed.  This is for visual readability.",
+        description = "The Y location of the first packed bone placed.  This is for easy reading.",
         default = 0.5,
         )
     mapper_pack_bones_origin_z : bpy.props.FloatProperty(
         name = "origin z",
-        description = "The Z location of the first packed bone placed.  This is for visual readability.",
+        description = "The Z location of the first packed bone placed.  This is for easy reading.",
         default = 0.0,
         )
     mapper_pack_bones_spacing_x : bpy.props.FloatProperty(
         name = "spacing x",
-        description =            "NOTE: Overrides Gap\n\n"            "The X spacing between bones.  This is for visual readability.",
+        description =            "NOTE: Overrides Gap\n\n"            "The X spacing between bones.  This is for easy reading.",
         min = 0.0,
         default = 0.0,
         update = update_spacing
         )
     mapper_pack_bones_spacing_y : bpy.props.FloatProperty(
         name = "spacing y",
-        description =            "NOTE: Overrides Gap\n\n"            "The Y spacing between bones.  This is for visual readability.",
+        description =            "NOTE: Overrides Gap\n\n"            "The Y spacing between bones.  This is for easy reading.",
         min = 0.0,
         default = 0.0,
         update = update_spacing
         )
     mapper_pack_bones_spacing_z : bpy.props.FloatProperty(
         name = "spacing z",
-        description =            "NOTE: Overrides Gap\n\n"            "The Z spacing between bones.  This is for visual readability.",
+        description =            "NOTE: Overrides Gap\n\n"            "The Z spacing between bones.  This is for easy reading.",
         min = 0.0,
         default = 0.0,
         update = update_spacing
@@ -59368,10 +59368,7 @@ class OnigiriInfoPanel(bpy.types.Panel):
                     icon_value = ico.custom_icons["dot_white"].icon_id
                     )
 
-        row = self.layout.row(align=True)
-        row.operator("wm.url_open", text="Onigiri Help System").url = "http://critters.xyz/help/onigiri"
-        row = self.layout.row(align=True)
-        row.operator("wm.url_open", text="Join Discord Server").url = "http://critters.xyz/discord"
+     
 
 class OnigiriPanelBind(bpy.types.Panel):
     """This is bind tools"""
