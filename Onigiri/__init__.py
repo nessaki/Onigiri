@@ -17517,7 +17517,7 @@ class OnigiriPanelDevKitTools(bpy.types.Panel):
         col = box.column(align = True)
         row = col.row(align=True)
 
-        row.operator("wm.url_open", text="Devkit Tools Help (website)").url = "http://critters.xyz/help/onigiri/devkit_tools.html"
+        row.operator("wm.url_open", text="Devkit Tools Help (website)").url = "https://github.com/nessaki/Onigiri/wiki/DEVKIT-Help"
 
         col = box.column(align = True)
         row = col.row(align=True)

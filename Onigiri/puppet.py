@@ -11,7 +11,7 @@ if 1 == 1:
 
     props = {}
 
-    props["help"] = "https://critters.xyz/help/onigiri/puppeteer.html"
+    props["help"] = "FIXME"
 
     props["master"] = None 
 
