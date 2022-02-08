@@ -1,23 +1,8 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 LOCX = 0
 LOCY = 1
 LOCZ = 2
-
 
 copy_buffer = {} 
 

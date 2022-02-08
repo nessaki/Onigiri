@@ -56,7 +56,7 @@ def main(
         
 
     
-    bb_splice = bpy.context.scene.bb_splice
+    oni_splice = bpy.context.scene.oni_splice
     obj = bpy.data.objects
     sarmObj = obj[source]
     tarmObj = obj[target]

@@ -9,34 +9,12 @@ import traceback
 import http.server
 import socketserver
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def run_main():
 
-    
-    
-
-    
-    
     args = sys.argv[sys.argv.index("--") + 1:]
 
     temp_dir = tempfile.gettempdir()
     print("Temp Folder:", temp_dir)
-
-    
-    
 
     args_file = args[0]
     arguments = {}
@@ -65,9 +43,6 @@ def run_main():
 
     return
 
-
-
-
 def get_unique_name():
     idn = str(uuid.uuid4())
     name = idn.replace("-", "")
@@ -76,15 +51,11 @@ def get_unique_name():
     unique_name = name + "_" + time_now
     return unique_name
 
-
-
-
-
 def check_parent():
     print("check_parent child thread runs from parent pid", pid)
 
     temp_dir = tempfile.gettempdir()
-    run_file = temp_dir + "/bentobuddy_llServer.run"
+    run_file = temp_dir + "/onigiri_llServer.run"
     if os.path.exists(run_file):
         try:
             os.remove(run_file)
@@ -100,12 +71,8 @@ def check_parent():
     os.kill(pid, -9)
     return False
 
-
-
-
-
 temp_dir = tempfile.gettempdir()
-run_file = temp_dir + "/bentobuddy_llServer.run"
+run_file = temp_dir + "/onigiri_llServer.run"
 
 if os.path.exists(run_file):
     print("llServer reports: Initial run file exists, removing and setting up timer event")
@@ -119,19 +86,10 @@ else:
     print("llServer reports: Initial run file is missing, fatal error")
     sys.exit()
 
-
 pid = os.getpid()
 print("llServer reports: pid is", pid)
-
-
-
 
 t_event = threading.Timer(10.0, check_parent)
 t_event.start()
 
-
 run_main()
-
-
-
-

@@ -67,7 +67,7 @@ def clean_groups(object=""):
 
 def remove_empty_groups(mesh):
     print("meshutils::remove_empty_groups : called with", mesh)
-    preserve = bpy.context.scene.bb_devkit.preserve_empty_counterparts
+    preserve = bpy.context.scene.oni_devkit.preserve_empty_counterparts
 
     def survey(meshObj):
         maxWeight = {}
@@ -1017,8 +1017,8 @@ def mesh_integrity_check(mesh=None, armature=None):
 
     obj = bpy.data.objects
     arm = armature
-    bbm = bpy.context.window_manager.bb_misc
-    group_limit = bbm.group_count_limit
+    onim = bpy.context.window_manager.oni_misc
+    group_limit = onim.group_count_limit
     error_count = 0
     error_notes = {}
     if bpy.context.mode != 'OBJECT':
@@ -1269,19 +1269,19 @@ def select_half(mesh):
 
     context = bpy.context
 
-    def bbox(ob):
+    def oniox(ob):
         return (Vector(b) for b in ob.bound_box)
 
-    def bbox_center(ob):
-        return sum(bbox(ob), Vector()) / 8
+    def oniox_center(ob):
+        return sum(oniox(ob), Vector()) / 8
 
-    def bbox_axes(ob):
-        bb = list(bbox(ob))
-        return tuple(bb[i] - bb[0] for i in (4, 3, 1))
+    def oniox_axes(ob):
+        oni = list(oniox(ob))
+        return tuple(oni[i] - oni[0] for i in (4, 3, 1))
 
     ob = context.edit_object
-    o = bbox_center(ob)
-    x, y, z = bbox_axes(ob) 
+    o = oniox_center(ob)
+    x, y, z = oniox_axes(ob) 
 
     print(o, x, y, z)
     
@@ -1500,7 +1500,7 @@ def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=F
         
         
         
-        newObj['bentobuddy_mesh_rig'] = 1
+        newObj['onigiri_mesh_rig'] = 1
 
         
         bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
@@ -2131,13 +2131,13 @@ def set_normalized_weights(meshObj, armature=None, skin=None, max_groups=4, prec
         
         if skin == None:
             if armObj != None:
-                if armObj.get('bb_collada_matrices') == None:
+                if armObj.get('oni_collada_matrices') == None:
                     print("meshutils::restrict_weights : no collada data")
                     return False
-                if armObj['bb_collada_matrices'].get('skin_data') == None:
+                if armObj['oni_collada_matrices'].get('skin_data') == None:
                     print("meshutils::restrict_weights : no collada skin data")
                     return False
-                skin_data = armObj['bb_collada_matrices']['skin_data']
+                skin_data = armObj['oni_collada_matrices']['skin_data']
 
         
         

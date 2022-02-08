@@ -67,9 +67,9 @@ X90I = X90.inverted()
 Y90I = Y90.inverted()
 Z90I = Z90.inverted()
 
-bb_const = {}
-bb_const["RAD"] = 0.01745333
-bb_const["meters_to_inches"] = 39.3701
+oni_const = {}
+oni_const["RAD"] = 0.01745333
+oni_const["meters_to_inches"] = 39.3701
 
 
 
@@ -83,7 +83,7 @@ bb_const["meters_to_inches"] = 39.3701
 
 
 
-bb_const["bone_roll"] = {
+oni_const["bone_roll"] = {
     "mHandThumb1Left": 0.7853981852531433,
     "mHandThumb2Left": 0.7853981852531433,
     "mHandThumb3Left": 0.7853981852531433,
@@ -97,10 +97,10 @@ bb_const["bone_roll"] = {
 
 
 
-bb_const["constraint_types"] = ["COPY_TRANSFORMS"]
+oni_const["constraint_types"] = ["COPY_TRANSFORMS"]
 
 
-bb_const["constraint_influence"] = 1
+oni_const["constraint_influence"] = 1
 
 
 
@@ -1462,8 +1462,8 @@ cr_bones_hash = {}
 for mBone, pBone in zip(all_mbones, all_pbones):
     mbones_map[mBone] = pBone
     pbones_map[pBone] = mBone
-    cr_bones_map[mBone] = "bb_" + pBone
-    cr_bones_hash["bb_" + pBone] = mBone
+    cr_bones_map[mBone] = "oni_" + pBone
+    cr_bones_hash["oni_" + pBone] = mBone
 
 
 
@@ -1508,18 +1508,18 @@ layers_ik = [17,18,19]
 
 
 
-bento_buddy_group_name = 'Bento Buddy Proxy'    
-pose_bones_group_name = 'BB Base Bones'  
+onigiri_group_name = 'Onigiri Proxy'    
+pose_bones_group_name = 'ONI Base Bones'  
 mbones_group_name = 'New mBone Group'           
 unused_bones_group_name = 'Bone Bucket'         
 excluded_bones_group_name = 'Excluded Bones'    
 problem_bones_group_name = 'Problem Bones'      
 misc_bones_group_name = 'Misc Bones'            
-vbones_group_name = 'BB Volume Bones'              
-ref_mbones_group_name = 'BB Ref mBones'
-ref_vbones_group_name = 'BB Ref vBones'
-cr_mbones_group_name = 'BB Control mBones'       
-cr_vbones_group_name = 'BB Control vBones'
+vbones_group_name = 'ONI Volume Bones'              
+ref_mbones_group_name = 'ONI Ref mBones'
+ref_vbones_group_name = 'ONI Ref vBones'
+cr_mbones_group_name = 'ONI Control mBones'       
+cr_vbones_group_name = 'ONI Control vBones'
 
 
 
@@ -1528,8 +1528,8 @@ cc_reskin_group = "Reskin Bones"
 
 
 
-bb_target_group = "Retarget Bones"
-bb_source_group = "Source Bones"
+oni_target_group = "Retarget Bones"
+oni_source_group = "Source Bones"
 
 
 
@@ -1551,21 +1551,21 @@ rig_group_ntheme = 'THEME01'
 
 
 
-bb_all_bones_layer = 0
+oni_all_bones_layer = 0
 
 
-bb_base_layer = 0
+oni_base_layer = 0
 
 
 
-bb_vbones_layer = 1
+oni_vbones_layer = 1
 
-bb_mbones_layer = 2
+oni_mbones_layer = 2
 
 
 cr_mbones_theme = 'THEME08'
 cr_vbones_theme = 'THEME05'
-bento_buddy_theme = 'THEME04'
+onigiri_theme = 'THEME04'
 pose_bone_theme = 'THEME02'
 mbone_theme = 'THEME03'
 unused_bone_theme = 'THEME09'
@@ -1590,8 +1590,8 @@ cc_rename_selected_color = 'THEME10'
 cc_reskin_selected_color = 'THEME03'
 
 
-bb_source_theme = 'THEME09'
-bb_target_theme = 'THEME03'
+oni_source_theme = 'THEME09'
+oni_target_theme = 'THEME03'
 
 
 fly_paper_group_name = "Fly Paper"

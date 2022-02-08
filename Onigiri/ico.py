@@ -3,7 +3,7 @@ import os
 from . import mod_settings
 from .mod_settings import *
 script_dir = os.path.dirname(os.path.abspath(__file__))
-icons_dir = script_dir + bb_settings["paths"]["icons"]
+icons_dir = script_dir + oni_settings["paths"]["icons"]
 custom_icons = None
 def load_icons():
     global custom_icons
@@ -241,7 +241,7 @@ def load_icons():
     custom_icons.load("peak_red", os.path.join(icons_dir, "peak_red.png"), 'IMAGE')
     custom_icons.load("peak_white", os.path.join(icons_dir, "peak_white.png"), 'IMAGE')
     custom_icons.load("peak_yellow", os.path.join(icons_dir, "peak_yellow.png"), 'IMAGE')
-    custom_icons.load("avastar_to_bb", os.path.join(icons_dir, "avastar_to_bb.png"), 'IMAGE')
+    custom_icons.load("avastar_to_oni", os.path.join(icons_dir, "avastar_to_oni.png"), 'IMAGE')
     custom_icons.load("safe", os.path.join(icons_dir, "safe.png"), 'IMAGE')
     custom_icons.load("match", os.path.join(icons_dir, "match.png"), 'IMAGE')
     custom_icons.load("fitmesh", os.path.join(icons_dir, "fitmesh.png"), 'IMAGE')

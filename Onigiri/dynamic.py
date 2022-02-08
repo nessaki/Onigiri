@@ -28,8 +28,8 @@ def get_director(armature=None):
 
     
     
-    actor_check = armObj.get('bb_dynamic_actor', None)
-    director_check = armObj.get('bb_dynamic_director', None)
+    actor_check = armObj.get('oni_dynamic_actor', None)
+    director_check = armObj.get('oni_dynamic_director', None)
 
     
     
@@ -40,7 +40,7 @@ def get_director(armature=None):
     elif director_check == None:
         if actor_check == None:
             return False
-        director = actor_check.get('bb_dynamic_director', None)
+        director = actor_check.get('oni_dynamic_director', None)
         if director == None:
             return False
         inRig = director
@@ -136,7 +136,7 @@ def add_constraints(
             utils.set_inverse(context_py, cname)
             
             
-        conObj.name = "BB " + cname
+        conObj.name = "ONI " + cname
 
     
 

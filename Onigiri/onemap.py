@@ -34,12 +34,12 @@ if 1 == 1:
     
     
     
-    props['bb_onemap_state'] = False
+    props['oni_onemap_state'] = False
 
     
     
-    props['bb_onemap_director'] = ""
-    props['bb_onemap_actor'] = ""
+    props['oni_onemap_director'] = ""
+    props['oni_onemap_actor'] = ""
 
     
     
@@ -126,8 +126,8 @@ def get_director(armature=None):
 
     
     
-    outRig = armObj.get('bb_onemap_actor', None)
-    inRig = armObj.get('bb_onemap_director', None)
+    outRig = armObj.get('oni_onemap_actor', None)
+    inRig = armObj.get('oni_onemap_director', None)
 
     
     
@@ -160,8 +160,8 @@ def apply_map(input=None, output=None):
     for boneObj in outRig.pose.bones:
         boneObj.bone_group = None
 
-    rename = inRig.get('bb_onemap_rename', {})
-    reskin = inRig.get('bb_onemap_reskin', {})
+    rename = inRig.get('oni_onemap_rename', {})
+    reskin = inRig.get('oni_onemap_reskin', {})
     for rename_in_bone in rename:
         if rename_in_bone not in inRig.pose.bones:
             continue
@@ -190,18 +190,18 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
     state = utils.get_state()
 
     if rename == None:
-        rename = inRig.get('bb_onemap_rename')
+        rename = inRig.get('oni_onemap_rename')
     
     if rename == None:
         print("onemap::update_map : no rename map")
         return False
     if reskin == None:
-        reskin = inRig.get('bb_onemap_reskin')
+        reskin = inRig.get('oni_onemap_reskin')
     if reskin == None:
         print("onemap::update_map : no reskin map, adding empty")
         reskin = {}
 
-    bb_onemap = bpy.context.scene.bb_onemap
+    oni_onemap = bpy.context.scene.oni_onemap
 
     
     
@@ -224,7 +224,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
     
     if controllers == True:
         
-        if bb_onemap.onemap_follow == True:
+        if oni_onemap.onemap_follow == True:
             
             
             
@@ -238,7 +238,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
                     frame_start = bpy.context.scene.frame_start
             bpy.context.scene.frame_set(frame_start)
 
-            proxyRig = inRig.get('bb_onemap_proxy')
+            proxyRig = inRig.get('oni_onemap_proxy')
             if utils.is_valid(proxyRig):
                 
                 
@@ -295,7 +295,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
                     
                     
                     
-                    cname = boneObj['bb_onemap_cname']
+                    cname = boneObj['oni_onemap_cname']
                     if boneObj.constraints.get(cname) != None:
                         conObj = boneObj.constraints[cname]
                         if boneObj.name not in rename:
@@ -323,7 +323,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
                     tbone = rename[bone]
                     if tbone in proxyRig.pose.bones:
                         boneObj = proxyRig.pose.bones[tbone]
-                        cname = boneObj['bb_onemap_cname']
+                        cname = boneObj['oni_onemap_cname']
                         if boneObj.constraints.get(cname) != None:
                             proxyRig.data.bones.active = boneObj.bone
                             conObj = boneObj.constraints[cname]
@@ -339,7 +339,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
        
         else:
             for boneObj in inRig.pose.bones:
-                cname = boneObj['bb_onemap_cname']
+                cname = boneObj['oni_onemap_cname']
                 if boneObj.constraints.get(cname) != None:
                     conObj = boneObj.constraints[cname]
                     conObj.influence = 0
@@ -387,7 +387,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
     
     
     
-    bpy.context.scene.bb_onemap.onemap_message = "Ready!"
+    bpy.context.scene.oni_onemap.onemap_message = "Ready!"
 
     utils.set_state(state)
 
@@ -476,20 +476,20 @@ def save_map(input=None, file=None):
     code = {}
     lock = {}
 
-    if len(inRig.get('bb_onemap_rename', {})) != 0:
-        rename = inRig['bb_onemap_rename'].to_dict()
-    if len(inRig.get('bb_onemap_reskin', {})) != 0:
-        reskin = inRig['bb_onemap_reskin'].to_dict()
-    if len(inRig.get('bb_onemap_pose', {})) != 0:
-        pose = inRig['bb_onemap_pose'].to_dict()
-    if len(inRig.get('bb_onemap_code', {})) != 0:
-        code = inRig['bb_onemap_code'].to_dict()
-    if len(inRig.get('bb_onemap_lock', {})) != 0:
-        lock = inRig['bb_onemap_lock'].to_dict()
+    if len(inRig.get('oni_onemap_rename', {})) != 0:
+        rename = inRig['oni_onemap_rename'].to_dict()
+    if len(inRig.get('oni_onemap_reskin', {})) != 0:
+        reskin = inRig['oni_onemap_reskin'].to_dict()
+    if len(inRig.get('oni_onemap_pose', {})) != 0:
+        pose = inRig['oni_onemap_pose'].to_dict()
+    if len(inRig.get('oni_onemap_code', {})) != 0:
+        code = inRig['oni_onemap_code'].to_dict()
+    if len(inRig.get('oni_onemap_lock', {})) != 0:
+        lock = inRig['oni_onemap_lock'].to_dict()
 
 
 
-    formatted_text = "# Auto Generated by Bento Buddy : Hybrid Map"
+    formatted_text = "# Auto Generated by Onigiri : Hybrid Map"
     if len(rename) == 0:
         print("onemap::save_map reports: There's nothing to make a map with")
         return False
@@ -555,7 +555,7 @@ def save_template(template=None, file=None):
 
 
 
-    formatted_text = "# Auto Generated by Bento Buddy : Hybrid Map from template_map"
+    formatted_text = "# Auto Generated by Onigiri : Hybrid Map from template_map"
 
     for mbone in template:
         (arm, tbone), = template[mbone].items()
@@ -600,7 +600,7 @@ def save_template(template=None, file=None):
 
 def save_hybrid_template(template=None, file=None):
  
-    formatted_text = "# Auto Generated by Bento Buddy : Hybrid Composer"
+    formatted_text = "# Auto Generated by Onigiri : Hybrid Composer"
 
 
 
@@ -724,7 +724,7 @@ def attach_proxy(inRig=None, outRig=None):
         for C in boneObj.constraints:
             
             
-            cname = boneObj.get('bb_onemap_cname')
+            cname = boneObj.get('oni_onemap_cname')
             if cname != None:
                 if C.name == cname:
                     boneObj.constraints.remove(C)
@@ -734,7 +734,7 @@ def attach_proxy(inRig=None, outRig=None):
         print("Something went wrong when attempting to copy the rig")
         return False
     proxyRig = duplicate[0]
-    proxyRig.name = "BB_Constraint_Proxy"
+    proxyRig.name = "ONI_Constraint_Proxy"
 
     
     
@@ -803,17 +803,17 @@ def attach_proxy(inRig=None, outRig=None):
             bpy.ops.constraint.childof_clear_inverse(context_py, constraint=cname, owner="BONE")
             bpy.ops.constraint.childof_set_inverse(context_py, constraint=cname, owner="BONE")
 
-        conObj.name = "BB " + cname
+        conObj.name = "ONI " + cname
         
         
         
-        boneObj['bb_onemap_cname'] = conObj.name
+        boneObj['oni_onemap_cname'] = conObj.name
 
         boneObj.bone.hide = True
 
     bpy.ops.object.mode_set(mode='OBJECT')
     proxyRig.select_set(False)
-    inRig['bb_onemap_proxy'] = proxyRig
+    inRig['oni_onemap_proxy'] = proxyRig
 
     
     
@@ -831,8 +831,8 @@ def attach_proxy(inRig=None, outRig=None):
         conObj.owner_space = 'POSE'
         conObj.influence = 0
         cname = conObj.name
-        conObj.name = "BB " + cname
-        boneObj['bb_onemap_cname'] = conObj.name 
+        conObj.name = "ONI " + cname
+        boneObj['oni_onemap_cname'] = conObj.name 
         
         
         

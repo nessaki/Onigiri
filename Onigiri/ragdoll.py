@@ -36,13 +36,13 @@ def get_actor():
 
     armObj = None
     for o in selected:
-        if o.get('bb_ragdoll_directors') != None:
+        if o.get('oni_ragdoll_directors') != None:
             print("Found actor rig directly:", o.name)
             return o
     for o in selected:
-       if o.get('bb_ragdoll_actor') != None:
+       if o.get('oni_ragdoll_actor') != None:
             print("Found actor rig on a director object:", o.name)
-            return o['bb_ragdoll_actor']
+            return o['oni_ragdoll_actor']
 
     print("ragdoll::get_actor : I couldn't find the actor")
 
@@ -242,10 +242,10 @@ def create_directors(armObj, source=None, move=True):
         modObj.object = armObj
         modObj.show_viewport = False 
 
-        OBJ['bb_ragdoll_bone'] = boneObj.name
-        OBJ['bb_ragdoll_bone_info'] = "I contain the bone name that is that target bone on the actor"
-        OBJ['bb_ragdoll_actor'] = armObj
-        OBJ['bb_ragdoll_actor_info'] = "I contain the rig object that is the actor containing the target pose bone"
+        OBJ['oni_ragdoll_bone'] = boneObj.name
+        OBJ['oni_ragdoll_bone_info'] = "I contain the bone name that is that target bone on the actor"
+        OBJ['oni_ragdoll_actor'] = armObj
+        OBJ['oni_ragdoll_actor_info'] = "I contain the rig object that is the actor containing the target pose bone"
 
         
         
@@ -254,7 +254,7 @@ def create_directors(armObj, source=None, move=True):
 
         OBJ.select_set(False)
 
-    armObj['bb_ragdoll_directors'] = ragdoll_directors
+    armObj['oni_ragdoll_directors'] = ragdoll_directors
 
     armObj.select_set(True)
     utils.activate(armObj)
@@ -279,7 +279,7 @@ def add_constraints(armObj):
 
     
     for boneObj in armObj.pose.bones:
-        cname = boneObj.bone.get('bb_ragdoll_constraint')
+        cname = boneObj.bone.get('oni_ragdoll_constraint')
         if cname == None:
             continue
         for cObj in boneObj.constraints:
@@ -287,7 +287,7 @@ def add_constraints(armObj):
                 boneObj.constraints.remove(cObj)
 
     
-    directors = armObj['bb_ragdoll_directors']
+    directors = armObj['oni_ragdoll_directors']
 
     
     bpy.ops.object.mode_set(mode = 'POSE')
@@ -313,8 +313,8 @@ def add_constraints(armObj):
         context_py = bpy.context.copy()
         context_py["constraint"] = bc.active
         utils.set_inverse(context_py, cname)
-        conObj.name = "BB " + cname
-        dBone['bb_ragdoll_constraint'] = conObj.name
+        conObj.name = "ONI " + cname
+        dBone['oni_ragdoll_constraint'] = conObj.name
     bpy.ops.object.mode_set(mode = 'OBJECT')
 
     utils.set_state(state)

@@ -25,16 +25,16 @@ def get_unique_name():
 
 
 
-class BentoBuddyHelpProperties(bpy.types.PropertyGroup):
+class OnigiriHelpProperties(bpy.types.PropertyGroup):
     def update_help_some_property(self, context):
-        bbh = bpy.context.window_manager.bb_help
+        onih = bpy.context.window_manager.oni_help
         
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return
         
-        bb_settings['terminate'] = True
-        bbh.help_some_property = False
+        oni_settings['terminate'] = True
+        onih.help_some_property = False
         return
 
 

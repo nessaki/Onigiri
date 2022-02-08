@@ -48,8 +48,8 @@ from .mod_settings import *
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-presets_path    =   bb_settings['paths']['presets']
-data_path       =   bb_settings['paths']['data']
+presets_path    =   oni_settings['paths']['presets']
+data_path       =   oni_settings['paths']['data']
 
 
 
@@ -63,11 +63,11 @@ data_path       =   bb_settings['paths']['data']
 
 def terminate(state=""):
     if state == "":
-        if bb_settings['terminate'] == True:
-            bb_settings['terminate'] = False
+        if oni_settings['terminate'] == True:
+            oni_settings['terminate'] = False
             return True
     elif state == True:
-        bb_settings['terminate'] = True
+        oni_settings['terminate'] = True
     else:
         print("terminate reports: unknown state setting -", state)
     return None
@@ -202,7 +202,7 @@ def get_target_bones(arm, target_bones):
     bpy.context.view_layer.objects.active = bpy.data.objects[arm]
     bpy.ops.object.mode_set(mode='EDIT')
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Generating target bone list for:", arm)
 
     for bPart in bpy.data.objects[arm].data.bones:
@@ -232,11 +232,11 @@ def save_target_links(obj, arm):
     bpy.context.view_layer.objects.active = bpy.data.objects[arm]
     bpy.ops.object.mode_set(mode='EDIT')
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Entering save_target_links with armature:", arm)
 
     
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Generating child_list hash ...")
 
     for child_bone in bpy.data.objects[arm].data.edit_bones:
@@ -246,7 +246,7 @@ def save_target_links(obj, arm):
             obj[arm].setdefault(parent_bone, [])
             obj[arm][parent_bone].append(child_bone.name)
         except:
-            if bb_flags['debug'] == 1:
+            if oni_flags['debug'] == 1:
                 print("no parent for, ", child_bone.name)
             pass
 
@@ -264,11 +264,11 @@ def save_source_links(arm, child_list):
     bpy.context.view_layer.objects.active = bpy.data.objects[arm]
     bpy.ops.object.mode_set(mode='EDIT')
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Entering save_soure_links with armature:", arm)
 
     
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Generating child_list hash ...")
 
     for child_bone in bpy.data.objects[arm].data.edit_bones:
@@ -278,7 +278,7 @@ def save_source_links(arm, child_list):
             child_list.setdefault(parent_bone, [])
             child_list[parent_bone].append(child_bone.name)
         except:
-            if bb_flags['debug'] == 1:
+            if oni_flags['debug'] == 1:
                 print("no parent for, ", child_bone.name)
             pass
 
@@ -301,9 +301,9 @@ def apply_inheritance(arm, bone_list):
     bpy.ops.object.mode_set(mode='EDIT')
 
     for bone in bone_list:
-        bpy.data.objects[arm].data.edit_bones[bone].use_local_location = bb_flags['inherit_location']
-        bpy.data.objects[arm].data.edit_bones[bone].use_inherit_rotation = bb_flags['inherit_rotation']
-        bpy.data.objects[arm].data.edit_bones[bone].use_inherit_scale = bb_flags['inherit_scale']
+        bpy.data.objects[arm].data.edit_bones[bone].use_local_location = oni_flags['inherit_location']
+        bpy.data.objects[arm].data.edit_bones[bone].use_inherit_rotation = oni_flags['inherit_rotation']
+        bpy.data.objects[arm].data.edit_bones[bone].use_inherit_scale = oni_flags['inherit_scale']
 
     bpy.ops.object.mode_set(mode='OBJECT') 
 
@@ -411,7 +411,7 @@ def force_unhide(arm, hidden_bones):
 
 
 
-def remove_shapes(arm, bb_flags):
+def remove_shapes(arm, oni_flags):
     bpy.ops.object.mode_set(mode='OBJECT')
     bpy.ops.object.select_all(action='DESELECT')
     bpy.data.objects[arm].select_set(True)
@@ -430,7 +430,7 @@ def remove_shapes(arm, bb_flags):
     for pBone in arm:
         if pBone.custom_shape is not None:
             cs = pBone.custom_shape
-            if bb_flags['debug'] == 1:
+            if oni_flags['debug'] == 1:
                 print("removing custom shape:", cs.name)
             pBone.custom_shape = None
             bpy.ops.object.delete()
@@ -455,8 +455,8 @@ def remove_constraints(arm):
     bpy.ops.pose.select_all(action = 'DESELECT')
 
     
-    if bb_flags['remove_constraints_pbones'] == 1:
-        if bb_flags['debug'] == 1:
+    if oni_flags['remove_constraints_pbones'] == 1:
+        if oni_flags['debug'] == 1:
             print("Removing constraints for pBones")
         for pBone in source_pbones:
             bpy.context.object.pose.bones[pBone].lock_location[0] = False 
@@ -471,8 +471,8 @@ def remove_constraints(arm):
             for pbC in bpy.context.object.pose.bones[pBone].constraints:
                 bpy.context.object.pose.bones[pBone].constraints.remove(pbC)
     
-    if bb_flags['remove_constraints_mbones'] == 1:
-        if bb_flags['debug'] == 1:
+    if oni_flags['remove_constraints_mbones'] == 1:
+        if oni_flags['debug'] == 1:
             print("Removing constraints for mBones")
         for mBone in source_mbones:
             bpy.context.object.pose.bones[mBone].lock_location[0] = False 
@@ -487,8 +487,8 @@ def remove_constraints(arm):
             for pbC in bpy.context.object.pose.bones[mBone].constraints:
                 bpy.context.object.pose.bones[mBone].constraints.remove(pbC)
     
-    if bb_flags['remove_constraints_vbones'] == 1:
-        if bb_flags['debug'] == 1:
+    if oni_flags['remove_constraints_vbones'] == 1:
+        if oni_flags['debug'] == 1:
             print("Removing constraints for vBones")
         for vBone in vBones:
             bpy.context.object.pose.bones[vBone].lock_location[0] = False 
@@ -503,8 +503,8 @@ def remove_constraints(arm):
             for pbC in bpy.context.object.pose.bones[vBone].constraints:
                 bpy.context.object.pose.bones[vBone].constraints.remove(pbC)
     
-    if bb_flags['remove_constraints_excluded'] == 1:
-        if bb_flags['debug'] == 1:
+    if oni_flags['remove_constraints_excluded'] == 1:
+        if oni_flags['debug'] == 1:
             print("Removing constraints for excluded_bones")
         for eb in excluded_bones:
             bpy.context.object.pose.bones[eb].lock_location[0] = False 
@@ -521,8 +521,8 @@ def remove_constraints(arm):
     
     
     
-    if bb_flags['remove_constraints_problem'] == 1:
-        if bb_flags['debug'] == 1:
+    if oni_flags['remove_constraints_problem'] == 1:
+        if oni_flags['debug'] == 1:
             print("Removing constraints for problem_bones")
         for mBone in problem_bones:
             pb = mBone[1:] 
@@ -541,8 +541,8 @@ def remove_constraints(arm):
     
     
     
-    if bb_flags['remove_constraints_ik'] == 1:
-        if bb_flags['debug'] == 1:
+    if oni_flags['remove_constraints_ik'] == 1:
+        if oni_flags['debug'] == 1:
             print("Removing constraints for ik bones")
 
         
@@ -583,8 +583,8 @@ def remove_constraints(arm):
                 bpy.context.object.pose.bones[ikName].constraints.remove(ikC)
 
     
-    if bb_flags['remove_constraints_misc'] == 1:
-        if bb_flags['debug'] == 1:
+    if oni_flags['remove_constraints_misc'] == 1:
+        if oni_flags['debug'] == 1:
             print("Removing constraints for misc_bones")
         for mb in misc_bones:
             bpy.context.object.pose.bones[mb].lock_location[0] = False 
@@ -607,16 +607,16 @@ def remove_constraints(arm):
 
 def constrain_bones(arm):
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Constraining any used source bones to the corresponding proxy rig bones")
         print("Constraint Parameters:")
-        print("    constraint_child_of:        ", bb_flags['constraint_child_of'])
-        print("    constraint_copy_location:   ", bb_flags['constraint_copy_location'])
-        print("    constraint_copy_rotation:   ", bb_flags['constraint_copy_rotation'])
-        print("    constraint_copy_scale:      ", bb_flags['constraint_copy_scale'])
-        print("    constraint_copy_transforms: ", bb_flags['constraint_copy_transforms'])
+        print("    constraint_child_of:        ", oni_flags['constraint_child_of'])
+        print("    constraint_copy_location:   ", oni_flags['constraint_copy_location'])
+        print("    constraint_copy_rotation:   ", oni_flags['constraint_copy_rotation'])
+        print("    constraint_copy_scale:      ", oni_flags['constraint_copy_scale'])
+        print("    constraint_copy_transforms: ", oni_flags['constraint_copy_transforms'])
 
-    if bb_flags['apply_restpose_before_constraints'] == 1:
+    if oni_flags['apply_restpose_before_constraints'] == 1:
         print("Applying new rest pose before constraints.  Try doing it after if this fails and/or/with apply visual transform")
         bpy.ops.object.mode_set(mode='OBJECT')
         bpy.ops.object.select_all(action='DESELECT')
@@ -636,12 +636,12 @@ def constrain_bones(arm):
     
     
     for target_arm in source_used:
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print("constrain to target_arm", target_arm)
         tBones = source_used[target_arm]
         for tBone in tBones:
             pBone = tBones[tBone]
-            if bb_flags['debug'] == 1:
+            if oni_flags['debug'] == 1:
                 print("     tBone/pBone:", tBone, pBone)
             obj = bpy.data.objects
             
@@ -653,54 +653,54 @@ def constrain_bones(arm):
             
             target_arm_obj = bpy.data.objects[target_arm]
 
-            if bb_flags['constraint_child_of'] == 1:
-                if bb_flags['debug'] == 1:
+            if oni_flags['constraint_child_of'] == 1:
+                if oni_flags['debug'] == 1:
                     print("Adding [Child Of] constraint for", target_arm, pBone, tBone)
                 bone_const.new('CHILD_OF')
                 bone_const['Child Of'].target = obj[target_arm]
                 bone_const['Child Of'].subtarget = tBone
-                bpy.context.object.pose.bones[pBone].constraints['Child Of'].name = "BB Child Of"
+                bpy.context.object.pose.bones[pBone].constraints['Child Of'].name = "ONI Child Of"
 
             
-            if bb_flags['constraint_copy_location'] == 1:
-                if bb_flags['debug'] == 1:
+            if oni_flags['constraint_copy_location'] == 1:
+                if oni_flags['debug'] == 1:
                     print("Adding [Copy Location] constraint for", target_arm, pBone, tBone)
                 bone_const.new('COPY_LOCATION')
                 bone_const['Copy Location'].target = obj[target_arm]
                 bone_const['Copy Location'].subtarget = tBone
                 bone_const['Copy Location'].target_space = 'WORLD'
                 bone_const['Copy Location'].owner_space = 'WORLD'
-                bpy.context.object.pose.bones[pBone].constraints['Copy Location'].name = "BB Copy Location"
+                bpy.context.object.pose.bones[pBone].constraints['Copy Location'].name = "ONI Copy Location"
 
-            if bb_flags['constraint_copy_rotation'] == 1:
-                if bb_flags['debug'] == 1:
+            if oni_flags['constraint_copy_rotation'] == 1:
+                if oni_flags['debug'] == 1:
                     print("Adding [Copy Rotation] constraint for", target_arm, pBone, tBone)
                 bone_const.new('COPY_ROTATION')
                 bone_const['Copy Rotation'].target = obj[target_arm]
                 bone_const['Copy Rotation'].subtarget = tBone
                 bone_const['Copy Rotation'].target_space = 'WORLD'
                 bone_const['Copy Rotation'].owner_space = 'WORLD'
-                bpy.context.object.pose.bones[pBone].constraints['Copy Rotation'].name = "BB Copy Rotation"
+                bpy.context.object.pose.bones[pBone].constraints['Copy Rotation'].name = "ONI Copy Rotation"
 
-            if bb_flags['constraint_copy_scale'] == 1:
-                if bb_flags['debug'] == 1:
+            if oni_flags['constraint_copy_scale'] == 1:
+                if oni_flags['debug'] == 1:
                     print("Adding [Copy Scale] constraint for", target_arm, pBone, tBone)
                 bone_const.new('COPY_SCALE')
                 bone_const['Copy Scale'].target = obj[target_arm]
                 bone_const['Copy Scale'].subtarget = tBone
                 bone_const['Copy Scale'].target_space = 'WORLD'
                 bone_const['Copy Scale'].owner_space = 'WORLD'
-                bpy.context.object.pose.bones[pBone].constraints['Copy Scale'].name = "BB Copy Scale"
+                bpy.context.object.pose.bones[pBone].constraints['Copy Scale'].name = "ONI Copy Scale"
 
-            if bb_flags['constraint_copy_transforms'] == 1:
-                if bb_flags['debug'] == 1:
+            if oni_flags['constraint_copy_transforms'] == 1:
+                if oni_flags['debug'] == 1:
                     print("Adding [Copy Transforms] constraint for", target_arm, pBone, tBone)
                 bone_const.new('COPY_TRANSFORMS')
                 bone_const['Copy Transforms'].target = obj[target_arm]
                 bone_const['Copy Transforms'].subtarget = tBone
                 bone_const['Copy Transforms'].target_space = 'WORLD'
                 bone_const['Copy Transforms'].owner_space = 'WORLD'
-                bpy.context.object.pose.bones[pBone].constraints['Copy Transforms'].name = "BB Copy Transforms"
+                bpy.context.object.pose.bones[pBone].constraints['Copy Transforms'].name = "ONI Copy Transforms"
 
             bpy.ops.pose.select_all(action = 'DESELECT')
 
@@ -708,8 +708,8 @@ def constrain_bones(arm):
         
 
         
-        if bb_flags['constraint_child_of'] == 1:
-            if bb_flags['debug'] == 1:
+        if oni_flags['constraint_child_of'] == 1:
+            if oni_flags['debug'] == 1:
                 print("Setting inverse for [Child Of] constraint for", target_arm, pBone, tBone)
             ob = bpy.context.active_object
             for b in ob.pose.bones:
@@ -723,7 +723,7 @@ def constrain_bones(arm):
                         
                         
                         
-                        bpy.ops.constraint.childof_set_inverse(context_py, constraint="BB Child Of", owner='BONE')
+                        bpy.ops.constraint.childof_set_inverse(context_py, constraint="ONI Child Of", owner='BONE')
 
     
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -735,7 +735,7 @@ def constrain_bones(arm):
     
     
     
-    if bb_flags['apply_restpose_after_constraints'] == 1:
+    if oni_flags['apply_restpose_after_constraints'] == 1:
         print("Applying new rest pose after constraints.  My note above was right, but I should make flags for these.")
         bpy.ops.object.mode_set(mode='OBJECT')
         bpy.ops.object.select_all(action='DESELECT')
@@ -771,7 +771,7 @@ def disconnect(arm):
 
 def unlink_bones(arm):
 
-    if bb_flags['unlink_all'] == 1:
+    if oni_flags['unlink_all'] == 1:
         bpy.ops.object.mode_set(mode='OBJECT')
         bpy.ops.object.select_all(action='DESELECT')
         bpy.data.objects[arm].select_set(True)
@@ -786,24 +786,24 @@ def unlink_bones(arm):
         print("nothing else to unlink, returning")
         return
 
-    if bb_flags['unlink_pbones'] == 1:
+    if oni_flags['unlink_pbones'] == 1:
         unlink_child_bones(arm, source_pbones, source_links)
-    if bb_flags['unlink_mbones'] == 1:
+    if oni_flags['unlink_mbones'] == 1:
         unlink_child_bones(arm, source_mbones, source_links)
     
-    if bb_flags['unlink_vbones'] == 1:
+    if oni_flags['unlink_vbones'] == 1:
         unlink_child_bones(arm, vBones, source_links)
-    if bb_flags['unlink_used_pbones'] == 1:
+    if oni_flags['unlink_used_pbones'] == 1:
         unlink_child_bones(arm, target_pbones, source_links)
-    if bb_flags['unlink_used_mbones'] == 1:
+    if oni_flags['unlink_used_mbones'] == 1:
         unlink_child_bones(arm, target_mbones, source_links)
-    if bb_flags['unlink_problem_bones'] == 1:
+    if oni_flags['unlink_problem_bones'] == 1:
         unlink_child_bones(arm, problem_bones, source_links)
-    if bb_flags['unlink_excluded_bones'] == 1:
+    if oni_flags['unlink_excluded_bones'] == 1:
         unlink_child_bones(arm, excluded_bones, source_links)
 
     
-    if bb_flags['anchor_vbones'] == 1:
+    if oni_flags['anchor_vbones'] == 1:
         set_mode(arm, "edit")
         for bone in vBones:
             bpy.data.objects[arm].data.edit_bones[bone].parent = bpy.data.objects[arm].data.edit_bones[vbone_anchor]
@@ -816,7 +816,7 @@ def unlink_bones(arm):
 
 def unlink_child_bones(arm, bone_list, source_link_data):
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Entering unlink_child_bones")
 
     
@@ -857,12 +857,12 @@ def unlink_child_bones(arm, bone_list, source_link_data):
 
 
 
-def add_empties(bb_flags):
+def add_empties(oni_flags):
     bpy.ops.object.mode_set(mode='OBJECT')
     bpy.ops.object.select_all(action='DESELECT')
 
     
-    if bb_flags['remove_empties'] == 1:
+    if oni_flags['remove_empties'] == 1:
         
         empty_head = bpy.data.objects.new( "empty.head", None )
         bpy.context.scene.collection.objects.link( empty_head )
@@ -895,7 +895,7 @@ def add_empties(bb_flags):
 
 
 
-def remove_empties(bb_flags, empty_head, empty_tail):
+def remove_empties(oni_flags, empty_head, empty_tail):
 
     
     empty_head = g_var['empty_head']
@@ -995,7 +995,7 @@ def map_to_tbones(arm):
     empty_head = g_var['empty_head']
     empty_tail = g_var['empty_tail']
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Entering map_to_tbones")
         print("Source rig is:", arm)
         print("target_skels:", target_skels)
@@ -1013,7 +1013,7 @@ def map_to_tbones(arm):
 
 
 
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print(" ======================================")
             print("target:", target_arm)
 
@@ -1027,7 +1027,7 @@ def map_to_tbones(arm):
             l_tail = target_tail[target_arm][bone]
             l_roll = target_roll[target_arm][bone]
 
-            if bb_flags['debug'] == 1:
+            if oni_flags['debug'] == 1:
                 print("  pBone:", pBone)
                 print("  mBone:", mBone)
                 print(" l_head:", l_head)
@@ -1037,7 +1037,7 @@ def map_to_tbones(arm):
             
             
             
-            if bb_flags['use_world_matrix'] == 0:
+            if oni_flags['use_world_matrix'] == 0:
                 
                 
                 target_world_mat_head = bpy.context.scene.objects[target_arm].matrix_world @ l_head
@@ -1060,7 +1060,7 @@ def map_to_tbones(arm):
             
             
             
-            if bb_flags['match_roll'] == 1:
+            if oni_flags['match_roll'] == 1:
                 bpy.data.objects[arm].data.edit_bones[mBone].roll = l_roll
                 bpy.data.objects[arm].data.edit_bones[pBone].roll = l_roll
 
@@ -1074,7 +1074,7 @@ def map_to_tbones(arm):
             bpy.data.objects[arm].data.edit_bones[pBone].tail = bpy.data.objects[empty_tail.name].location
             bpy.ops.object.mode_set(mode='OBJECT')
  
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print(" ======================================")
 
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -1090,7 +1090,7 @@ def map_to_tbones(arm):
 
 def map_to_mbones(animation_arm):
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Entering map_to_mbones")
         print("Source rig is:", animation_arm)
         print("target_skels:", target_skels)
@@ -1121,7 +1121,7 @@ def map_to_mbones(animation_arm):
     empty_head = g_var['empty_head']
     empty_tail = g_var['empty_tail']
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Entering move_source_bones")
         print("Source rig is:", animation_arm)
         print("target_skels:", target_skels)
@@ -1149,7 +1149,7 @@ def map_to_mbones(animation_arm):
         bpy.data.objects[target_arm].select_set(True)
         bpy.context.view_layer.objects.active = bpy.data.objects[target_arm]
 
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print(" ======================================")
             print("target:", target_arm)
 
@@ -1163,7 +1163,7 @@ def map_to_mbones(animation_arm):
             l_tail = target_tail[target_arm][mBone]
             l_roll = target_roll[target_arm][mBone]
 
-            if bb_flags['debug'] == 1:
+            if oni_flags['debug'] == 1:
                 print("  pBone:", pBone)
                 print("  mBone:", mBone)
                 print(" l_head:", l_head)
@@ -1173,7 +1173,7 @@ def map_to_mbones(animation_arm):
             
             
             
-            if bb_flags['use_world_matrix'] == 0:
+            if oni_flags['use_world_matrix'] == 0:
                 
                 
                 target_world_mat_head = bpy.context.scene.objects[target_arm].matrix_world @ l_head
@@ -1196,7 +1196,7 @@ def map_to_mbones(animation_arm):
             
             
             
-            if bb_flags['match_roll'] == 1:
+            if oni_flags['match_roll'] == 1:
                 bpy.data.objects[animation_arm].data.edit_bones[mBone].roll = l_roll
                 bpy.data.objects[animation_arm].data.edit_bones[pBone].roll = l_roll
 
@@ -1208,7 +1208,7 @@ def map_to_mbones(animation_arm):
             bpy.data.objects[animation_arm].data.edit_bones[pBone].tail = bpy.data.objects[empty_tail.name].location
             bpy.ops.object.mode_set(mode='OBJECT')
  
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print(" ======================================")
 
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -1218,7 +1218,7 @@ def map_to_mbones(animation_arm):
 
 def map_to_template(animation_arm):
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Entering map_to_template")
         print("Source rig is:", animation_arm)
         print("target_skels:", target_skels)
@@ -1311,7 +1311,7 @@ def map_to_template(animation_arm):
         bpy.data.objects[target_arm].select_set(True)
         bpy.context.view_layer.objects.active = bpy.data.objects[target_arm]
 
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print(" ======================================")
             print("target:", target_arm)
 
@@ -1325,7 +1325,7 @@ def map_to_template(animation_arm):
             l_tail = target_tail[target_arm][bone]
             l_roll = target_roll[target_arm][bone]
 
-            if bb_flags['debug'] == 1:
+            if oni_flags['debug'] == 1:
                 print("  pBone:", pBone)
                 print("  mBone:", mBone)
                 print(" l_head:", l_head)
@@ -1335,7 +1335,7 @@ def map_to_template(animation_arm):
             
             
             
-            if bb_flags['use_world_matrix'] == 0:
+            if oni_flags['use_world_matrix'] == 0:
                 
                 
                 target_world_mat_head = bpy.context.scene.objects[target_arm].matrix_world @ l_head
@@ -1358,7 +1358,7 @@ def map_to_template(animation_arm):
             
             
             
-            if bb_flags['match_roll'] == 1:
+            if oni_flags['match_roll'] == 1:
                 bpy.data.objects[animation_arm].data.edit_bones[mBone].roll = l_roll
                 bpy.data.objects[animation_arm].data.edit_bones[pBone].roll = l_roll
 
@@ -1372,7 +1372,7 @@ def map_to_template(animation_arm):
             bpy.data.objects[animation_arm].data.edit_bones[pBone].tail = bpy.data.objects[empty_tail.name].location
             bpy.ops.object.mode_set(mode='OBJECT')
  
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print(" ======================================")
 
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -1397,7 +1397,7 @@ def create_bone_group(armature="", group="", theme=""):
     try:
         
         existing = bpy.context.object.pose.bone_groups[group]
-        if bb_flags['debug'] == 1:
+        if oni_flags['debug'] == 1:
             print("Bone group already exists for", "[" + arm + "] " + "[" + group + "] " + "- skipping add function")
         return bpy.data.objects[arm].pose.bone_groups.active.name
     except:
@@ -1471,7 +1471,7 @@ def create_links(animation_arm):
                 
                 bpy.data.objects[animation_arm].data.edit_bones[src_c].parent =                    bpy.data.objects[animation_arm].data.edit_bones[src_p]
                 
-                if bb_flags['use_connect_state'] == 1:
+                if oni_flags['use_connect_state'] == 1:
                     bpy.data.objects[animation_arm].data.edit_bones[src_c].use_connect =                        connect_state[target_arm][child]
 
 
@@ -1504,10 +1504,10 @@ def rename_to():
             
             
             
-            if bb_flags['rename_to_source'] == 1:
+            if oni_flags['rename_to_source'] == 1:
                 bpy.data.objects[target_arm].pose.bones[tBone].name = source_used[target_arm][tBone]
             
-            if bb_flags['rename_to_mbones'] == 1:
+            if oni_flags['rename_to_mbones'] == 1:
                 pBone = source_used[target_arm][tBone]
                 mBone = source_pbones[pBone] 
                 bpy.data.objects[target_arm].pose.bones[tBone].name = mBone
@@ -1786,7 +1786,7 @@ def remove_object(object=""):
 def set_select_enabled(select="enabled", armatures=[]):
     s = ["enabled", "disabled"]
     obj = bpy.data.objects
-    ani = bpy.context.window_manager.bb_animesh
+    ani = bpy.context.window_manager.oni_animesh
 
     for o in armatures:
         if obj[o].type != 'ARMATURE':
@@ -1869,12 +1869,12 @@ def pretty_bones(arm):
 
     print("Applying groups to various bones")
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Applying groups to used bones")
 
     
     for target_arm in target_skels:
-        create_bone_group(target_arm, bento_buddy_group_name, bento_buddy_theme)
+        create_bone_group(target_arm, onigiri_group_name, onigiri_theme)
 
     
     animation_arm = arm 
@@ -1887,30 +1887,30 @@ def pretty_bones(arm):
     create_bone_group(animation_arm, vbones_group_name, vbone_theme)
 
     
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Applying group to unusable bones")
     for eBone in excluded_bones:
         add_bone_to_group(animation_arm, eBone, excluded_bones_group_name)
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Applying group to problem bones")
-    for probBone in problem_bones:
-        pBone = probBone[1:] 
+    for proonione in problem_bones:
+        pBone = proonione[1:] 
         add_bone_to_group(animation_arm, pBone, problem_bones_group_name)
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Applying group to misc bones")
     for mb in misc_bones:
         add_bone_to_group(animation_arm, mb, misc_bones_group_name)
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Applying group to unused bones")
 
     
     for ub in unused_bones:
         add_bone_to_group(animation_arm, ub, unused_bones_group_name)
 
-    if bb_flags['debug'] == 1:
+    if oni_flags['debug'] == 1:
         print("Applying group to volume bones")
     for vBone in vBones:
         add_bone_to_group(animation_arm, vBone, vbones_group_name)
@@ -1941,7 +1941,7 @@ def pretty_bones(arm):
     
     for target_arm in target_skels:
         for tBone in source_used[target_arm]:
-            add_bone_to_group(target_arm, tBone, bento_buddy_group_name)
+            add_bone_to_group(target_arm, tBone, onigiri_group_name)
 
     return
 
@@ -1961,13 +1961,13 @@ def pretty_places(arm):
     
     
 
-    t_world_x,     t_world_y,     t_world_z     = bb_data['pretty_places_transform_world']
-    t_spacing_x,   t_spacing_y,   t_spacing_z   = bb_data['pretty_places_transform_spacing']
-    t_length_x,    t_length_y,    t_length_z    = bb_data['pretty_places_transform_length']
-    t_separator_x, t_separator_y, t_separator_z = bb_data['pretty_places_transform_separator']
+    t_world_x,     t_world_y,     t_world_z     = oni_data['pretty_places_transform_world']
+    t_spacing_x,   t_spacing_y,   t_spacing_z   = oni_data['pretty_places_transform_spacing']
+    t_length_x,    t_length_y,    t_length_z    = oni_data['pretty_places_transform_length']
+    t_separator_x, t_separator_y, t_separator_z = oni_data['pretty_places_transform_separator']
 
-    t_offset_x,    t_offset_y,    t_offset_z    = bb_data['pretty_places_transform_offset']
-    t_groups = bb_data['pretty_places_transform_groups']
+    t_offset_x,    t_offset_y,    t_offset_z    = oni_data['pretty_places_transform_offset']
+    t_groups = oni_data['pretty_places_transform_groups']
 
     
 
@@ -1995,7 +1995,7 @@ def pretty_places(arm):
     tail_local_y = 0
     tail_local_z = 0
 
-    if bb_flags['pretty_places_set_pbones'] == 1:
+    if oni_flags['pretty_places_set_pbones'] == 1:
         for pBone in unused_bones:
             mBone = unused_bones[pBone] 
             bpy.data.objects[animation_arm].data.edit_bones[pBone].head.x = head_x + head_local_x
@@ -2036,16 +2036,16 @@ def pretty_places(arm):
         head_x, head_y, head_z = head_x + t_separator_x, head_y + t_separator_y, head_z + t_separator_z
         tail_x, tail_y, tail_z = head_x + t_separator_x, head_y + t_separator_y, head_z + t_separator_z
 
-    if bb_flags['pretty_places_set_vbones'] == 1:
+    if oni_flags['pretty_places_set_vbones'] == 1:
         pass
 
 
 
-    if bb_flags['pretty_places_set_misc'] == 1:
+    if oni_flags['pretty_places_set_misc'] == 1:
         pass
-    if bb_flags['pretty_places_set_problem'] == 1:
+    if oni_flags['pretty_places_set_problem'] == 1:
         pass
-    if bb_flags['pretty_places_set_excluded'] == 1:
+    if oni_flags['pretty_places_set_excluded'] == 1:
         pass
 
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -2118,7 +2118,7 @@ def link_animation(arm):
 
 
 
-def create_default_reference_rig(bb_arm, add_control_rig=False):
+def create_default_reference_rig(oni_arm, add_control_rig=False):
 
     print("Create default ref rig")
 
@@ -2148,8 +2148,8 @@ def create_default_reference_rig(bb_arm, add_control_rig=False):
         bpy.ops.object.select_all(action='DESELECT')
 
     
-    arm_thing = bpy.data.armatures.new(bb_data['bb_arm'])
-    armObj = bpy.data.objects.new(bb_data['bb_arm'], arm_thing)
+    arm_thing = bpy.data.armatures.new(oni_data['oni_arm'])
+    armObj = bpy.data.objects.new(oni_data['oni_arm'], arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -2237,10 +2237,10 @@ def create_default_reference_rig(bb_arm, add_control_rig=False):
                 add_bone_to_group(arm, cr_bones_map[mBone], cr_vbones_group_name)
 
                 
-                bpy.data.objects[arm].data.bones[cr_bone_name].layers[bb_vbones_layer] = True
+                bpy.data.objects[arm].data.bones[cr_bone_name].layers[oni_vbones_layer] = True
                 
-                bpy.data.objects[arm].data.bones[cr_bone_name].layers[bb_base_layer] = False
-                if bb_rig['vbones_selectable'] == 0:
+                bpy.data.objects[arm].data.bones[cr_bone_name].layers[oni_base_layer] = False
+                if oni_rig['vbones_selectable'] == 0:
                     
                     bpy.data.objects[arm].data.bones[cr_bone_name].hide_select = True
 
@@ -2251,18 +2251,18 @@ def create_default_reference_rig(bb_arm, add_control_rig=False):
         for bone in cr_bones_map:
             
             
-            for con in bb_const["constraint_types"]:
-                add_constraint(arm, bone, arm, cr_bones_map[bone], con, bb_const['constraint_influence'])
+            for con in oni_const["constraint_types"]:
+                add_constraint(arm, bone, arm, cr_bones_map[bone], con, oni_const['constraint_influence'])
 
             
-            bpy.data.objects[arm].data.bones[bone].layers[bb_mbones_layer] = True
-            bpy.data.objects[arm].data.bones[bone].layers[bb_base_layer] = False
+            bpy.data.objects[arm].data.bones[bone].layers[oni_mbones_layer] = True
+            bpy.data.objects[arm].data.bones[bone].layers[oni_base_layer] = False
 
     bpy.ops.object.mode_set(mode='OBJECT')
 
     
     
-    bpy.context.object.data.layers[bb_vbones_layer] = True
+    bpy.context.object.data.layers[oni_vbones_layer] = True
 
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
@@ -2290,7 +2290,7 @@ def create_default_reference_rig(bb_arm, add_control_rig=False):
 
 
 
-def create_neutral_reference_rig(bb_arm, add_control_rig=False):
+def create_neutral_reference_rig(oni_arm, add_control_rig=False):
 
     print("Create neutral ref rig")
 
@@ -2327,8 +2327,8 @@ def create_neutral_reference_rig(bb_arm, add_control_rig=False):
         bpy.ops.object.select_all(action='DESELECT')
 
     
-    arm_thing = bpy.data.armatures.new(bb_data['bb_arm'])
-    armObj = bpy.data.objects.new(bb_data['bb_arm'], arm_thing)
+    arm_thing = bpy.data.armatures.new(oni_data['oni_arm'])
+    armObj = bpy.data.objects.new(oni_data['oni_arm'], arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -2411,10 +2411,10 @@ def create_neutral_reference_rig(bb_arm, add_control_rig=False):
 
                 
                 
-                bpy.data.objects[arm].data.bones[cr_bone_name].layers[bb_vbones_layer] = True
+                bpy.data.objects[arm].data.bones[cr_bone_name].layers[oni_vbones_layer] = True
                 
-                bpy.data.objects[arm].data.bones[cr_bone_name].layers[bb_base_layer] = False
-                if bb_rig['vbones_selectable'] == 0:
+                bpy.data.objects[arm].data.bones[cr_bone_name].layers[oni_base_layer] = False
+                if oni_rig['vbones_selectable'] == 0:
                     
                     bpy.data.objects[arm].data.bones[cr_bone_name].hide_select = True
 
@@ -2424,11 +2424,11 @@ def create_neutral_reference_rig(bb_arm, add_control_rig=False):
         for bone in cr_bones_map:
             
             
-            for con in bb_const["constraint_types"]:
-                add_constraint(arm, bone, arm, cr_bones_map[bone], con, bb_const['constraint_influence'])
+            for con in oni_const["constraint_types"]:
+                add_constraint(arm, bone, arm, cr_bones_map[bone], con, oni_const['constraint_influence'])
             
-            bpy.data.objects[arm].data.bones[bone].layers[bb_mbones_layer] = True
-            bpy.data.objects[arm].data.bones[bone].layers[bb_base_layer] = False
+            bpy.data.objects[arm].data.bones[bone].layers[oni_mbones_layer] = True
+            bpy.data.objects[arm].data.bones[bone].layers[oni_base_layer] = False
 
     bpy.ops.object.mode_set(mode='OBJECT')
 
@@ -2439,7 +2439,7 @@ def create_neutral_reference_rig(bb_arm, add_control_rig=False):
 
     
     
-    bpy.context.object.data.layers[bb_vbones_layer] = True
+    bpy.context.object.data.layers[oni_vbones_layer] = True
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
 
@@ -2532,8 +2532,8 @@ def generate_human_ref():
     bpy.ops.object.select_all(action='DESELECT')
 
     
-    arm_thing = bpy.data.armatures.new(bb_data['bb_arm'])
-    armObj = bpy.data.objects.new(bb_data['bb_arm'], arm_thing)
+    arm_thing = bpy.data.armatures.new(oni_data['oni_arm'])
+    armObj = bpy.data.objects.new(oni_data['oni_arm'], arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -2649,7 +2649,7 @@ def generate_human_ref():
 
 
 
-def create_selected_reference_rig(arm, bb_arm, add_control_rig=False):
+def create_selected_reference_rig(arm, oni_arm, add_control_rig=False):
 
     print("create_selected_reference_rig - needs rotation values when Avastar is present")
 
@@ -2710,8 +2710,8 @@ def create_selected_reference_rig(arm, bb_arm, add_control_rig=False):
     bpy.ops.object.select_all(action='DESELECT')
 
     
-    arm_thing = bpy.data.armatures.new(bb_arm)
-    armObj = bpy.data.objects.new(bb_arm, arm_thing)
+    arm_thing = bpy.data.armatures.new(oni_arm)
+    armObj = bpy.data.objects.new(oni_arm, arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -2787,9 +2787,9 @@ def create_selected_reference_rig(arm, bb_arm, add_control_rig=False):
             add_bone_to_group(arm, bone, ref_mbones_group_name)
         else:
             add_bone_to_group(arm, bone, ref_vbones_group_name)
-            bpy.data.objects[arm].data.bones[bone].layers[bb_vbones_layer] = True
+            bpy.data.objects[arm].data.bones[bone].layers[oni_vbones_layer] = True
             
-            bpy.data.objects[arm].data.bones[cr_bone_name].layers[bb_base_layer] = False
+            bpy.data.objects[arm].data.bones[cr_bone_name].layers[oni_base_layer] = False
 
     
     
@@ -2803,10 +2803,10 @@ def create_selected_reference_rig(arm, bb_arm, add_control_rig=False):
 
                 
                 
-                bpy.data.objects[arm].data.bones[cr_bone_name].layers[bb_vbones_layer] = True
+                bpy.data.objects[arm].data.bones[cr_bone_name].layers[oni_vbones_layer] = True
                 
-                bpy.data.objects[arm].data.bones[cr_bone_name].layers[bb_base_layer] = False
-                if bb_rig['vbones_selectable'] == 0:
+                bpy.data.objects[arm].data.bones[cr_bone_name].layers[oni_base_layer] = False
+                if oni_rig['vbones_selectable'] == 0:
                     
                     bpy.data.objects[arm].data.bones[cr_bone_name].hide_select = True
 
@@ -2827,15 +2827,15 @@ def create_selected_reference_rig(arm, bb_arm, add_control_rig=False):
         for bone in cr_bones_map:
             
             
-            for con in bb_const["constraint_types"]:
-                add_constraint(arm, bone, arm, cr_bones_map[bone], con, bb_const['constraint_influence'])
+            for con in oni_const["constraint_types"]:
+                add_constraint(arm, bone, arm, cr_bones_map[bone], con, oni_const['constraint_influence'])
             
-            bpy.data.objects[arm].data.bones[bone].layers[bb_mbones_layer] = True
-            bpy.data.objects[arm].data.bones[bone].layers[bb_base_layer] = False
+            bpy.data.objects[arm].data.bones[bone].layers[oni_mbones_layer] = True
+            bpy.data.objects[arm].data.bones[bone].layers[oni_base_layer] = False
 
     
     
-    bpy.context.object.data.layers[bb_vbones_layer] = True
+    bpy.context.object.data.layers[oni_vbones_layer] = True
 
     
     
@@ -2850,9 +2850,9 @@ def create_selected_reference_rig(arm, bb_arm, add_control_rig=False):
 
 
 
-def map_from_bentobuddy(arm, template, add_control_rig=False):
+def map_from_onigiri(arm, template, add_control_rig=False):
 
-    print("map from bb running")
+    print("map from oni running")
 
     
     
@@ -2970,17 +2970,17 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
     has_control_rig = 0
 
     
-    if bpy.data.objects[arm].get('bentobuddy_control_rig') is not None:
+    if bpy.data.objects[arm].get('onigiri_control_rig') is not None:
         
         
-        if bpy.data.objects[arm].get('bentobuddy_control_rig') == 1:
+        if bpy.data.objects[arm].get('onigiri_control_rig') == 1:
             has_control_rig = 1
             print(arm, "has a control rig")
             print("removing parent from control rig on", arm)
             for bone in cr_bones_map:
                 cr_bone = cr_bones_map[bone]
                 bpy.data.objects[arm].data.edit_bones[cr_bone].parent = None
-        elif bpy.data.objects[arm].get('bentobuddy_control_rig') == 0:
+        elif bpy.data.objects[arm].get('onigiri_control_rig') == 0:
             print(arm, "has no control rig")
             
             has_control_rig = 0
@@ -2999,7 +2999,7 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
             target_bone = template[skel][bone]
 
             
-            if bb_flags['target_non_deformable'] == 1:
+            if oni_flags['target_non_deformable'] == 1:
                 used_bones[skel][bone] = target_bone
 
             
@@ -3079,7 +3079,7 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
     
     
 
-    if bb_flags['constrain_bones'] == 1:
+    if oni_flags['constrain_bones'] == 1:
         for skel in used_bones:
             for bone in used_bones[skel]:
                 source_bone = bone 
@@ -3088,16 +3088,16 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
                 if has_control_rig == 1:
                     source_bone = cr_bones_map[bone]
                 target_bone = used_bones[skel][bone]
-                if bb_flags['constraint_copy_transforms'] == 1:
-                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_TRANSFORMS', bb_const['constraint_influence'])
-                if bb_flags['constraint_copy_location'] == 1:
-                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_LOCATION', bb_const['constraint_influence'])
-                if bb_flags['constraint_copy_rotation'] == 1:
-                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_ROTATION', bb_const['constraint_influence'])
-                if bb_flags['constraint_copy_scale'] == 1:
-                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_SCALE', bb_const['constraint_influence'])
-                if bb_flags['constraint_child_of'] == 1:
-                    add_constraint(arm, source_bone, skel, target_bone, 'CHILD_OF', bb_const['constraint_influence'])
+                if oni_flags['constraint_copy_transforms'] == 1:
+                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_TRANSFORMS', oni_const['constraint_influence'])
+                if oni_flags['constraint_copy_location'] == 1:
+                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_LOCATION', oni_const['constraint_influence'])
+                if oni_flags['constraint_copy_rotation'] == 1:
+                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_ROTATION', oni_const['constraint_influence'])
+                if oni_flags['constraint_copy_scale'] == 1:
+                    add_constraint(arm, source_bone, skel, target_bone, 'COPY_SCALE', oni_const['constraint_influence'])
+                if oni_flags['constraint_child_of'] == 1:
+                    add_constraint(arm, source_bone, skel, target_bone, 'CHILD_OF', oni_const['constraint_influence'])
 
         
         
@@ -3107,7 +3107,7 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
     
     
 
-    if bb_flags['create_links'] == 1:
+    if oni_flags['create_links'] == 1:
         if has_control_rig == 1:
             
             template_rev = {}
@@ -3143,7 +3143,7 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
 
     
     
-    if bb_flags['rename_to'] == 1:
+    if oni_flags['rename_to'] == 1:
         print("entering rename bones")
         uhash = {}
         for skel in used_bones:
@@ -3160,7 +3160,7 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
                 mbone = uhash[skel][ubone]
                 bpy.data.objects[skel].data.bones[ubone].name = mbone
 
-    if bb_flags['disable_relationship_lines'] == 1:
+    if oni_flags['disable_relationship_lines'] == 1:
         
             
                 
@@ -3171,16 +3171,16 @@ def map_from_bentobuddy(arm, template, add_control_rig=False):
     
     
     
-    if bb_flags['change_inherit'] == 1:
+    if oni_flags['change_inherit'] == 1:
 
         
         
 
         set_mode(arm, "edit")
         for boneObj in bpy.data.objects[arm].data.edit_bones:
-            boneObj.use_local_location = bb_flags['inherit_rotation']
-            boneObj.use_inherit_rotation = bb_flags['inherit_location']
-            boneObj.use_inherit_scale = bb_flags['inherit_scale']
+            boneObj.use_local_location = oni_flags['inherit_rotation']
+            boneObj.use_inherit_rotation = oni_flags['inherit_location']
+            boneObj.use_inherit_scale = oni_flags['inherit_scale']
             boneObj.use_connect = False
 
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -3300,7 +3300,7 @@ def map_from_unknown(arm, target_arms, template):
         for bone in template[skel]:
             target_bone = template[skel][bone]
             
-            if bb_flags['target_non_deformable'] == 1:
+            if oni_flags['target_non_deformable'] == 1:
                 used_bones[skel][bone] = target_bone
             
             else:
@@ -3388,7 +3388,7 @@ def map_from_unknown(arm, target_arms, template):
     
     bpy.ops.pose.select_all(action = 'DESELECT')
 
-    if bb_flags['change_inherit'] == 1:
+    if oni_flags['change_inherit'] == 1:
         for boneObj in bpy.data.objects[arm].data.edit_bones:
             boneObj.use_local_location = False
             boneObj.use_inherit_rotation = False
@@ -3398,7 +3398,7 @@ def map_from_unknown(arm, target_arms, template):
 
     
     
-    if bb_flags['rename_to'] == 1:
+    if oni_flags['rename_to'] == 1:
         print("unknown: entering rename bones")
         for bone in used_bones:
             print("unknown: TAGGED in rename cycle, not finished:", bone, used_bones[bone])
@@ -3412,12 +3412,12 @@ def create_reference_pose(arm):
     armObj = bpy.context.active_object
 
     
-    if bpy.data.objects[armObj.name].get('bb_fixed_rig') == 1:
+    if bpy.data.objects[armObj.name].get('oni_fixed_rig') == 1:
         print("Rig animation fix already processed for", armObj.name)
         return
 
     print("Set animation fix flag on", armObj.name)
-    bpy.data.objects[armObj.name]["bb_fixed_rig"] = 1
+    bpy.data.objects[armObj.name]["oni_fixed_rig"] = 1
 
     
     start_frame, end_frame = bpy.data.objects[armObj.name].animation_data.action.frame_range
@@ -3474,13 +3474,13 @@ def show_states():
 
 def reset_flags():
     
-    print(bb_flags)
+    print(oni_flags)
 
     pkl_file = open(reset_path, 'rb')
-    bb_flags = pickle.load(pkl_file)
+    oni_flags = pickle.load(pkl_file)
     pkl_file.close()
-    for flag in bb_flags:
-        bpy.context.scene[pre_flag + flag] = bb_flags[flag]
+    for flag in oni_flags:
+        bpy.context.scene[pre_flag + flag] = oni_flags[flag]
     return
 
 
@@ -3525,21 +3525,21 @@ def add_trs_constraint(arm, bone, target_arm, target_bone):
     bc['Copy Location'].target_space = 'WORLD'
     bc['Copy Location'].owner_space = 'WORLD'
     bc['Copy Location'].influence = 1
-    bc['Copy Location'].name = "BB Copy Loc"
+    bc['Copy Location'].name = "ONI Copy Loc"
     bc.new('COPY_ROTATION')
     bc['Copy Rotation'].target = bpy.data.objects[target_arm]
     bc['Copy Rotation'].subtarget = target_bone
     bc['Copy Rotation'].target_space = 'WORLD'
     bc['Copy Rotation'].owner_space = 'WORLD'
     bc['Copy Rotation'].influence = 1
-    bc['Copy Rotation'].name = "BB Copy Rot"
+    bc['Copy Rotation'].name = "ONI Copy Rot"
     bc.new('COPY_SCALE')
     bc['Copy Scale'].target = bpy.data.objects[target_arm]
     bc['Copy Scale'].subtarget = target_bone
     bc['Copy Scale'].target_space = 'WORLD'
     bc['Copy Scale'].owner_space = 'WORLD'
     bc['Copy Scale'].influence = 1
-    bc['Copy Scale'].name = "BB Copy Scale"
+    bc['Copy Scale'].name = "ONI Copy Scale"
     return
 
 
@@ -3587,11 +3587,11 @@ def add_constraint(
         bc['Child Of'].target =  bpy.data.objects[target]
         bc['Child Of'].subtarget = tbone
         bc['Child Of'].influence = influence
-        bc['Child Of'].name = "BB Child Of"
+        bc['Child Of'].name = "ONI Child Of"
         if invert == True:
             context_py = bpy.context.copy()
             context_py["constraint"] = bc.active
-            bpy.ops.constraint.childof_set_inverse(context_py, constraint="BB Child Of", owner=owner)
+            bpy.ops.constraint.childof_set_inverse(context_py, constraint="ONI Child Of", owner=owner)
 
         return
     elif type == 'COPY_LOCATION':
@@ -3601,7 +3601,7 @@ def add_constraint(
         bc['Copy Location'].target_space = target_space
         bc['Copy Location'].owner_space = owner_space
         bc['Copy Location'].influence = influence
-        bc['Copy Location'].name = "BB Copy Loc"
+        bc['Copy Location'].name = "ONI Copy Loc"
         return
     elif type == 'COPY_ROTATION':
         bc.new('COPY_ROTATION')
@@ -3610,7 +3610,7 @@ def add_constraint(
         bc['Copy Rotation'].target_space = target_space
         bc['Copy Rotation'].owner_space = owner_space
         bc['Copy Rotation'].influence = influence
-        bc['Copy Rotation'].name = "BB Copy Rot"
+        bc['Copy Rotation'].name = "ONI Copy Rot"
         return
     elif type == 'COPY_SCALE':
         bc.new('COPY_SCALE')
@@ -3619,7 +3619,7 @@ def add_constraint(
         bc['Copy Scale'].target_space = target_space
         bc['Copy Scale'].owner_space = owner_space
         bc['Copy Scale'].influence = influence
-        bc['Copy Scale'].name = "BB Copy Scale"
+        bc['Copy Scale'].name = "ONI Copy Scale"
         return
     elif type == 'COPY_TRANSFORMS':
         bc.new('COPY_TRANSFORMS')
@@ -3628,7 +3628,7 @@ def add_constraint(
         bc['Copy Transforms'].target_space = target_space
         bc['Copy Transforms'].owner_space = owner_space
         bc['Copy Transforms'].influence = influence
-        bc['Copy Transforms'].name = "BB Copy TRS"
+        bc['Copy Transforms'].name = "ONI Copy TRS"
         return
     else:
         print("add_constraint called with unknown type", type)
@@ -4084,8 +4084,8 @@ def hide_volume_bones(arm):
         bone = boneObj.name
         if bone in vbones_only:
             boneObj.hide = True
-            if "bb_" + bone in armObj.data.bones:
-                armObj.data.bones["bb_"+bone].hide = True
+            if "oni_" + bone in armObj.data.bones:
+                armObj.data.bones["oni_"+bone].hide = True
     armObj['hide_volume_bones'] = True
     return
 
@@ -4095,8 +4095,8 @@ def unhide_volume_bones(arm):
         bone = boneObj.name
         if bone in vbones_only:
             boneObj.hide = False
-            if "bb_" + bone in armObj.data.bones:
-                armObj.data.bones["bb_"+bone].hide = False
+            if "oni_" + bone in armObj.data.bones:
+                armObj.data.bones["oni_"+bone].hide = False
     armObj['hide_volume_bones'] = False
     return
 
@@ -4106,22 +4106,22 @@ def hide_extended_bones(arm):
     armObj = bpy.data.objects[arm]
     for bone in extended_bones:
         mbone = "m" + bone
-        bbone = "bb_" + bone
+        onione = "oni_" + bone
         if mbone in  armObj.data.bones:
             armObj.data.bones[mbone].hide = True
-        if bbone in  armObj.data.bones:
-            armObj.data.bones[bbone].hide = True
+        if onione in  armObj.data.bones:
+            armObj.data.bones[onione].hide = True
     armObj['hide_extended_bones'] = True
     return
 def unhide_extended_bones(arm):
     armObj = bpy.data.objects[arm]
     for bone in extended_bones:
         mbone = "m" + bone
-        bbone = "bb_" + bone
+        onione = "oni_" + bone
         if mbone in  armObj.data.bones:
             armObj.data.bones[mbone].hide = False
-        if bbone in  armObj.data.bones:
-            armObj.data.bones[bbone].hide = False
+        if onione in  armObj.data.bones:
+            armObj.data.bones[onione].hide = False
     armObj['hide_extended_bones'] = False
     return
 
@@ -4131,22 +4131,22 @@ def hide_face_bones(arm):
     armObj = bpy.data.objects[arm]
     for bone in face_bones:
         mbone = "m" + bone
-        bbone = "bb_" + bone
+        onione = "oni_" + bone
         if mbone in  armObj.data.bones:
             armObj.data.bones[mbone].hide = True
-        if bbone in  armObj.data.bones:
-            armObj.data.bones[bbone].hide = True
+        if onione in  armObj.data.bones:
+            armObj.data.bones[onione].hide = True
     armObj['hide_face_bones'] = True
     return
 def unhide_face_bones(arm):
     armObj = bpy.data.objects[arm]
     for bone in face_bones:
         mbone = "m" + bone
-        bbone = "bb_" + bone
+        onione = "oni_" + bone
         if mbone in  armObj.data.bones:
             armObj.data.bones[mbone].hide = False
-        if bbone in  armObj.data.bones:
-            armObj.data.bones[bbone].hide = False
+        if onione in  armObj.data.bones:
+            armObj.data.bones[onione].hide = False
     armObj['hide_face_bones'] = False
     return
 
@@ -4156,22 +4156,22 @@ def hide_hand_bones(arm):
     armObj = bpy.data.objects[arm]
     for bone in hand_bones:
         mbone = "m" + bone
-        bbone = "bb_" + bone
+        onione = "oni_" + bone
         if mbone in  armObj.data.bones:
             armObj.data.bones[mbone].hide = True
-        if bbone in  armObj.data.bones:
-            armObj.data.bones[bbone].hide = True
+        if onione in  armObj.data.bones:
+            armObj.data.bones[onione].hide = True
     armObj['hide_hand_bones'] = True
     return
 def unhide_hand_bones(arm):
     armObj = bpy.data.objects[arm]
     for bone in hand_bones:
         mbone = "m" + bone
-        bbone = "bb_" + bone
+        onione = "oni_" + bone
         if mbone in  armObj.data.bones:
             armObj.data.bones[mbone].hide = False
-        if bbone in  armObj.data.bones:
-            armObj.data.bones[bbone].hide = False
+        if onione in  armObj.data.bones:
+            armObj.data.bones[onione].hide = False
     armObj['hide_hand_bones'] = False
     return
 
@@ -4311,7 +4311,7 @@ def apply_sl_bone_roll(arm=""):
 
     
     bpy.ops.object.mode_set(mode='EDIT')
-    for bone in bb_const['bone_roll']:
+    for bone in oni_const['bone_roll']:
         if bone not in obj[arm].data.edit_bones:
             continue
 
@@ -4319,7 +4319,7 @@ def apply_sl_bone_roll(arm=""):
         obj[arm].data.edit_bones[bone].select_head = True
         obj[arm].data.edit_bones[bone].select_tail = True
 
-        obj[arm].data.edit_bones[bone].roll = bb_const['bone_roll'][bone]
+        obj[arm].data.edit_bones[bone].roll = oni_const['bone_roll'][bone]
 
         obj[arm].data.edit_bones[bone].select = False
         obj[arm].data.edit_bones[bone].select_head = False
@@ -4328,13 +4328,13 @@ def apply_sl_bone_roll(arm=""):
         
         
         
-        if obj[arm].get('bentobuddy_control_rig') == 1:
+        if obj[arm].get('onigiri_control_rig') == 1:
             cr_bone = cr_bones_map[bone]
             obj[arm].data.edit_bones[cr_bone].select = True
             obj[arm].data.edit_bones[cr_bone].select_head = True
             obj[arm].data.edit_bones[cr_bone].select_tail = True
 
-            obj[arm].data.edit_bones[cr_bone].roll = bb_const['bone_roll'][bone]
+            obj[arm].data.edit_bones[cr_bone].roll = oni_const['bone_roll'][bone]
 
             obj[arm].data.edit_bones[cr_bone].select = False
             obj[arm].data.edit_bones[cr_bone].select_head = False
@@ -4452,7 +4452,7 @@ def store_bone_data():
     
 
     obj = bpy.data.objects
-    bbr = bpy.context.window_manager.bb_retarget
+    onir = bpy.context.window_manager.oni_retarget
 
     
 
@@ -4465,7 +4465,7 @@ def store_bone_data():
     source_bone_data = dict()
     target_bone_data = dict()
 
-    for boneObj in obj[bbr.retarget_source_name].pose.bones:
+    for boneObj in obj[onir.retarget_source_name].pose.bones:
         head = boneObj.head.copy()
         tail = boneObj.tail.copy()
 
@@ -4476,7 +4476,7 @@ def store_bone_data():
             "tail": tail,
             })
 
-    for boneObj in obj[bbr.retarget_target_name].pose.bones:
+    for boneObj in obj[onir.retarget_target_name].pose.bones:
         head = boneObj.head.copy()
         tail = boneObj.tail.copy()
 
@@ -4494,9 +4494,9 @@ def store_bone_data():
     
     
     
-    bpy.context.view_layer.objects.active = obj[bbr.retarget_source_name]
+    bpy.context.view_layer.objects.active = obj[onir.retarget_source_name]
 
-    for boneObj in obj[bbr.retarget_source_name].data.edit_bones:
+    for boneObj in obj[onir.retarget_source_name].data.edit_bones:
         head = boneObj.head.copy()
         tail = boneObj.tail.copy()
         roll = boneObj.roll 
@@ -4511,9 +4511,9 @@ def store_bone_data():
             "connect": connect,
             })
 
-    bpy.context.view_layer.objects.active = obj[bbr.retarget_target_name]
+    bpy.context.view_layer.objects.active = obj[onir.retarget_target_name]
 
-    for boneObj in obj[bbr.retarget_target_name].data.edit_bones:
+    for boneObj in obj[onir.retarget_target_name].data.edit_bones:
         head = boneObj.head.copy()
         tail = boneObj.tail.copy()
         roll = boneObj.roll
@@ -4528,8 +4528,8 @@ def store_bone_data():
             "connect": connect,
             })
 
-    obj[bbr.retarget_source_name]['bone_data'] = source_bone_data
-    obj[bbr.retarget_target_name]['bone_data'] = target_bone_data
+    obj[onir.retarget_source_name]['bone_data'] = source_bone_data
+    obj[onir.retarget_target_name]['bone_data'] = target_bone_data
 
     bpy.ops.object.mode_set(mode='POSE')
 
@@ -4547,7 +4547,7 @@ def store_bone_data():
 
 def restore_sources(type="pose"):
     obj = bpy.data.objects
-    bbr = bpy.context.window_manager.bb_retarget
+    onir = bpy.context.window_manager.oni_retarget
 
     bpy.ops.object.mode_set(mode='EDIT')
 
@@ -4560,11 +4560,11 @@ def restore_sources(type="pose"):
     
     
     
-    source_location = obj[bbr.retarget_source_name_backup].matrix_world.to_translation().copy()
+    source_location = obj[onir.retarget_source_name_backup].matrix_world.to_translation().copy()
 
     
-    bone_map = obj[bbr.retarget_source_name_backup]['bone_map'].to_dict()
-    bone_data = obj[bbr.retarget_source_name_backup]['bone_data'].to_dict()
+    bone_map = obj[onir.retarget_source_name_backup]['bone_map'].to_dict()
+    bone_data = obj[onir.retarget_source_name_backup]['bone_data'].to_dict()
 
     
     for sbone in bone_map:
@@ -4591,20 +4591,20 @@ def restore_sources(type="pose"):
 
 def restore_source_bone(sbone, type):
     obj = bpy.data.objects
-    bbr = bpy.context.window_manager.bb_retarget
+    onir = bpy.context.window_manager.oni_retarget
 
     
     
     
 
     if type == "pose":
-        obj[bbr.retarget_source_name_backup].data.edit_bones[sbone].head =            obj[bbr.retarget_source_name_backup]['bone_data'][sbone]['pose']['head']
-        obj[bbr.retarget_source_name_backup].data.edit_bones[sbone].tail =            obj[bbr.retarget_source_name_backup]['bone_data'][sbone]['pose']['tail']
-        obj[bbr.retarget_source_name_backup].data.edit_bones[sbone].roll =            obj[bbr.retarget_source_name_backup]['bone_data'][sbone]['edit']['roll']
+        obj[onir.retarget_source_name_backup].data.edit_bones[sbone].head =            obj[onir.retarget_source_name_backup]['bone_data'][sbone]['pose']['head']
+        obj[onir.retarget_source_name_backup].data.edit_bones[sbone].tail =            obj[onir.retarget_source_name_backup]['bone_data'][sbone]['pose']['tail']
+        obj[onir.retarget_source_name_backup].data.edit_bones[sbone].roll =            obj[onir.retarget_source_name_backup]['bone_data'][sbone]['edit']['roll']
 
     elif type == "edit":
-        obj[bbr.retarget_source_name_backup].data.edit_bones[sbone].head =            obj[bbr.retarget_source_name_backup]['bone_data'][sbone]['edit']['head']
-        obj[bbr.retarget_source_name_backup].data.edit_bones[sbone].tail =            obj[bbr.retarget_source_name_backup]['bone_data'][sbone]['edit']['tail']
+        obj[onir.retarget_source_name_backup].data.edit_bones[sbone].head =            obj[onir.retarget_source_name_backup]['bone_data'][sbone]['edit']['head']
+        obj[onir.retarget_source_name_backup].data.edit_bones[sbone].tail =            obj[onir.retarget_source_name_backup]['bone_data'][sbone]['edit']['tail']
         
             
 
@@ -5474,31 +5474,31 @@ def save_state():
 
     
     
-    if bb_settings['save_state'] == False:
+    if oni_settings['save_state'] == False:
         print("save_state reports: save_state is disabled")
         return False
 
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
 
     state = get_unique_name()
 
     
-    if bbm.get('states') == None:
-        bbm['states'] = dict()
+    if onim.get('states') == None:
+        onim['states'] = dict()
     else:
-        if state in bbm['states']:
+        if state in onim['states']:
             print("save_state reports: state collision -", state)
 
-    bbm['states'][state] = dict()
-    bbm['states'][state]['mode'] = bpy.context.mode
+    onim['states'][state] = dict()
+    onim['states'][state]['mode'] = bpy.context.mode
 
     if bpy.context.active_object != None:
-        bbm['states'][state]['active'] = bpy.context.active_object.name
+        onim['states'][state]['active'] = bpy.context.active_object.name
     else:
-        bbm['states'][state]['active'] = ""
+        onim['states'][state]['active'] = ""
 
-    bbm['states'][state]['selected'] = list()
+    onim['states'][state]['selected'] = list()
     
     selected = list()
 
@@ -5506,14 +5506,14 @@ def save_state():
         print("appended selected object to state:", o.name)
         selected.append(o.name)
         
-    bbm['states'][state]['selected'] = selected
+    onim['states'][state]['selected'] = selected
 
-    print("save_state reports: total states -", len(bbm['states']))
+    print("save_state reports: total states -", len(onim['states']))
     return state
 
 def restore_state(state):
 
-    if bb_settings['save_state'] == False:
+    if oni_settings['save_state'] == False:
         print("save_state reports: save_state is disabled so restore_state is as well")
         return False
 
@@ -5521,8 +5521,8 @@ def restore_state(state):
         print("restore_state reports: nothing to do")
         return False
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
-    if state not in bbm['states']:
+    onim = bpy.context.window_manager.oni_misc
+    if state not in onim['states']:
         print("restore_state reports: state doesn't exist -", state)
         return False
 
@@ -5531,25 +5531,25 @@ def restore_state(state):
         bpy.ops.object.select_all(action='DESELECT')
 
     
-    for object in bbm['states'][state]['selected']:
+    for object in onim['states'][state]['selected']:
         obj[object].select_set(True)
 
     
     
-    if bbm['states'][state]['active'] != "":
-        object = bbm['states'][state]['active']
+    if onim['states'][state]['active'] != "":
+        object = onim['states'][state]['active']
         bpy.context.view_layer.objects.active = obj[object]
     
-    if len(bbm['states'][state]['selected']) > 0:
+    if len(onim['states'][state]['selected']) > 0:
         
         
         try:
-            bpy.ops.object.mode_set(mode=bbm['states'][state]['mode'])
+            bpy.ops.object.mode_set(mode=onim['states'][state]['mode'])
         except:
             print("unable to set mode when restoring state for object:", object)
 
-    del bbm['states'][state]
-    print("restore_state reports: total states -", len(bbm['states']))
+    del onim['states'][state]
+    print("restore_state reports: total states -", len(onim['states']))
 
     return True
 
@@ -5562,7 +5562,7 @@ def restore_state(state):
 
 def save_armature_state(armature=""):
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
 
     if armature == "":
         print("save_armature_states reports: nothing to do")
@@ -5574,23 +5574,23 @@ def save_armature_state(armature=""):
     state = get_unique_name()
 
     
-    if bbm.get('arm_states') == None:
-        bbm['arm_states'] = dict()
+    if onim.get('arm_states') == None:
+        onim['arm_states'] = dict()
     else:
-        if state in bbm['arm_states']:
+        if state in onim['arm_states']:
             print("save_armature_state reports: state collision -", state)
 
-    bbm['arm_states'][state] = dict()
+    onim['arm_states'][state] = dict()
 
     
-    bbm['arm_states'][state]['armature'] = armature
+    onim['arm_states'][state]['armature'] = armature
 
     
     
     layers = list()
     for l in obj[armature].data.layers:
         layers.append(l)
-    bbm['arm_states'][state]['view_layers'] = layers
+    onim['arm_states'][state]['view_layers'] = layers
 
     
     
@@ -5612,29 +5612,29 @@ def save_armature_state(armature=""):
         
         boneObj.hide = False
 
-    bbm['arm_states'][state]['bones'] = bone_properties
+    onim['arm_states'][state]['bones'] = bone_properties
 
     return state
 
 def restore_armature_state(state):
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
 
     if state == "":
         print("restore_armature_state reports: nothing to do")
         return False
 
-    if state not in bbm['arm_states']:
+    if state not in onim['arm_states']:
         print("restore_armature_state reports: state doesn't exist -", state)
         return False
 
-    arm = bbm['arm_states'][state]['armature']
+    arm = onim['arm_states'][state]['armature']
 
     
     
     
     layers = list()
-    for l in bbm['arm_states'][state]['view_layers']:
+    for l in onim['arm_states'][state]['view_layers']:
         if l == 1:
             layers.append(True)
         else:
@@ -5644,11 +5644,11 @@ def restore_armature_state(state):
 
     for boneObj in obj[arm].data.bones:
         bone = boneObj.name
-        boneObj.hide_select = bbm['arm_states'][state]['bones'][bone]['hide_select']
-        boneObj.hide = bbm['arm_states'][state]['bones'][bone]['hide']
+        boneObj.hide_select = onim['arm_states'][state]['bones'][bone]['hide_select']
+        boneObj.hide = onim['arm_states'][state]['bones'][bone]['hide']
 
-    del bbm['arm_states'][state]
-    print("restore_armature_state reports: remaining states after processing -", len(bbm['arm_states']))
+    del onim['arm_states'][state]
+    print("restore_armature_state reports: remaining states after processing -", len(onim['arm_states']))
     return True
 
 
@@ -5839,7 +5839,7 @@ def write_ctm(container="", path=""):
         print("write_ctm reports: nothing to do")
         return None
 
-    template_map = "# Character Template Map auto-generated by Bento Buddy\n"
+    template_map = "# Character Template Map auto-generated by Onigiri\n"
     template_map += "template_map = {\n"
     for sbone in container:
         (tarm, tbone), = container[sbone].items()
@@ -5864,7 +5864,7 @@ def write_ctm(container="", path=""):
 
 def set_rotation_mode(armature="", mode="QUATERNION"):
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
 
     if armature == "":
         print("set_rotation_mode reports: nothing to do")
@@ -5879,17 +5879,17 @@ def set_rotation_mode(armature="", mode="QUATERNION"):
     
     id = get_unique_name()
 
-    if bbm.get('rotate_state') == None:
-        bbm['rotate_state'] = {}
-    if id in bbm['rotate_state']:
+    if onim.get('rotate_state') == None:
+        onim['rotate_state'] = {}
+    if id in onim['rotate_state']:
         print("set_rotation_mode reports: rotate state exists, overwriting:", rotate_state)
-    bbm['rotate_state'][id] = {}
+    onim['rotate_state'][id] = {}
 
     armObj = obj[armature]
 
     for boneObj in bpy.context.selected_pose_bones:
         armObj.data.bones[boneObj.name].select = True
-        bbm['rotate_state'][id][boneObj.name] = bone.rotation_mode
+        onim['rotate_state'][id][boneObj.name] = bone.rotation_mode
         armObj.pose.bones[boneObj.name].rotation_mode = mode
         armObj.data.bones[boneObj.name].select = False
 
@@ -5902,23 +5902,23 @@ def set_rotation_mode(armature="", mode="QUATERNION"):
 
 def restore_rotation_mode(armature="", id=""):
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
     if id == "":
         print("get_rotation_mode reports: nothing to do")
         return False
-    if id not in bbm['rotate_state']:
+    if id not in onim['rotate_state']:
         print("get_rotation_mode reports: id does not exist -", id)
         return False
 
     selected_bones = bpy.context.selected_pose_bones
     bpy.ops.pose.select_all(action = 'DESELECT')
 
-    for bone in bbm['rotate_state'][id]:
+    for bone in onim['rotate_state'][id]:
         obj[armature].data.bones[bone].select = True
         if bone not in armObj.pose.bones:
             print("restore_rotation_mode reports: missing bone in armature -", bone)
-        armObj.pose.bones[boneObj.name].rotation_mode = bbm['rotate_state'][id]
-    del bbm['rotate_state'][id]
+        armObj.pose.bones[boneObj.name].rotation_mode = onim['rotate_state'][id]
+    del onim['rotate_state'][id]
 
     for poseBone in selected_bones:
         obj[armature].data.bones[poseBone.name].select = True
@@ -6268,13 +6268,13 @@ def set_frame(frame=0):
 
 def get_test_angles(reverse=False):
 
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
 
     pos =  90
     neg = -90
-    x = bbm.test_angle_x
-    y = bbm.test_angle_y
-    z = bbm.test_angle_z
+    x = onim.test_angle_x
+    y = onim.test_angle_y
+    z = onim.test_angle_z
 
     if reverse == True:
         pos =  -90
@@ -6289,17 +6289,17 @@ def get_test_angles(reverse=False):
         z
         ]
 
-    if bbm.test_angle_pos_x == True:
+    if onim.test_angle_pos_x == True:
         angles[0] = pos
-    if bbm.test_angle_neg_x == True:
+    if onim.test_angle_neg_x == True:
         angles[0] = neg
-    if bbm.test_angle_pos_y == True:
+    if onim.test_angle_pos_y == True:
         angles[1] = pos
-    if bbm.test_angle_neg_y == True:
+    if onim.test_angle_neg_y == True:
         angles[1] = neg
-    if bbm.test_angle_pos_z == True:
+    if onim.test_angle_pos_z == True:
         angles[2] = pos
-    if bbm.test_angle_neg_z == True:
+    if onim.test_angle_neg_z == True:
         angles[2] = neg
 
     return angles

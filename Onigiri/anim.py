@@ -19,8 +19,8 @@ from . import joint_data
 from . import mod_flags
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-presets_path    =   bb_settings['paths']['presets']
-data_path       =   bb_settings['paths']['data']
+presets_path    =   oni_settings['paths']['presets']
+data_path       =   oni_settings['paths']['data']
 
 
 
@@ -225,9 +225,9 @@ def save_anim(data=None, file=None):
     file_content['header']['ease_out_duration'] = struct.pack('f', header['ease_out_duration'])
 
     
-    bb_anim_edit = bpy.context.window_manager.bb_anim_edit
-    if bb_anim_edit.anim_hand_pose_enabled == True:
-        hp = int(bb_edit_anim.anim_hand_pose)
+    oni_anim_edit = bpy.context.window_manager.oni_anim_edit
+    if oni_anim_edit.anim_hand_pose_enabled == True:
+        hp = int(oni_edit_anim.anim_hand_pose)
         file_content['header']['hand_pose'] = struct.pack("i", hp)
     else:
         file_content['header']['hand_pose'] = (0).to_bytes(4, byteorder='little')
@@ -390,7 +390,7 @@ def get_compatible_bone_list(armature=""):
         elif transform_type == 'location':
             loc_rot = 'loc'
         else:
-            if bb_settings['debug'] == True:
+            if oni_settings['debug'] == True:
                 print("anim::get_compatible_bone_list reports : wrong transform type, skipping...", transform_type, rot_mode)
             continue
 
@@ -596,7 +596,7 @@ def get_rotation_data(armature="", bone="", frame="", frame_data="", matrix_type
     jd = joint_data
 
     
-    ac = bpy.context.scene.bb_anim_advanced
+    ac = bpy.context.scene.oni_anim_advanced
 
 
 
@@ -645,7 +645,7 @@ def get_rotation_data(armature="", bone="", frame="", frame_data="", matrix_type
     
     
     
-    if mod_flags.bb_flags['debug'] == 1:
+    if mod_flags.oni_flags['debug'] == 1:
         res = quat_base.x ** 2 + quat_base.y ** 2 + quat_base.z ** 2 + quat_base.w ** 2
         print("quat result:", res)
 
@@ -672,7 +672,7 @@ def get_rotation_data(armature="", bone="", frame="", frame_data="", matrix_type
 
 
 
-    if mod_flags.bb_flags['debug'] == 1:
+    if mod_flags.oni_flags['debug'] == 1:
         print("== Quats ==========================================================")
         print(rot_base)
         print("===================================================================")
@@ -683,7 +683,7 @@ def get_rotation_data(armature="", bone="", frame="", frame_data="", matrix_type
     if ac.disable_axis_conversion == False:
         
         if ac.matrix_converter_enabled == True:
-            if mod_flags.bb_flags['debug'] == 1:
+            if mod_flags.oni_flags['debug'] == 1:
                 print("========================================================")
                 print("debug axis conversion enabled:", bone)
             m = axis_conversion(
@@ -741,7 +741,7 @@ def get_rotation_data(armature="", bone="", frame="", frame_data="", matrix_type
                 
                 rot = mathutils.Vector((I0, I1, I2))
 
-                if mod_flags.bb_flags['debug'] == 1:
+                if mod_flags.oni_flags['debug'] == 1:
                     print("Bone reorienting:", bone)
                     print("A0, A1, A2:", A0, A1, A2)
                     print("C0, C1, C2:", C0, C1, C2)
@@ -804,7 +804,7 @@ def get_rotation_data(armature="", bone="", frame="", frame_data="", matrix_type
     
 
 
-    if mod_flags.bb_flags['debug'] == 1:
+    if mod_flags.oni_flags['debug'] == 1:
         print("final rot:", rot)
 
 
@@ -821,7 +821,7 @@ def get_rotation_data(armature="", bone="", frame="", frame_data="", matrix_type
     
     
 
-    if mod_flags.bb_flags['debug'] == 1:
+    if mod_flags.oni_flags['debug'] == 1:
         print("final: x,y,z:", x,y,z)
 
     return [x, y, z]
@@ -896,7 +896,7 @@ def get_location_data(armature="", bone="", frame="", frame_data="", matrix_type
 
 
     
-    ac = bpy.context.scene.bb_anim_advanced
+    ac = bpy.context.scene.oni_anim_advanced
 
     
     
@@ -940,7 +940,7 @@ def get_location_data(armature="", bone="", frame="", frame_data="", matrix_type
 
         
         if ac.matrix_converter_enabled == True:
-            if mod_flags.bb_flags['debug'] == 1:
+            if mod_flags.oni_flags['debug'] == 1:
                 print("========================================================")
                 print("debug axis conversion enabled:", bone)
             m = axis_conversion(
@@ -1138,7 +1138,7 @@ def get_location_data(armature="", bone="", frame="", frame_data="", matrix_type
             L1 = loc_offset[P1]
             L2 = loc_offset[P2]
 
-            if mod_flags.bb_flags['debug'] == 1:
+            if mod_flags.oni_flags['debug'] == 1:
                 print("offset loc after Vector:", loc)
 
             

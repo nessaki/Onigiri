@@ -23,7 +23,7 @@ emotes = {
     },
     "aim_l_bow":
     {
-        "uuid": "46bb4359-de38-4ed8-6a22-f1f52fe8f506",
+        "uuid": "46oni4359-de38-4ed8-6a22-f1f52fe8f506",
         "priority": 2,
         "looped": True,
         "description": "Also triggers targeting",
@@ -72,7 +72,7 @@ emotes = {
     },
     "blowkiss":
     {
-        "uuid": "db84829b-462c-ee83-1e27-9bbee66bd624",
+        "uuid": "db84829b-462c-ee83-1e27-9oniee66bd624",
         "priority": 2,
         "looped": False,
         "description": "Also triggers express_kiss",
@@ -191,14 +191,14 @@ emotes = {
     },
     "dance6":
     {
-        "uuid": "cd28b69b-9c95-bb78-3f94-8d605ff1bb12",
+        "uuid": "cd28b69b-9c95-oni78-3f94-8d605ff1oni12",
         "priority": 2,
         "looped": False,
         "description": "",
     },
     "dance7":
     {
-        "uuid": "a54d8ee2-28bb-80a9-7f0c-7afbbe24a5d6",
+        "uuid": "a54d8ee2-28oni-80a9-7f0c-7afonie24a5d6",
         "priority": 2,
         "looped": False,
         "description": "",
@@ -443,7 +443,7 @@ emotes = {
     },
     "hover":
     {
-        "uuid": "4ae8016b-31b9-03bb-c401-b1ea941db41d",
+        "uuid": "4ae8016b-31b9-03oni-c401-b1ea941db41d",
         "priority": 0,
         "looped": True,
         "description": "",
@@ -667,7 +667,7 @@ emotes = {
     },
     "e04d450d-fdb5-0432-fd68-818aaf5935f8 ":
     {
-        "uuid": "6bd01860-4ebd-127a-bb3d-d1427e8e0c42",
+        "uuid": "6bd01860-4ebd-127a-oni3d-d1427e8e0c42",
         "priority": 2,
         "looped": False,
         "description": "Also triggers express_laugh_emote. Sent with \"shout\" volume chat from viewer",
@@ -702,7 +702,7 @@ emotes = {
     },
     "sit_ground_constrained":
     {
-        "uuid": "1a2bd58e-87ff-0df8-0b4c-53e047b0bb6e",
+        "uuid": "1a2bd58e-87ff-0df8-0b4c-53e047b0oni6e",
         "priority": 3,
         "looped": True,
         "description": "",
@@ -772,7 +772,7 @@ emotes = {
     },
     "stand_1":
     {
-        "uuid": "15468e00-3400-bb66-cecc-646d7c14458e",
+        "uuid": "15468e00-3400-oni66-cecc-646d7c14458e",
         "priority": 0,
         "looped": True,
         "description": "Stopped automatically by viewer",
@@ -863,7 +863,7 @@ emotes = {
     },
     "turnleft":
     {
-        "uuid": "56e0ba0d-4a9f-7f27-6117-32f2ebbf6135",
+        "uuid": "56e0ba0d-4a9f-7f27-6117-32f2eonif6135",
         "priority": 1,
         "looped": True,
         "description": "*",
@@ -940,7 +940,7 @@ emotes = {
     },
     "yoga_float":
     {
-        "uuid": "42ecd00b-9947-a97c-400a-bbc9174c7aeb",
+        "uuid": "42ecd00b-9947-a97c-400a-onic9174c7aeb",
         "priority": 2,
         "looped": False,
         "description": "*",

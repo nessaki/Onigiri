@@ -149,8 +149,8 @@ def create_rig(target="default"):
         bpy.ops.object.select_all(action='DESELECT')
 
     
-    arm_thing = bpy.data.armatures.new("BentoBuddy")
-    armObj = bpy.data.objects.new("BentoBuddy", arm_thing)
+    arm_thing = bpy.data.armatures.new("Onigiri")
+    armObj = bpy.data.objects.new("Onigiri", arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -248,7 +248,7 @@ def create_rig(target="default"):
     
     
     
-    bpy.context.object.data.layers[md.bb_all_bones_layer] = True
+    bpy.context.object.data.layers[md.oni_all_bones_layer] = True
 
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
@@ -301,8 +301,8 @@ def build_devkit_rig(target="female_neutral", connect=True):
     obj = bpy.data.objects
 
     
-    arm_thing = bpy.data.armatures.new("BentoBuddy")
-    armObj = bpy.data.objects.new("BentoBuddy", arm_thing)
+    arm_thing = bpy.data.armatures.new("Onigiri")
+    armObj = bpy.data.objects.new("Onigiri", arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -383,7 +383,7 @@ def build_devkit_rig(target="female_neutral", connect=True):
 
     bpy.ops.object.mode_set(mode='OBJECT')
 
-    armObj['bentobuddy'] = globals.version
+    armObj['onigiri'] = globals.version
 
     return armObj
 
@@ -511,7 +511,7 @@ def apply_sl_bone_roll(arm=""):
 
     
     bpy.ops.object.mode_set(mode='EDIT')
-    for bone in md.bb_const['bone_roll']:
+    for bone in md.oni_const['bone_roll']:
         if bone not in obj[arm].data.edit_bones:
             continue
 
@@ -519,7 +519,7 @@ def apply_sl_bone_roll(arm=""):
         obj[arm].data.edit_bones[bone].select_head = True
         obj[arm].data.edit_bones[bone].select_tail = True
 
-        obj[arm].data.edit_bones[bone].roll = md.bb_const['bone_roll'][bone]
+        obj[arm].data.edit_bones[bone].roll = md.oni_const['bone_roll'][bone]
 
         obj[arm].data.edit_bones[bone].select = False
         obj[arm].data.edit_bones[bone].select_head = False
@@ -743,11 +743,11 @@ def convert_rig_to_class_OLD(armature="", rig_class=""):
 
 
 
-def convert_rig_to_class(armature=None, rig_class=None, brand="bentobuddy"):
+def convert_rig_to_class(armature=None, rig_class=None, brand="onigiri"):
 
     obj = bpy.data.objects
     armObj = obj[armature]
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
 
     rig_classes = {'pivot', 'pos', 'default', 'neutral', 'male_default', 'male_neutral'}
     old_classes = {'default', 'neutral', 'male_default', 'male_neutral'}
@@ -1109,62 +1109,62 @@ def worldMatrix(armature="", bone=""):
 
 def save_hide_state(armature=""):
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
+    onim = bpy.context.window_manager.oni_misc
     armObj = obj[armature]
     state = get_unique_name()
     
-    if bbm.get('hide_states') == None:
-        bbm['hide_states'] = dict()
+    if onim.get('hide_states') == None:
+        onim['hide_states'] = dict()
     else:
-        if state in bbm['hide_states']:
+        if state in onim['hide_states']:
             print("save_hidden_states reports: state collision -", state)
 
-    bbm['hide_states'][state] = dict()
-    bbm['hide_states'][state]['hide'] = dict()
-    bbm['hide_states'][state]['hide_select'] = dict()
-    bbm['hide_states'][state]['layers'] = list()
+    onim['hide_states'][state] = dict()
+    onim['hide_states'][state]['hide'] = dict()
+    onim['hide_states'][state]['hide_select'] = dict()
+    onim['hide_states'][state]['layers'] = list()
 
     layers = list()
     for h in range(len(armObj.data.layers)):
         layers.append(armObj.data.layers[h])
         armObj.data.layers[h] = True
-    bbm['hide_states'][state]['layers'] = layers
+    onim['hide_states'][state]['layers'] = layers
 
     
     
     for boneObj in armObj.data.bones:
-        bbm['hide_states'][state]['hide_select'][boneObj.name] = boneObj.hide_select
+        onim['hide_states'][state]['hide_select'][boneObj.name] = boneObj.hide_select
         boneObj.hide_select = False
-        bbm['hide_states'][state]['hide'][boneObj.name] = boneObj.hide
+        onim['hide_states'][state]['hide'][boneObj.name] = boneObj.hide
         boneObj.hide = False
 
-    bbm['hide_states'][state]['armature'] = armature
+    onim['hide_states'][state]['armature'] = armature
 
-    print("save_hidden_states reports: total states -", len(bbm['hide_states']))
+    print("save_hidden_states reports: total states -", len(onim['hide_states']))
     return state
 
 def restore_hide_state(state):
     obj = bpy.data.objects
-    bbm = bpy.context.window_manager.bb_misc
-    if state not in bbm['hide_states']:
+    onim = bpy.context.window_manager.oni_misc
+    if state not in onim['hide_states']:
         print("restore_hide_state reports: state doesn't exist -", state)
         return False
-    if state not in bbm['hide_states']:
+    if state not in onim['hide_states']:
         print("restore_state reports: state doesn't exist -", state)
         return False
 
-    arm = bbm['hide_states'][state]['armature']
+    arm = onim['hide_states'][state]['armature']
     armObj = obj[arm]
 
-    for bone in bbm['hide_states'][state]['hide']:
-        armObj.data.bones[bone].hide = bbm['hide_states'][state]['hide'][bone]
-        armObj.data.bones[bone].hide_select = bbm['hide_states'][state]['hide_select'][bone]
+    for bone in onim['hide_states'][state]['hide']:
+        armObj.data.bones[bone].hide = onim['hide_states'][state]['hide'][bone]
+        armObj.data.bones[bone].hide_select = onim['hide_states'][state]['hide_select'][bone]
 
-    layers = bbm['hide_states'][state]['layers'].to_list()
+    layers = onim['hide_states'][state]['layers'].to_list()
     for h in range(len(layers)):
         armObj.data.layers[h] = layers[h]
 
-    del bbm['hide_states'][state]
+    del onim['hide_states'][state]
 
     return True
 
@@ -1188,11 +1188,11 @@ rig_name = get_rig
 
 def teflon(armature=None):
 
-    bb = bpy.context.scene.bentobuddy
-    animation_start_frame = bb.animation_start_frame
-    animation_end_frame = bb.animation_end_frame
-    bb_anim = bpy.context.scene.bb_anim
-    frame_step = bb_anim.bake_frame_step
+    oni = bpy.context.scene.onigiri
+    animation_start_frame = oni.animation_start_frame
+    animation_end_frame = oni.animation_end_frame
+    oni_anim = bpy.context.scene.oni_anim
+    frame_step = oni_anim.bake_frame_step
     old_mode = bpy.context.mode
     if old_mode == "EDIT_ARMATURE":
         old_mode = "EDIT"
@@ -1449,7 +1449,7 @@ def to_deg(mat):
 def write_bind_data(arm):
     rig_data = bpy.context.object['rig_data'].to_dict()
     fd = "bind_data.py"
-    formatted = "# Generated by Bento Buddy\n"
+    formatted = "# Generated by Onigiri\n"
     formatted += "rig_data = {\n"
 
     for bone in rig_data:
@@ -1686,17 +1686,17 @@ def get_bind_data(armature=None, bone=None, rig_data=None):
     
     
 
-    bb_devkit = bpy.context.scene.bb_devkit
-    use_offset_location = bb_devkit.use_offset_location
-    use_offset_rotation = bb_devkit.use_offset_rotation
-    use_offset_scale = bb_devkit.use_offset_scale
+    oni_devkit = bpy.context.scene.oni_devkit
+    use_offset_location = oni_devkit.use_offset_location
+    use_offset_rotation = oni_devkit.use_offset_rotation
+    use_offset_scale = oni_devkit.use_offset_scale
 
-    rotate_for_sl = bb_devkit.rotate_for_sl
+    rotate_for_sl = oni_devkit.rotate_for_sl
 
-    process_volume_bones = bb_devkit.process_volume_bones
-    volume_bone_location = bb_devkit.volume_bone_location
-    volume_bone_rotation = bb_devkit.volume_bone_rotation
-    volume_bone_scale = bb_devkit.volume_bone_scale
+    process_volume_bones = oni_devkit.process_volume_bones
+    volume_bone_location = oni_devkit.volume_bone_location
+    volume_bone_rotation = oni_devkit.volume_bone_rotation
+    volume_bone_scale = oni_devkit.volume_bone_scale
 
     
     
@@ -1981,11 +1981,11 @@ def get_joint_data(armature=None, bone=None, rig_data=None):
     
     
     
-    bb_devkit = bpy.context.scene.bb_devkit
-    use_offset_location = bb_devkit.use_offset_location
-    use_offset_rotation = bb_devkit.use_offset_rotation
-    use_offset_scale = bb_devkit.use_offset_scale
-    rotate_for_sl = bb_devkit.rotate_for_sl
+    oni_devkit = bpy.context.scene.oni_devkit
+    use_offset_location = oni_devkit.use_offset_location
+    use_offset_rotation = oni_devkit.use_offset_rotation
+    use_offset_scale = oni_devkit.use_offset_scale
+    rotate_for_sl = oni_devkit.rotate_for_sl
 
     
     
@@ -1995,7 +1995,7 @@ def get_joint_data(armature=None, bone=None, rig_data=None):
     
     
     
-    process_volume_bones = bb_devkit.process_volume_bones
+    process_volume_bones = oni_devkit.process_volume_bones
 
     transforms = {}
     transforms[bone] = {}
@@ -2198,11 +2198,11 @@ def get_bone_transforms(armature=None, rig_data=None):
     
     
 
-    bb_devkit = bpy.context.scene.bb_devkit
-    use_offset_location = bb_devkit.use_offset_location
-    use_offset_rotation = bb_devkit.use_offset_rotation
-    use_offset_scale = bb_devkit.use_offset_scale
-    rotate_for_sl = bb_devkit.rotate_for_sl
+    oni_devkit = bpy.context.scene.oni_devkit
+    use_offset_location = oni_devkit.use_offset_location
+    use_offset_rotation = oni_devkit.use_offset_rotation
+    use_offset_scale = oni_devkit.use_offset_scale
+    rotate_for_sl = oni_devkit.rotate_for_sl
 
 
     obj = bpy.data.objects
@@ -2751,9 +2751,9 @@ def attach_slave_rig(
     for boneObj in slaveObj.pose.bones:
         boneObj.bone_group = slaveObj.pose.bone_groups[mod_data.slave_group_name]
 
-    lname = "BB Copy Loc"
-    rname = "BB Copy Rot"
-    sname = "BB Copy Sca"
+    lname = "ONI Copy Loc"
+    rname = "ONI Copy Rot"
+    sname = "ONI Copy Sca"
 
 
 
@@ -2844,7 +2844,7 @@ def attach_proxy_rig(armature=None, clean=False):
 
     bpy.ops.object.duplicate()
     glueObj = bpy.context.object
-    glueObj.name = "BentoBuddy_Controller"
+    glueObj.name = "Onigiri_Controller"
     glue = glueObj.name
 
     glueObj.data.display_type = 'STICK'
@@ -2883,9 +2883,9 @@ def attach_proxy_rig(armature=None, clean=False):
     sarmObj.select_set(True)
     bpy.context.view_layer.objects.active = sarmObj
 
-    lname = "BB Copy Loc"
-    rname = "BB Copy Rot"
-    sname = "BB Copy Sca"
+    lname = "ONI Copy Loc"
+    rname = "ONI Copy Rot"
+    sname = "ONI Copy Sca"
     bpy.ops.object.mode_set(mode='POSE')
 
     for boneObj in obj[sarm].pose.bones:
@@ -3037,8 +3037,8 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
         bpy.ops.object.select_all(action='DESELECT')
 
     
-    arm_thing = bpy.data.armatures.new("BentoBuddy")
-    armObj = bpy.data.objects.new("BentoBuddy", arm_thing)
+    arm_thing = bpy.data.armatures.new("Onigiri")
+    armObj = bpy.data.objects.new("Onigiri", arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -3168,7 +3168,7 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
     bpy.ops.object.mode_set(mode='OBJECT')
 
     
-    bpy.context.object.data.layers[md.bb_all_bones_layer] = True
+    bpy.context.object.data.layers[md.oni_all_bones_layer] = True
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
 
@@ -3197,11 +3197,11 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
         for mod_name in bpy.context.preferences.addons.keys():
             mod = sys.modules[mod_name]
             name = mod.bl_info.get('name')
-            if name == "Bento Buddy":
+            if name == "Onigiri":
                 version = mod.bl_info.get('version', (-1, -1, -1))
                 break
-        armObj['bentobuddy'] = utils.get_bento_buddy_version()
-    armObj['bentobuddy'] = "Post 2.8.2 - see rigs : build_sl_rig to re-enable"
+        armObj['onigiri'] = utils.get_onigiri_version()
+    armObj['onigiri'] = "Post 2.8.2 - see rigs : build_sl_rig to re-enable"
 
     
     armObj['hide_extended_bones'] = 0
@@ -3232,8 +3232,8 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
         bpy.ops.object.select_all(action='DESELECT')
 
     
-    arm_thing = bpy.data.armatures.new("BentoBuddy")
-    armObj = bpy.data.objects.new("BentoBuddy", arm_thing)
+    arm_thing = bpy.data.armatures.new("Onigiri")
+    armObj = bpy.data.objects.new("Onigiri", arm_thing)
 
     
     bpy.context.scene.collection.objects.link(armObj)
@@ -3392,7 +3392,7 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
     bpy.ops.object.mode_set(mode='OBJECT')
 
     
-    bpy.context.object.data.layers[md.bb_all_bones_layer] = True
+    bpy.context.object.data.layers[md.oni_all_bones_layer] = True
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
 
@@ -3443,12 +3443,12 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
         for mod_name in bpy.context.preferences.addons.keys():
             mod = sys.modules[mod_name]
             name = mod.bl_info.get('name')
-            if name == "Bento Buddy":
+            if name == "Onigiri":
                 version = mod.bl_info.get('version', (-1, -1, -1))
                 break
-        armObj['bentobuddy'] = utils.get_bento_buddy_version()
+        armObj['onigiri'] = utils.get_onigiri_version()
     
-    armObj['bentobuddy'] = globals.version
+    armObj['onigiri'] = globals.version
 
     
     
@@ -3637,7 +3637,7 @@ def show_bones(armature=None, group=None, state=True, default=False):
     get_layer_state(armObj)
 
     
-    bone_groups = armObj.get('bb_bone_groups', {})
+    bone_groups = armObj.get('oni_bone_groups', {})
 
     
     if default == True:
@@ -3645,7 +3645,7 @@ def show_bones(armature=None, group=None, state=True, default=False):
             bone_groups[group] = False
         bone_groups['base'] = True
         bone_groups['hand'] = True
-        armObj['bb_bone_groups'] = bone_groups
+        armObj['oni_bone_groups'] = bone_groups
         for boneObj in armObj.data.bones:
             boneObj.hide = True
         for boneObj in armObj.data.bones:
@@ -3663,8 +3663,8 @@ def show_bones(armature=None, group=None, state=True, default=False):
             bone = boneObj.name
             if skel.avatar_skeleton[bone]['type'] == "attachment":
                 boneObj.hide = True
-        armObj['bb_bone_groups']['attach'] = False
-        armObj['bb_bone_groups']['attach2'] = False
+        armObj['oni_bone_groups']['attach'] = False
+        armObj['oni_bone_groups']['attach2'] = False
         return True
 
     
@@ -3729,7 +3729,7 @@ def show_bones(armature=None, group=None, state=True, default=False):
         return False
 
     
-    armObj['bb_bone_groups'][group] = state
+    armObj['oni_bone_groups'][group] = state
 
     return True
 
@@ -3892,7 +3892,7 @@ def add_constraints(
             utils.set_inverse(context_py, cname)
             
             
-        conObj.name = "BB " + cname
+        conObj.name = "ONI " + cname
         if name != None:
             cnames = boneObj.get(name, [])
             cnames.append(conObj.name)
@@ -3989,7 +3989,7 @@ def add_controllers(
             utils.set_inverse(context_py, cname)
             
             
-        conObj.name = "BB " + cname
+        conObj.name = "ONI " + cname
         if name != None:
             cnames = boneObj.get(name, [])
             cnames.append(conObj.name)
@@ -4051,8 +4051,8 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
     glueObj.show_in_front = True
 
     
-    sarmObj['bb_frozen_target'] = glueObj
-    glueObj['bb_frozen_source'] = sarmObj
+    sarmObj['oni_frozen_target'] = glueObj
+    glueObj['oni_frozen_source'] = sarmObj
 
     
     bpy.ops.object.mode_set(mode='EDIT')
@@ -4100,7 +4100,7 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
                 CO.influence = influence
             else:
                 CO.influence = 0
-            CO.name = "BB Frozen TRS"
+            CO.name = "ONI Frozen TRS"
 
     else:
         
@@ -4117,7 +4117,7 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
                 CO.influence = influence
             else:
                 CO.influence = 0
-            CO.name = "BB Frozen ROT"
+            CO.name = "ONI Frozen ROT"
         for boneObj in sarmObj.pose.bones:
             sbone = boneObj.name
             sarmObj.data.bones.active = sarmObj.data.bones[sbone]
@@ -4131,7 +4131,7 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
                 CO.influence = influence
             else:
                 CO.influence = 0
-            CO.name = "BB Frozen LOC"
+            CO.name = "ONI Frozen LOC"
         for boneObj in sarmObj.pose.bones:
             sbone = boneObj.name
             sarmObj.data.bones.active = sarmObj.data.bones[sbone]
@@ -4145,7 +4145,7 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
                 CO.influence = influence
             else:
                 CO.influence = 0
-            CO.name = "BB Frozen SCL"
+            CO.name = "ONI Frozen SCL"
 
     bpy.ops.object.mode_set(mode='OBJECT')
     sarmObj.select_set(False)
@@ -4175,8 +4175,8 @@ def get_controller_rig(armature=None):
 
     
     
-    outRig = armObj.get('bb_controller_slave', None)
-    inRig = armObj.get('bb_controller_master', None)
+    outRig = armObj.get('oni_controller_slave', None)
+    inRig = armObj.get('oni_controller_master', None)
 
     
     
@@ -4200,7 +4200,7 @@ def get_controller_rig(armature=None):
 
 def add_empty_constraints(source=None, target=None, transform='COPY_TRANSFORMS', space='WORLD', influence=0):
     trs_names = {
-        "COPY_TRANSFORMS": "BB TRS", "COPY_ROTATION": "BB ROT", "COPY_LOCATION": "BB LOC", "CHILD_OF": "BB CO"
+        "COPY_TRANSFORMS": "ONI TRS", "COPY_ROTATION": "ONI ROT", "COPY_LOCATION": "ONI LOC", "CHILD_OF": "ONI CO"
         }
     if transform not in trs_names:
         print("add_empty_constraint reports: transform", transform, "is not a key in trs_names, update this later")
@@ -4356,12 +4356,12 @@ def get_bone_data(armature=None, deform_only=False, store=True, location=False, 
 
 
 def get_rig_class():
-    bb_devkit = bpy.context.scene.bb_devkit
+    oni_devkit = bpy.context.scene.oni_devkit
     
     classes = {"default", "neutral", "male_default", "male_neutral"}
     rc = "rig_class_"
     for c in classes:
-        if getattr(bb_devkit, rc + c) == True:
+        if getattr(oni_devkit, rc + c) == True:
             return c
     return ""
 
@@ -4516,9 +4516,9 @@ def check_maps(armature=None, rename=None, reskin=None, pose=None, report=False)
 
     
     if rename_map == None:
-        rename_map = armObj.get('bb_onemap_rename', {})
+        rename_map = armObj.get('oni_onemap_rename', {})
     if reskin_map == None:
-        reskin_map = armObj.get('bb_onemap_reskin', {})
+        reskin_map = armObj.get('oni_onemap_reskin', {})
 
     
     
@@ -4653,7 +4653,7 @@ def match_bone_orientation(inRig=None, outRig=None, apply=False):
     utils.activate(outRig)
 
     
-    rename_map = outRig['bb_onemap_rename']
+    rename_map = outRig['oni_onemap_rename']
 
     
     
@@ -5116,7 +5116,7 @@ def make_complete(
 
     state = utils.get_state()
 
-    bb_import = bpy.context.scene.bb_import
+    oni_import = bpy.context.scene.oni_import
 
     
     
@@ -5161,7 +5161,7 @@ def make_complete(
     utils.activate(armObj)
 
     
-    armObj['bentobuddy'] = globals.version
+    armObj['onigiri'] = globals.version
 
     
     
@@ -5360,7 +5360,7 @@ def make_complete(
         utils.set_state(state)
         print("The imported armature is not compatible with SL, use the dae importer instead.")
         print("The imported dae file is not SL compatible and was removed from the scene.")
-        print("If you are attempting to import and repair a dae file use the Bento Buddy dae importer instead.")
+        print("If you are attempting to import and repair a dae file use the Onigiri dae importer instead.")
         return False
 
     
@@ -5369,11 +5369,11 @@ def make_complete(
     
     for boneObj in newObj.data.bones:
         boneObj.hide = False
-    groups = newObj.get('bb_bone_groups')
+    groups = newObj.get('oni_bone_groups')
     if groups != None:
         for g in groups.keys():
             groups[g] = 1
-        newObj['bb_bone_groups'] = groups
+        newObj['oni_bone_groups'] = groups
 
     armObj.select_set(False)
     newObj.select_set(True)
@@ -5384,7 +5384,7 @@ def make_complete(
     groups = {}
     for l in visible.layers:
         groups[l] = 1
-    armObj['bb_bone_groups'] = groups
+    armObj['oni_bone_groups'] = groups
     for boneObj in armObj.data.bones:
         boneObj.hide = False
 
@@ -5507,7 +5507,7 @@ def cycle_rig(armature=None, frame_start=0, frame_end=0):
     smat = mathutils.Matrix()
     for i in range(3):
         smat[i][i] = scale[i]
-    bvh_file = "bb_" + utils.get_temp_name() + ".eu_"
+    bvh_file = "oni_" + utils.get_temp_name() + ".eu_"
     temp_dir = tempfile.gettempdir()
     file_path = temp_dir + "/" + bvh_file
 
@@ -5616,11 +5616,11 @@ def cycle_rig(armature=None, frame_start=0, frame_end=0):
 def map_convert(armObj):
     if isinstance(armObj, str):
         armObj = bpy.data.objects[armature]
-    if armObj.get('bb_onemap_rename') == None:
+    if armObj.get('oni_onemap_rename') == None:
         print("No map on the armature")
         return False
 
-    rename_map = armObj['bb_onemap_rename'].to_dict()
+    rename_map = armObj['oni_onemap_rename'].to_dict()
 
     
     
@@ -5671,16 +5671,16 @@ def set_deform_view(arm, action=None):
     
     
     
-    bone_state = armObj.data.bones[0].get('bb_hide_data')
+    bone_state = armObj.data.bones[0].get('oni_hide_data')
     if bone_state == None:
         print("No state set on bones, adding...")
         for boneObj in armObj.data.bones:
-            boneObj['bb_hide_data'] = boneObj.hide
+            boneObj['oni_hide_data'] = boneObj.hide
         bpy.ops.object.mode_set(mode='EDIT')
         
         
         for boneObj in armObj.data.edit_bones:
-            boneObj['bb_hide_edit'] = boneObj.hide
+            boneObj['oni_hide_edit'] = boneObj.hide
             boneObj.hide = False
         bpy.ops.object.mode_set(mode='OBJECT')
 
@@ -5728,12 +5728,12 @@ def set_deform_view(arm, action=None):
         print("Restored bone view")
         for boneObj in armObj.data.bones:
             
-            if boneObj.get('bb_hide_data') != None:
-                boneObj.hide = boneObj['bb_hide_data']
+            if boneObj.get('oni_hide_data') != None:
+                boneObj.hide = boneObj['oni_hide_data']
         bpy.ops.object.mode_set(mode='EDIT')
         for boneObj in armObj.data.edit_bones:
-            if boneObj.get('bb_hide_edit') != None:
-                boneObj.hide = boneObj['bb_hide_edit']
+            if boneObj.get('oni_hide_edit') != None:
+                boneObj.hide = boneObj['oni_hide_edit']
         bpy.ops.object.mode_set(mode='OBJECT')
 
     
@@ -5741,14 +5741,14 @@ def set_deform_view(arm, action=None):
         print("Cleared called, will restore first.")
         for boneObj in armObj.data.bones:
             
-            if boneObj.get('bb_hide_data') != None:
-                boneObj.hide = boneObj['bb_hide_data']
-                del boneObj['bb_hide_data']
+            if boneObj.get('oni_hide_data') != None:
+                boneObj.hide = boneObj['oni_hide_data']
+                del boneObj['oni_hide_data']
         bpy.ops.object.mode_set(mode='EDIT')
         for boneObj in armObj.data.edit_bones:
-            if boneObj.get('bb_hide_edit') != None:
-                boneObj.hide = boneObj['bb_hide_edit']
-                del boneObj['bb_hide_edit']
+            if boneObj.get('oni_hide_edit') != None:
+                boneObj.hide = boneObj['oni_hide_edit']
+                del boneObj['oni_hide_edit']
         bpy.ops.object.mode_set(mode='OBJECT')
 
     print("mode:", state['mode'])

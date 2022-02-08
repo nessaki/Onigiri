@@ -1,25 +1,16 @@
 
 
-
-
-
-
 LOCX = 0
 LOCY = 1
 LOCZ = 2
-
-
 
 LOC_XYZ = ['LOCX', 'LOCY', 'LOCZ']
 LOC_SIMPLE = ['X', 'Y', 'Z']
 
 ICON_AXIS = ['x', 'y', 'z']
 
-
 icon_choice_off = "choice_off"
 icon_choice_on = "choice_red"
-
-
 
 icon_defs = {
     "loc_axis_angle_xyz": {
@@ -77,4 +68,3 @@ icon_defs = {
         "icon": icon_choice_off,
         },
     }
-

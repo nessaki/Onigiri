@@ -18,7 +18,7 @@ if 1 == 1:
     props = {}
 
     
-    props["help"] = "http://critters.xyz/help/bentobuddy/reactor.html"
+    props["help"] = "FIXME"
 
     
     props['poll_enabled'] = False
